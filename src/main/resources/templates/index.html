@@ -12,16 +12,46 @@
 <a href="/login/gitee">
     <img width="45px" src="/images/logo-black.svg"><span>gitee登录</span>
 </a>
+<a href="/login/gitee">
+    <img width="45px" src="/images/gitee图标.svg"><span>gitee登录</span>
+</a>
+
 <div id="app">
+
     <h1>Index页面-测试Vue+ElementUI</h1>
 
-    <el-row>
-        <el-col :span="2" :offset="11">
-            <el-button type="primary">普通按钮</el-button>
-        </el-col>
-    </el-row>
+    <el-button @click="login" type="primary">点击登录</el-button>
 
-    <h3>请登录：<a href="/loginPage">点击登陆</a></h3>
+    <!-- 登录表单 -->
+    <el-dialog title="添加用户" :visible.sync="loginFormVisible" :close-on-click-modal="false" :show-close="false">
+
+        <el-form :model="loginForm" ref="loginForm" label-width="160px">
+
+            <el-form-item label="用户名" prop="username" label-width="60px">
+                <el-input v-model="loginForm.username" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="密码" prop="password" label-width="60px">
+                <el-input v-model="loginForm.password" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="loginOk('loginForm')">确 定</el-button>
+                <el-button @click="resetForm('loginForm')">重置</el-button>
+                <el-button @click="loginNo('loginForm')">取 消</el-button>
+            </el-form-item>
+
+            <el-form-item>
+                <el-row>
+                    <el-col :span="6">第三方登录:</el-col>
+                    <el-col :span="2"><a href="/login/gitee"><img width="25px" src="/images/logo-black.svg"></a></el-col>
+                </el-row>
+            </el-form-item>
+
+        </el-form>
+
+    </el-dialog>
+
     <h3>请登出：
         <form action="/logout" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><br/>
@@ -33,10 +63,7 @@
         <p>用户信息：<span th:text="${#session?.getAttribute('SPRING_SECURITY_CONTEXT')}"></span></p>
 
         已经登录的用户名：<span th:text="${#authentication.name}"></span>
-
-        <div>
-            图片静态资源：<img src="/images/test.jpg" width="200"/>
-        </div>
+<!--        已经登录的头像：<img th:src="${#authentication.avatarUrl}">-->
     </div>
 </div>
 
@@ -49,11 +76,63 @@
     new Vue({
         el: '#app',
         data: {
-            text: '请输入你的想法……',
+            //登录
+            //控制登录表单显示还是隐藏
+            loginFormVisible: false,
+            //登录表单数据
+            loginForm: {
+                username: '',
+                password: '',
+            }
         },
         methods: {
-            click: function (id) {
-            }
+            //重置表单
+            resetForm(loginForm) {
+                this.$refs[loginForm].resetFields();
+            },
+            /* 呼出登录表单 ----------------------------------------*/
+            login() {
+                this.loginFormVisible = true
+            },
+            /* 确定登录 */
+            loginOk(loginForm) {
+                this.$refs[loginForm].validate((valid) => {
+                    if (valid) {
+                        this.loginFormVisible = false// 隐藏表单
+                        //把表单数据赋值给data
+                        let data = {
+                            username: this.loginForm.username,
+                            password: this.loginForm.password
+                        }
+                        //存入表格数组
+                        this.tableData.push(data)
+                        //清除表单绑定的数据
+                        Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
+                        this.resetForm(loginForm)
+                        //提示
+                        this.$notify({
+                            title: '成功',
+                            message: '添加数据成功',
+                            type: 'success'
+                        });
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            /* 取消登录 */
+            loginNo(loginForm) {
+                this.loginFormVisible = false
+                //清除表单绑定的数据
+                Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
+                this.resetForm(loginForm)
+                //提示
+                this.$notify.info({
+                    title: '消息',
+                    message: '您取消了登录'
+                });
+            },
         },
         mounted: function () {
             console.log('已经加载Vue……')

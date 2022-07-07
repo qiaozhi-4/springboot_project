@@ -23,11 +23,6 @@ public class MainController
         return "index";
     }
 
-    @GetMapping("loginPage")
-    public String loginPage(){
-        return "longin";
-    }
-
     //第三方gitee登录
     @RequestMapping("/login/gitee")
     public String auth(Model model,
