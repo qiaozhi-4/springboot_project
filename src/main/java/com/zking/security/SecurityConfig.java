@@ -65,7 +65,7 @@ public class SecurityConfig {
 
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
         return request -> {
-            String uri = request.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri();
+            String url = request.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri();
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.AUTHORIZATION,
@@ -73,7 +73,7 @@ public class SecurityConfig {
                             request.getAccessToken().getTokenValue()
             );
             HttpEntity<String> entity = new HttpEntity<>("", headers);
-            ResponseEntity<Map> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Map.class);
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
             return mapToUser(response.getBody());
         };
     }

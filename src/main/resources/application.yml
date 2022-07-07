@@ -118,6 +118,6 @@ pagehelper:
 logging:
   level:
     root: info
-    com.zking: debug
+    com.zking: info
   file.path: .
   file.name: target\log.log
