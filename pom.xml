@@ -34,27 +34,27 @@
             <version>2.1.4</version>
         </dependency>-->
         <!--mybatis-plus依赖-->
-        <!--<dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.2</version>
-        </dependency>-->
+        </dependency>
         <!--分页插件依赖-->
-        <!--<dependency>
+        <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.4.2</version>
-        </dependency>-->
+        </dependency>
         <!--mysql依赖-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <!--redis依赖-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>-->
+        </dependency>
         <!--shiro的依赖-->
         <!--<dependency>
             <groupId>org.apache.shiro</groupId>
@@ -86,6 +86,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!--  Spring Security 结合 OAuth2 实现第三方登录-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
         <!--security整合thymeleaf模板-->
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
@@ -97,10 +102,10 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <!--validate验证依赖-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>-->
+        </dependency>
         <!--支付宝调用接口API-->
         <dependency>
             <groupId>com.alipay.sdk</groupId>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--必须填写namespace属性，是接口路径-->
+<mapper namespace="com.zking.mapper.IUserMapper">
+
+    <!--根据用户id查询，用户有哪些角色-->
+    <select id="getOneByGiteeId" resultType="User">
+        SELECT *
+        FROM user1 u
+        WHERE u.id = (SELECT user_id FROM gitee WHERE id = #{id});
+    </select>
+</mapper>

@@ -11,7 +11,7 @@
     <div th:if="${#authentication.authenticated}">
         <p>已经登录的用户名：<span th:text="${#authentication.name}"></span></p>
         <hr/>
-        <p>所有权限：<th:block sec:authentication="principal.authorities"/></p>
+<!--        <p>所有权限：<th:block sec:authentication="principal.authorities"/></p>-->
         <hr/>
         <p>所有权限：<span th:text="${#authentication.authorities}"></span></p>
         <p>Details信息：<span th:text="${#authentication.details}"></span></p>

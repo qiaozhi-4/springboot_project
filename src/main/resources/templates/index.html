@@ -8,6 +8,10 @@
     <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
 </head>
 <body>
+
+<a href="/login/gitee">
+    <img width="45px" src="/images/logo-black.svg"><span>gitee登录</span>
+</a>
 <div id="app">
     <h1>Index页面-测试Vue+ElementUI</h1>
 
@@ -17,7 +21,7 @@
         </el-col>
     </el-row>
 
-    <h3>请登录：<a href="/login.html">点击登陆</a></h3>
+    <h3>请登录：<a href="/loginPage">点击登陆</a></h3>
     <h3>请登出：
         <form action="/logout" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><br/>

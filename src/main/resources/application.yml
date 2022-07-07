@@ -49,11 +49,44 @@ spring:
   thymeleaf:
     cache: false # 缓存HTML模板，开发环境中必须使用false，部署环境使用true
 # -------------------- Spring Security认证配置
+  #配置security登录验证
   security:
     user:
+      password: 123
       name: admin
-      password: 123456
-      roles: admin, user
+    oauth2:
+      client:
+        registration:
+          #          github:
+          #            client-id: ${clientId}
+          #            client-secret: ${clientSecret}
+          #            redirect-uri: '{baseUrl}/login/oauth2/{registrationId}'
+          #            client-authentication-method: POST
+          #            scope: read:user
+          #            client-name: GitHub
+          gitee:
+            provider: gitee
+            client-id: 2694c10f42c9d33d9257e5693bcd5183506ee62e5b00396e13e8e5b80d882048
+            client-secret: 6d046cc842f9e1924566d1c16e46350f4968354a98f339784ef6395bd6577f4d
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8081/login/gitee
+            client-authentication-method: POST
+            scope: user_info
+            client-name: Gitee
+        provider:
+          gitee:
+            authorization-uri: https://gitee.com/oauth/authorize
+            token-uri: https://gitee.com/oauth/token
+            user-name-attribute: id
+            user-info-uri: https://gitee.com/api/v5/user
+    #          github:
+    #            authorization-uri: https://github.com/login/oauth/authorize
+    #            token-uri: https://github.com/login/oauth/access_token
+    #            user-name-attribute: id
+    #            user-info-uri: https://api.github.com/user
+
+
+
 # -------------------- JPA配置
 #  jpa:
 #    hibernate:
