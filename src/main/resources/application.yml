@@ -1,6 +1,6 @@
 # -------------------- SpringBoot配置
 server:
-  port: 8080
+  port: 8081
 
 # -------------------- 自定义属性
 
@@ -55,14 +55,14 @@ spring:
       password: 123456
       roles: admin, user
 # -------------------- JPA配置
-  jpa:
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-    show-sql: true
-    generate-ddl: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+#        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+#    show-sql: true
+#    generate-ddl: true
 
 # -------------------- Mybatis配置
 mybatis:
