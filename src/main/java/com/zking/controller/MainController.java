@@ -16,6 +16,7 @@ import javax.annotation.security.PermitAll;
 @PermitAll
 @Controller
 public class MainController
+    
 {
     @GetMapping({"/","/index"})
     public String index()
