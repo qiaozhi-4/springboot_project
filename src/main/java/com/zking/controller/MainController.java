@@ -16,7 +16,6 @@ import javax.annotation.security.PermitAll;
 @PermitAll
 @Controller
 public class MainController
-    
 {
     @GetMapping({"/","/index"})
     public String index()
@@ -26,7 +25,7 @@ public class MainController
 
     @GetMapping("loginPage")
     public String loginPage(){
-        return "login";
+        return "loginPage";
     }
 
     //第三方gitee登录
