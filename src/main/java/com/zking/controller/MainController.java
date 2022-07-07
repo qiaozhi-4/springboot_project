@@ -25,7 +25,7 @@ public class MainController
 
     @GetMapping("loginPage")
     public String loginPage(){
-        return "longin";
+        return "login";
     }
 
     //第三方gitee登录
