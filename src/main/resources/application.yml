@@ -8,7 +8,7 @@ server:
 
 # -------------------- 自定义上传文件夹
 upload:
-  location: D:/springboot/videolook/videolookimg
+  location: D:/springboot/
 
 # -------------------- spring配置
 spring:

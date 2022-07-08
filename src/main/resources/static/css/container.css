@@ -1,0 +1,49 @@
+
+.el-header, .el-footer {
+    background-color: #1E1F22;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+  }
+
+  .el-header{
+    position: fixed;
+    right: 8px;
+    top: 0;
+    left: 8px;
+    /* 一直将导航栏置于最顶层  */
+     z-index: 999;
+  }
+/* 
+  .el-footer{
+    line-height: 400px;
+  } */
+  
+  .el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
+  
+  .el-main {
+    top: 0;
+    background-color: #14161A;
+    color: #333;
+    text-align: center;
+    /* line-height: 300px; */
+   
+  }
+  
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+  
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+  
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
