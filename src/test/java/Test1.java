@@ -2,8 +2,6 @@ import com.zking.App;
 import com.zking.service.IActorService;
 import com.zking.service.ICommentService;
 import com.zking.service.IFilmService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
