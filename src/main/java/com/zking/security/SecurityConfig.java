@@ -29,7 +29,7 @@ import java.util.Map;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
-    // @Bean
+     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
