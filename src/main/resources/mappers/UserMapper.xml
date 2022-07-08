@@ -3,16 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--必须填写namespace属性，是接口路径-->
-<mapper namespace="com.zking.mapper.IUserMapper">
+<mapper namespace="com.zking.repository.IUserMapper">
 
-    <!--根据用户id查询，用户有哪些角色-->
+    <!--根据用户id查询用户有哪些角色-->
+    <select id="findAllRoleByUserId" resultType="String">
+        SELECT name FROM role r INNER JOIN user_role ur ON r.id=ur.role_id
+        WHERE ur.user_id=#{uid}
+    </select>
+    <!--根据用户id查询用户有哪些权限-->
     <select id="findAllJurisdictionByUserId" resultType="String">
         SELECT name FROM jurisdiction j INNER JOIN user_jurisdiction uj ON j.id=uj.jurisdiction_id
         WHERE uj.user_id=#{uid}
     </select>
-    <!--根据用户id查询，用户有哪些权限-->
-    <select id="findAllJurisdictionByUserId" resultType="String">
-        SELECT name FROM jurisdiction j INNER JOIN user_jurisdiction uj ON j.id=uj.jurisdiction_id
-        WHERE uj.user_id=#{uid}
-    </select>
+
 </mapper>
