@@ -9,11 +9,4 @@ import java.util.List;
 
 public interface IUserService extends IService<User>{
 
-    //根据用户id查询，用户有哪些角色
-    List<Role> getRolesByUserId(int id);
-
-    //根据角色id查询，拥有哪些权限
-    List<Authority> getAuthoritySByUserId(int id);
-
-
 }

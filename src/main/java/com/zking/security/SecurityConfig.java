@@ -51,14 +51,14 @@ public class SecurityConfig {
                 .userInfoEndpoint(u -> u.userService(oauth2UserService()));
 
         http.formLogin()
-                .loginPage("/login.html")
+                .loginPage("/loginUser")
                 .loginProcessingUrl("/login")
-                .failureUrl("/login.html?error")
-                .defaultSuccessUrl("/success.html");
+                .failureUrl("/loginUser?error")
+                .defaultSuccessUrl("/successUser");
         http.logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login.html?logout");
-        http.exceptionHandling().accessDeniedPage("/403.html");
+                .logoutSuccessUrl("/loginUser?logout");
+        http.exceptionHandling().accessDeniedPage("/403");
         return http.build();
     }
 
