@@ -49,7 +49,7 @@ public class MyUserDetailsService implements UserDetailsService {
             }
         }
         // 返回该用户和权限security进行匹配
-        return new User(user.getName(), user.getPass(),
+        return new User(user.getUsername(), user.getPass(),
                 AuthorityUtils.commaSeparatedStringToAuthorityList(authorities.toString()));
     }
 }
