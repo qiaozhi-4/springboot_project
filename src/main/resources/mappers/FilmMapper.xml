@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--必须填写namespace属性，是接口路径-->
+<mapper namespace="com.zking.repository.IFilmMapper">
+    <!--根据电影id查询电影的类型-->
+    <select id="findAllTypeByFilmId" resultType="String">
+        SELECT name FROM type t INNER JOIN film_type ft ON t.id=ft.type_id
+        WHERE ft.film_id=#{fid};
+    </select>
+    <!--根据电影id查询电影的地区-->
+    <select id="findAllRegionByFilmId" resultType="String">
+        SELECT name FROM region r INNER JOIN film_region fr ON r.id=fr.region_id
+        WHERE fr.film_id=#{fid};
+    </select>
+    <!--根据电影id查询电影的演员-->
+    <select id="findAllActorByFilmId" resultType="Actor">
+        SELECT * FROM actor a INNER JOIN film_actor fa ON a.id=fa.actor_id
+        WHERE fa.film_id=#{fid};
+    </select>
+</mapper>

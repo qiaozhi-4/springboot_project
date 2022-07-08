@@ -14,7 +14,7 @@ upload:
 spring:
 # -------------------- jdbc配置
   datasource:
-    url: jdbc:mysql:///mydb
+    url: jdbc:mysql:///springboot
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 12345678
