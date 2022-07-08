@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import static com.baomidou.mybatisplus.annotation.IdType.AUTO;
 
@@ -22,10 +23,17 @@ import static com.baomidou.mybatisplus.annotation.IdType.AUTO;
 public class User implements Serializable {
     @TableId(type = AUTO)
     private Integer id;
-    @TableField("username")
-    private String name;
+    private String username;
     @TableField("password")
     private String pass;
-    private Double money;
+    @TableField("img_id")
+    private int imgId;
+    private String name;
+    private String sex;
+    private int vip;
+    private Date birthday;
+    private String address;
+    private String email;
+    private String time;
 }
 
