@@ -8,7 +8,7 @@ server:
 
 # -------------------- 自定义上传文件夹
 upload:
-  location: D:/upload
+  location: D:/springboot/videolook/videolookimg
 
 # -------------------- spring配置
 spring:
@@ -42,8 +42,8 @@ spring:
 # -------------------- 文件上传配置
   servlet:
     multipart:
-      location: ./
-      max-file-size: 5MB
+      location:
+      max-file-size: 1GB
       max-request-size: 10MB
 # -------------------- Thymeleaf模板引擎配置
   thymeleaf:
@@ -118,6 +118,6 @@ pagehelper:
 logging:
   level:
     root: info
-    com.zking: debug
+    com.zking: info
   file.path: .
   file.name: target\log.log
