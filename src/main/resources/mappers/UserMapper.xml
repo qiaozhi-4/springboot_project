@@ -6,9 +6,13 @@
 <mapper namespace="com.zking.mapper.IUserMapper">
 
     <!--根据用户id查询，用户有哪些角色-->
-    <select id="getOneByGiteeId" resultType="User">
-        SELECT *
-        FROM user1 u
-        WHERE u.id = (SELECT user_id FROM gitee WHERE id = #{id});
+    <select id="findAllJurisdictionByUserId" resultType="String">
+        SELECT name FROM jurisdiction j INNER JOIN user_jurisdiction uj ON j.id=uj.jurisdiction_id
+        WHERE uj.user_id=#{uid}
+    </select>
+    <!--根据用户id查询，用户有哪些权限-->
+    <select id="findAllJurisdictionByUserId" resultType="String">
+        SELECT name FROM jurisdiction j INNER JOIN user_jurisdiction uj ON j.id=uj.jurisdiction_id
+        WHERE uj.user_id=#{uid}
     </select>
 </mapper>
