@@ -1,0 +1,13 @@
+#top{
+    height: 200px;
+    background-color: #343A4A;
+    position: relative;
+}
+.style-left{
+    position: absolute;
+    left: 0;
+}
+.style-right{
+    position: absolute;
+    right: 0;
+}
