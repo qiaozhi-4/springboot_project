@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>你的项目</title>
+    <!--添加Bootstrap和fontawesome的样式-->
+    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
+    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../../static/css/bootstrap.css" rel="stylesheet"/>
+    <!-- 布局容器 -->
+    <link th:href="@{/css/container.css}" href="../../static/css/container.css" rel="stylesheet"/>
+    <link th:href="@{/css/container.css}" href="../../static/css/admin.css" rel="stylesheet"/>
+    <!-- 布局 -->
+    <link th:href="@{/css/layout.css}" href="../../static/css/layout.css" rel="stylesheet"/>
+    <!-- 下拉菜单按钮样式 -->
+    <link th:href="@{/css/mycss1.css}" href="../../static/css/mycss1.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="app">
+    <!--主体布局-->
+    <el-container>
+
+        <!-- 头部 -->
+        <el-header id="admin-el-header" style="height: 200px;">
+            <!-- type="flex"开启 flex 布局 -->
+            <el-row :gutter="5" type="flex" align="middle" style="height: 80px;">
+                <el-col :span="3" :offset="1">
+                    <a href="/"><img width="100%" height="60px" th:src="@{/images/ikun.png}"
+                                     src="../../static/images/ikun.png"></a>
+                    </form>
+                </el-col>
+                <el-col :span="8" :offset="1">
+                    <el-input placeholder="熊出没" v-model="inputHead">
+                        <el-button slot="append" icon="el-icon-search" style="margin: -11px 0;">搜索</el-button>
+                    </el-input>
+                </el-col>
+                <el-col :span="6" :offset="1">
+                </el-col>
+                <el-col :span="1">
+                    <el-dropdown>
+                        <el-badge :value="12" class="item">
+                            <i class="el-icon-bell"></i>
+                        </el-badge>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>黄金糕</el-dropdown-item>
+                            <el-dropdown-item>狮子头</el-dropdown-item>
+                            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                            <el-dropdown-item>双皮奶</el-dropdown-item>
+                            <el-dropdown-item>蚵仔煎</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+                <el-col :span="2">
+                    <el-link @click="login" :underline="false">
+                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
+                        登录
+                    </el-link>
+                </el-col>
+            </el-row>
+            <el-row :gutter="2" type="flex" align="middle" style="height: 30px;font-size: 20px;color: white;">
+                <el-col :span="1" style="margin-left: 5%">
+                    <a class="btn text-decoration-none" style="color: white;" href="adminIndex.html"><i
+                            class="el-icon-menu"></i></a>
+                </el-col>
+                <el-col :span="1" type="flex" align="left">
+                    <a class="btn text-decoration-none" style="color: white;" href="adminIndex.html"><span>主页</span></a>
+                </el-col>
+                <el-col :span="1" style="">
+                    <a class="btn text-decoration-none" style="color: white;" href="adminFilm.html"><i
+                            class="el-icon-video-camera-solid"></i></a>
+                </el-col>
+                <el-col :span="4" type="flex" align="left">
+                    <a class="btn text-decoration-none" style="color: white;"
+                       href="adminFilm.html"><span>电影管理</span></a>
+                </el-col>
+            </el-row>
+            <el-row type="flex" justify="space-around">
+                <el-col :span="20" style="position: relative;height: 50px;">
+                    <div class="grid-content bg-purple-dark admin-row2">
+                        <span style="margin-left: 10px">电影管理</span>
+                    </div>
+                </el-col>
+            </el-row>
+        </el-header>
+
+        <!-- 主体部分 -->
+        <el-main width="1500px" style="background-color: white">
+            <el-row type="flex" justify="space-around">
+                <el-col :span="20">
+                    <div class="adminFilm-main-row1-col2">
+                        <el-row class="p-0" style="height: 10px">
+                            <el-col :span="12">
+                                <div style="margin-bottom: 20px">
+                                    <span>所有电影</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="12">
+                                <div style="float: right;">
+                                    <el-button type="primary" @addFilm="">添加电影</el-button>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <template>
+                            <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
+                                      @selection-change="handleSelectionChange" @row-click="dj">
+                                <el-table-column prop="userImg" label="电影" width="120">
+                                    <template slot-scope="scope">
+                                        <div class="demo-type">
+                                            <div>
+                                                <el-image :src="scope.row.userImg"></el-image>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="name" label="电影名" width="120">
+                                </el-table-column>
+                                <el-table-column prop="sex" label="评分" width="120">
+                                </el-table-column>
+                                <el-table-column prop="sex" label="导演" width="120">
+                                </el-table-column>
+                                <el-table-column prop="sex" label="上映时间" width="120">
+                                </el-table-column>
+                                <el-table-column prop="sex" label="上映国家" width="120">
+                                </el-table-column>
+                                <el-table-column prop="sex" label="类型" width="120">
+                                </el-table-column>
+                                <el-table-column label="操作" >
+                                    <button></button>
+                                </el-table-column>
+                            </el-table>
+                        </template>
+                        <el-pagination
+                                background
+                                layout="prev, pager, next"
+                                :total="1000">
+                        </el-pagination>
+                    </div>
+                </el-col>
+            </el-row>
+        </el-main>
+
+        <!-- 底部部分 -->
+        <el-footer>
+            <span style="color: white">底部</span>
+        </el-footer>
+
+    </el-container>
+
+</div>
+
+<!--js脚本-->
+<script th:src="@{/js/vue-2.6.14.min.js}" src="../../static/js/vue-2.6.14.min.js"></script>
+<script th:src="@{/js/vue-router.js}" src="../../static/js/vue-router.js"></script>
+<script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
+<script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
+<script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
+<script>
+
+    new Vue({
+        el: '#app',
+        data: {
+            //头部模糊搜索框内容
+            inputHead: '',
+            //登录
+            //控制登录表单显示还是隐藏
+            loginFormVisible: false,
+            //登录表单数据
+            loginForm: {
+                username: '',
+                password: '',
+            },
+            tableData: [],
+        },
+        methods: {
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            formatter(row, column) {
+                return row.address;
+            },
+            dj(row) {
+                console.log(row)
+            },
+            handleEdit(index, row) {
+                console.log(index, row);
+            },
+            handleDelete(index, row) {
+                console.log(index, row);
+            },
+            //重置表单
+            resetForm(loginForm) {
+                this.$refs[loginForm].resetFields();
+            },
+            /* 呼出登录表单 ----------------------------------------*/
+            login() {
+                this.loginFormVisible = true
+            },
+            /* 确定登录 */
+            loginOk(loginForm) {
+                this.$refs[loginForm].validate((valid) => {
+                    if (valid) {
+                        this.loginFormVisible = false// 隐藏表单
+                        //把表单数据赋值给data
+                        let data = {
+                            username: this.loginForm.username,
+                            password: this.loginForm.password
+                        }
+                        const params = new URLSearchParams();
+                        params.append('username', this.loginForm.username);
+                        params.append('password', this.loginForm.password);
+                        //发送请求到后端删除sql数据
+                        axios.get('/login', params)
+                            .then((response) => {
+                                if (response.data) {
+                                    this.$message({
+                                        type: 'success',
+                                        message: '登录成功!'
+                                    });
+                                } else {
+                                    this.$message({
+                                        type: 'info',
+                                        message: '登录败败!'
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                    this.$message({
+                                        type: 'error',
+                                        message: '登录请求失败!'
+                                    });
+                                    console.log(error)
+                                }
+                            )
+                        //清除表单绑定的数据
+                        Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
+                        this.resetForm(loginForm)
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            /* 取消登录 */
+            loginNo(loginForm) {
+                this.loginFormVisible = false
+                //清除表单绑定的数据
+                Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
+                this.resetForm(loginForm)
+                //提示
+                this.$notify.info({
+                    title: '消息',
+                    message: '您取消了登录'
+                });
+            },
+        },
+        mounted: function () {
+            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/user'
+            )
+                .then(response => {
+                    this.tableData = response.data;
+                    console.log(response);
+                })
+                .catch(data => console.log(response))
+        },
+    });
+
+</script>
+</body>
+</html>
