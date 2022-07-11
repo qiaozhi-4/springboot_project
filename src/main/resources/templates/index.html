@@ -97,14 +97,16 @@
                     </el-tooltip>
                 </el-col>
                 <el-col :span="2">
-                    <el-link th:if="${#authentication.name}" href="loginUser" :underline="false">
-                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
-                        <span class="qita">登录</span>
-                    </el-link>
-                    <el-link th:if="${#authentication.name}"  :underline="false">
-                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
-                        <span class="qita">你以登录</span>
-                    </el-link>
+                    <!--Thymeleaf模板引擎片段复用【导航 栏】-->
+                    <div th:insert="~{fragments/userlogin::userlogin}"></div>
+<!--                    <el-link th:if="${#authentication.name == 'anonymousUser'}" href="loginUser" :underline="false">-->
+<!--                        <el-avatar size="small" src="img/log.jpg"></el-avatar>-->
+<!--                        <span class="qita">登录</span>-->
+<!--                    </el-link>-->
+<!--                    <el-link th:if="${#authentication.name != 'anonymousUser'}"  :underline="false">-->
+<!--                        <el-avatar size="small" src="img/log.jpg"></el-avatar>-->
+<!--                        <span class="qita">你以登录</span>-->
+<!--                    </el-link>-->
                 </el-col>
             </el-row>
         </el-header>

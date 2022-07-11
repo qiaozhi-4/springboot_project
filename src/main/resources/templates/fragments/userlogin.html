@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>用户是否登录的头像显示</h2>
+
+<div th:fragment="userlogin">
+    <el-link th:if="${#authentication.name == 'anonymousUser'}" href="loginUser" :underline="false">
+        <el-avatar size="small" src="img/log.jpg"></el-avatar>
+        <span class="qita">登录</span>
+    </el-link>
+    <el-link th:if="${#authentication.name != 'anonymousUser'}"  :underline="false">
+        <el-avatar size="small" src="img/log.jpg"></el-avatar>
+        <span class="qita">你以登录</span>
+    </el-link>
+</div>
+
+</body>
+</html>
