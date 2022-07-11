@@ -4,6 +4,7 @@ import com.zking.entity.User;
 import com.zking.service.IActorService;
 import com.zking.service.ICommentService;
 import com.zking.service.IFilmService;
+import com.zking.service.impl.FilmService;
 import com.zking.service.impl.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,8 @@ public class Test1 {
     @Autowired
     private UserService userService;
     @Autowired
+    private FilmService filmService;
+    @Autowired
     private PasswordEncoder encoder;
 
     @Test
@@ -32,5 +35,10 @@ public class Test1 {
     @Test
     public void test2(){
         System.out.println(encoder.encode("admin"));
+    }
+
+    @Test
+    public void test3(){
+        System.out.println(filmService.findAllActorByFilmId(1));
     }
 }

@@ -1,10 +1,7 @@
 package com.zking.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zking.entity.Authority;
-import com.zking.entity.Film;
-import com.zking.entity.Role;
-import com.zking.entity.User;
+import com.zking.entity.*;
 
 import com.zking.repository.IFilmMapper;
 
@@ -20,9 +17,13 @@ import java.util.List;
 //@RequiredArgsConstructor
 
 @Service
+@RequiredArgsConstructor
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
+    private final IFilmMapper filmMapper;
 
-
+    public List<Actor> findAllActorByFilmId(int id){
+        return filmMapper.findAllActorByFilmId(id);
+    }
 
 
 

@@ -1,0 +1,39 @@
+/* 电影卡片样式 */
+.text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    /* width: 200px;
+    height: 200px; */
+  }
+  .box-card:hover{
+    /* position: fixed; */
+    /* 一直将导航栏置于最顶层  */
+    /* z-index: 999; */
+    /* width: 300px;
+    height: 300px; */
+  }
+
+  .el-card__body {
+    
+    padding: 0;
+}
+  .el-card {
+    border:0;
+    color: #7B4800;
+    background-color: #FFFFFF;
+}
