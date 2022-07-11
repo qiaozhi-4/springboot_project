@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
-    <title>你的项目</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
     <!--添加Bootstrap和fontawesome的样式-->
-    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
+    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet" />
     <!-- 布局容器 -->
-    <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet"/>
+    <!-- <link rel="stylesheet" href="css/container.css" /> -->
+    <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet" />
     <!-- 布局 -->
-    <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet"/>
-    <!-- 下拉菜单按钮样式 -->
-    <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet"/>
+    <!-- <link rel="stylesheet" href="css/layout.css" /> -->
+    <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet" />
+    <!-- 电影卡片样式 -->
+    <!-- <link rel="stylesheet" href="css/card.css" /> -->
+    <link th:href="@{/css/card.css}" href="../static/css/card.css" rel="stylesheet" />
+    <!-- 电影播放样式 -->
+    <!-- <link rel="stylesheet" href="css/video-js.custom.css" /> -->
+    <link th:href="@{/css/video-js.custom.css}" href="../static/css/video-js.custom.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="css/video-js.min.css" /> -->
+    <link th:href="@{/css/video-js.min.css}" href="../static/css/video-js.min.css" rel="stylesheet" />
+    <!-- 自己的样式 -->
+    <!-- <link rel="stylesheet" href="css/mycss1.css" /> -->
+    <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet" />
+
 </head>
+
 <body>
-
-<a href="/login/gitee">
-    <img width="45px" src="/images/logo-black.svg"><span>gitee登录</span>
-</a>
-<a href="/login/gitee">
-    <img width="45px" src="/images/gitee图标.svg"><span>gitee登录</span>
-</a>
-
 <div id="app">
 
-    <!--主体布局-->
+
     <el-container>
 
         <!-- 头部 -->
@@ -32,65 +41,70 @@
             <!-- type="flex"开启 flex 布局 -->
             <el-row :gutter="5" type="flex" align="middle">
                 <el-col :span="3" :offset="1">
-                    <a href="/"><img width="100%" src="img/ikun.png"></a>
+                    <a href="img/ikun.png"><img width="100%" src="img/ikun.png"></a>
                     </form>
                 </el-col>
                 <el-col :span="1">
-                    <el-link href="/" :underline="false">首页</el-link>
+                    <el-link class="shouye" href="img/ikun.png" :underline="false">首页</el-link>
                 </el-col>
                 <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false">电视剧</el-link>
+                    <el-link class="qita" href="img/ikun.png" :underline="false">电视剧</el-link>
                 </el-col>
                 <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false">电影</el-link>
+                    <el-link class="qita" href="img/ikun.png" :underline="false">电影</el-link>
                 </el-col>
                 <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false">云影院</el-link>
+                    <el-link class="qita" href="img/ikun.png" :underline="false">云影院</el-link>
                 </el-col>
                 <el-col :span="2">
-                    <el-link href="img/ikun.png" :underline="false">会员中心</el-link>
+                    <el-link class="hyzx" href="img/ikun.png" :underline="false">会员中心</el-link>
                 </el-col>
                 <el-col :span="1">
-                    <el-dropdown>
-                        <el-button class="headDropdown" size="mini" icon="el-icon-arrow-down" circle></el-button>
+                    <el-dropdown size="mini">
+                        <el-button class="headDropdown qita" size="mini" icon="el-icon-arrow-down" circle>
+                        </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>黄金糕</el-dropdown-item>
-                            <el-dropdown-item>狮子头</el-dropdown-item>
-                            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                            <el-dropdown-item>双皮奶</el-dropdown-item>
-                            <el-dropdown-item>蚵仔煎</el-dropdown-item>
+                            <el-dropdown-item v-for="(classify,index) in classifys">
+                                <el-link class="qita" :href="'#'+ classify.id" :underline="false">{{classify.name}}
+                                </el-link>
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-col>
                 <el-col :span="5" :offset="1">
-                    <el-input placeholder="熊出没" v-model="inputHead">
-                        <el-button slot="append" icon="el-icon-search">搜索</el-button>
+                    <el-input class="sousuo qita" placeholder="熊出没" v-model="inputHead">
+                        <span>|</span>
+                        <el-button class="shouye" slot="append" icon="el-icon-search">搜索</el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false"><i class="el-icon-upload"></i></el-link>
+                    <el-link class="qita" href="img/ikun.png" :underline="false"> <i class="el-icon-upload"></i>
+                    </el-link>
                 </el-col>
                 <el-col :span="1">
                     <el-tooltip content="上传作品" placement="top">
-                        <el-link href="img/ikun.png" :underline="false"><i class="el-icon-upload"></i></el-link>
+                        <el-link class="qita" href="img/ikun.png" :underline="false"> <i class="el-icon-upload"></i>
+                        </el-link>
                     </el-tooltip>
                 </el-col>
                 <el-col :span="1">
                     <el-tooltip content="客户端下载" placement="top">
-                        <el-link href="img/ikun.png" :underline="false"><i class="el-icon-s-platform"></i>
+                        <el-link class="qita" href="img/ikun.png" :underline="false"> <i
+                                class="el-icon-s-platform"></i>
                         </el-link>
                     </el-tooltip>
 
                 </el-col>
                 <el-col :span="1">
                     <el-tooltip content="历史播放" placement="top">
-                        <el-link href="img/ikun.png" :underline="false"><i class="el-icon-time"></i></el-link>
+                        <el-link class="qita" href="img/ikun.png" :underline="false"> <i class="el-icon-time"></i>
+                        </el-link>
                     </el-tooltip>
                 </el-col>
                 <el-col :span="2">
                     <el-link @click="login" :underline="false">
                         <el-avatar size="small" src="img/log.jpg"></el-avatar>
-                        登录
+                        <span class="qita">登录</span>
                     </el-link>
                 </el-col>
             </el-row>
@@ -99,23 +113,57 @@
         <!-- 主体部分 -->
         <el-main width="1500px">
             <!-- 轮播部分 -->
-            <el-row type="flex" justify="space-around">
+            <el-row class="lunbo" type="flex" justify="space-around">
                 <el-col :span="22">
                     <div>
-                        <el-carousel class="lunbo" height="400px" direction="vertical">
-                            <el-carousel-item v-for="item in imgList" :key="item.name">
-                                <!-- <el-link href="img/ikun.png" :underline="false"> <i class="el-icon-time"></i></el-link> -->
-                                <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title"/>
+                        <el-carousel height="400px" direction="vertical">
+                            <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
+                                <el-link href="img/ikun.png" :underline="false">
+                                    <!-- <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"
+                                        :name="item.title" /></i> -->
+                                    <div class="mohuImg" width="100%">
+                                        <video id="video1" class="video-js" controls preload="auto" width="640"
+                                               height="264" poster="resource/video-logo.jpg" data-setup="{}">
+                                            <source src="resource/sample1.mp4" type="video/mp4" />
+                                            <p class="vjs-no-js">
+                                                你的浏览器不支持视频播放器！请开启JavaScript脚本或者更换浏览器以正常观看视频：<a
+                                                    href="https://videojs.com/html5-video-support/"
+                                                    target="_blank">supports HTML5 video</a>
+                                            </p>
+                                        </video>
+                                    </div>
+                                </el-link>
+                                <!-- <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title" /> -->
                             </el-carousel-item>
                         </el-carousel>
                     </div>
                 </el-col>
             </el-row>
-            <el-row type="flex" justify="space-around">
-                <el-col :span="22">
 
-                </el-col>
-            </el-row>
+            <!-- 电影分类 -->
+            <div v-for="(classify,index) in classifys">
+                <el-row>
+                    <el-col :id="classify.id" class="className" :push="1" :span="1">
+                        <h2>{{classify.name}}</h2>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="0">
+
+                    <el-col :offset="1" :span="3" v-for="(caedData,index) in classify.caedData">
+                        <el-tooltip :content="caedData.name" placement="top" :visible-arrow="false">
+                            <el-link href="img/ikun.png" :underline="false">
+                                <el-card class="box-card">
+                                    <img height="120px" width="100%" :src="caedData.img"><br>
+                                    <b><span>{{caedData.name}}</span></b><br><br>
+                                    <span>{{caedData.info}}</span><br>
+                                </el-card>
+                            </el-link>
+                        </el-tooltip>
+                    </el-col>
+
+                </el-row>
+            </div>
+
         </el-main>
 
         <!-- 底部部分 -->
@@ -125,29 +173,33 @@
 
     </el-container>
 
+
+
+
+
     <!-- 登录表单 -->
     <el-dialog title="添加用户" :visible.sync="loginFormVisible" :close-on-click-modal="false" :show-close="false">
 
         <el-form :model="loginForm" ref="loginForm" label-width="160px">
 
-            <el-form-item label="用户名" prop="username" label-width="60px">
+            <el-form-item label="用户名" label-width="60px">
                 <el-input v-model="loginForm.username" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="密码" prop="password" label-width="60px">
-                <el-input v-model="loginForm.password" autocomplete="off"></el-input>
+            <el-form-item label="密码" label-width="60px">
+                <el-input v-model="loginForm.username" autocomplete="off"></el-input>
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="loginOk('loginForm')">确 定</el-button>
+                <el-button type="primary" @click="loginok('loginForm')">确 定</el-button>
                 <el-button @click="resetForm('loginForm')">重置</el-button>
-                <el-button @click="loginNo('loginForm')">取 消</el-button>
+                <el-button @click="loginno('loginForm')">取 消</el-button>
             </el-form-item>
 
             <el-form-item>
                 <el-row>
                     <el-col :span="6">第三方登录:</el-col>
-                    <el-col :span="2"><a href="/login/gitee"><img width="25px" src="/images/logo-black.svg"></a>
+                    <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>
                     </el-col>
                 </el-row>
             </el-form-item>
@@ -155,31 +207,27 @@
         </el-form>
 
     </el-dialog>
-
-    <h3>请登出：
-        <form action="/logout" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><br/>
-            <button type="submit">点击登出</button>
-        </form>
-    </h3>
-
-    <div>
-        <p>用户信息：<span th:text="${#session?.getAttribute('SPRING_SECURITY_CONTEXT')}"></span></p>
-
-        已经登录的用户名：<span th:text="${#authentication.name}"></span>
-        <!--        已经登录的头像：<img th:src="${#authentication.avatarUrl}">-->
-    </div>
 </div>
+</body>
 
-<!--js脚本-->
-<script th:src="@{/js/vue-2.6.14.min.js}" src="../static/js/vue-2.6.14.min.js"></script>
+<!-- <script src="../a_js/vue-2.6.14.js"></script>
+<script src="../a_js/vue-router.js"></script>
+<script src="../a_js/axios-0.26.js"></script>
+<script src="../a_js/element-ui-2.15.7.js"></script>
+<script src="../a_js/video-vue.js"></script>
+<script src="../a_js/video.min.js"></script> -->
+
+<script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
 <script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
 <script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
+<script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
+<script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
 <script>
     new Vue({
         el: '#app',
         data: {
+            changed: false,
             //头部模糊搜索框内容
             inputHead: '',
             //轮播图片数组
@@ -217,20 +265,81 @@
             loginForm: {
                 username: '',
                 password: '',
-            }
+            },
+            //电影分类
+            classifys: [
+                {
+                    id: 1,
+                    name: '喜剧',
+                    //电影数据
+                    caedData: [{
+                        img: 'img/log.jpg',
+                        name: '王小虎',
+                        info: '上海市普陀区金沙江路 1518 弄',
+                    }, {
+                        img: 'img/log.jpg',
+                        name: '王小虎',
+                        info: '上海市普陀区金沙江路 1518 弄'
+                    }, {
+                        img: 'img/log.jpg',
+                        name: '王小虎',
+                        info: '上海市普陀区金沙江路 1518 弄'
+                    }, {
+                        img: 'img/log.jpg',
+                        name: '王小虎',
+                        info: '上海市普陀区金沙江路 1518 弄'
+                    }, {
+                        img: 'img/log.jpg',
+                        name: '王小虎',
+                        info: '上海市普陀区金沙江路 1518 弄'
+                    }, {
+                        img: 'img/log.jpg',
+                        name: '王小虎',
+                        info: '上海市普陀区金沙江路 1518 弄'
+                    }],
+                },
+                {
+                    id: 2,
+                    name: '冒险',
+                },
+                {
+                    id: 3,
+                    name: '动作',
+                },
+                {
+                    id: 4,
+                    name: '动漫',
+                },
+                {
+                    id: 5,
+                    name: '卧底',
+                },
+                {
+                    id: 6,
+                    name: '热血',
+                },
+                {
+                    id: 7,
+                    name: '偶像',
+                },
+                {
+                    id: 8,
+                    name: '都市',
+                },
+            ],
         },
         methods: {
             //重置表单
-            resetForm(loginForm) {
-                this.$refs[loginForm].resetFields();
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
             },
             /* 呼出登录表单 ----------------------------------------*/
             login() {
                 this.loginFormVisible = true
             },
             /* 确定登录 */
-            loginOk(loginForm) {
-                this.$refs[loginForm].validate((valid) => {
+            loginok(formName) {
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.loginFormVisible = false// 隐藏表单
                         //把表单数据赋值给data
@@ -238,35 +347,17 @@
                             username: this.loginForm.username,
                             password: this.loginForm.password
                         }
-                        const params = new URLSearchParams();
-                        params.append('username', this.loginForm.username);
-                        params.append('password', this.loginForm.password);
-                        //发送请求到后端删除sql数据
-                        axios.get('/login', params)
-                            .then((response) => {
-                                if (response.data) {
-                                    this.$message({
-                                        type: 'success',
-                                        message: '登录成功!'
-                                    });
-                                } else {
-                                    this.$message({
-                                        type: 'info',
-                                        message: '登录败败!'
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                    this.$message({
-                                        type: 'error',
-                                        message: '登录请求失败!'
-                                    });
-                                    console.log(error)
-                                }
-                            )
+                        //存入表格数组
+                        this.tableData.push(data)
                         //清除表单绑定的数据
                         Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
-                        this.resetForm(loginForm)
+                        this.resetForm(formName)
+                        //提示
+                        this.$notify({
+                            title: '成功',
+                            message: '添加数据成功',
+                            type: 'success'
+                        });
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -274,11 +365,11 @@
                 });
             },
             /* 取消登录 */
-            loginNo(loginForm) {
+            loginno(formName) {
                 this.loginFormVisible = false
                 //清除表单绑定的数据
                 Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
-                this.resetForm(loginForm)
+                this.resetForm(formName)
                 //提示
                 this.$notify.info({
                     title: '消息',
@@ -286,10 +377,21 @@
                 });
             },
         },
+
         mounted: function () {
-            console.log('已经加载Vue……')
+            const options = {}
+            let player = videojs('video1', options, function () {
+                videojs.log('start playing...')
+                // 手动控制播放
+                this.play()
+                this.on('ended', function () {
+                    // 停止播放
+                    videojs.log('stopped!')
+                })
+            })
+            console.log(player)
         },
-    });
+    })
 </script>
-</body>
+
 </html>

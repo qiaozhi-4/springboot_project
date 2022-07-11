@@ -1,0 +1,33 @@
+/*以下为自定义样式，可以全部删除不影响大局！*/
+
+.video-js .vjs-big-play-button {
+    font-size: 2.5em !important;
+    line-height: 2.3em !important;
+    height: 2.5em !important;
+    width: 2.5em !important;
+    -webkit-border-radius: 2.5em !important;
+    -moz-border-radius: 2.5em !important;
+    border-radius: 2.5em !important;
+    background-color: #73859f;
+    background-color: rgba(115, 133, 159, 0.5) !important;
+    border-width: 0.15em !important;
+    margin-top: -1.25em !important;
+    margin-left: -1.75em !important;
+}
+.vjs-big-play-button .vjs-icon-placeholder {
+    font-size: 1.63em !important;
+}
+
+/*暂停播放时显示播放按钮*/
+.vjs-paused .vjs-big-play-button,
+.vjs-paused.vjs-has-started .vjs-big-play-button {
+    display: block !important;
+}
+
+/*设置时间显示*/
+.video-js .vjs-time-control {
+    display: block !important;
+}
+.video-js .vjs-remaining-time {
+    display: none !important;
+}

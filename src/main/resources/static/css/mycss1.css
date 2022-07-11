@@ -1,8 +1,79 @@
+.el-header {
+    /* 透明度 */
+    /* opacity:0.3; */
+    background-color: rgba(255, 255, 255, 0);
+
+    position: fixed;
+    right: 8px;
+    top: 0;
+    left: 8px;
+    /* 一直将导航栏置于最顶层  */
+    z-index: 999;
+}
+.sousuo input{
+    background-color:rgba(255, 255, 255, 0.1)!important;
+    border:0!important;
+}
+.el-input-group__append{
+    background-color:rgba(255, 255, 255, 0.1)!important;
+    border:0!important;
+}
+.el-dropdown-menu{
+    background-color:#14161A;
+    border: 0;
+}
+
+/* 头部文字颜色 */
+.shouye {
+    color: #FFA5DC !important;
+}
+.qita {
+    color: #fffcfcfd !important;
+}
+.qita:hover {
+    color: #FFA5DC !important;
+}
+.hyzx {
+    color: #D8B182 !important;
+}
+
+
 /* 头部的下拉菜单 */
-.headDropdown{
+.headDropdown {
     background: transparent !important;
 }
+
 /* 轮播位置 */
-.lunbo{
-    top: 35px;
+.lunbo {
+    top: -25px;
+    /* top: 35px; */
+}
+
+/* 轮播图模糊效果 */
+.mohu::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 65px 65px #14161A inset;
+}
+
+/* 电影分类 */
+.className{
+    color: #FFA5DC;
+}/* 电影分类 */
+.className:hover{
+    color: green;
+}
+
+body {
+    /* background: url("img/109951167468514107.jpg") no-repeat center center fixed; */
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
+  background-size: 100% 100%;
+    background-color: #14161A;
 }
