@@ -63,9 +63,22 @@
 /* 电影分类 */
 .className{
     color: #FFA5DC;
-}/* 电影分类 */
+}
+/* 电影分类 */
 .className:hover{
     color: green;
+}
+/* 电影卡片 */
+.movie{
+    
+    border:0;
+    color: #FFA5DC;
+    background-color: #14161A;
+}
+
+/* vip卡片 */
+.vip{
+    height: 80px;
 }
 
 body {
@@ -76,4 +89,8 @@ body {
     
   background-size: 100% 100%;
     background-color: #14161A;
+}
+
+.el-link--inner{
+    width: 100%;
 }
