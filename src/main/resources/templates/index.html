@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -11,21 +10,15 @@
     <!--添加Bootstrap和fontawesome的样式-->
     <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet" />
     <!-- 布局容器 -->
-    <!-- <link rel="stylesheet" href="css/container.css" /> -->
     <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet" />
     <!-- 布局 -->
-    <!-- <link rel="stylesheet" href="css/layout.css" /> -->
     <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet" />
     <!-- 电影卡片样式 -->
-    <!-- <link rel="stylesheet" href="css/card.css" /> -->
     <link th:href="@{/css/card.css}" href="../static/css/card.css" rel="stylesheet" />
     <!-- 电影播放样式 -->
-    <!-- <link rel="stylesheet" href="css/video-js.custom.css" /> -->
     <link th:href="@{/css/video-js.custom.css}" href="../static/css/video-js.custom.css" rel="stylesheet" />
-    <!-- <link rel="stylesheet" href="css/video-js.min.css" /> -->
     <link th:href="@{/css/video-js.min.css}" href="../static/css/video-js.min.css" rel="stylesheet" />
     <!-- 自己的样式 -->
-    <!-- <link rel="stylesheet" href="css/mycss1.css" /> -->
     <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet" />
 
 </head>
@@ -57,7 +50,7 @@
                     <el-link class="qita" href="img/ikun.png" :underline="false">云影院</el-link>
                 </el-col>
                 <el-col :span="2">
-                    <el-link class="hyzx" href="img/ikun.png" :underline="false">会员中心</el-link>
+                    <el-link @click="vip" class="hyzx" :underline="false">会员充值</el-link>
                 </el-col>
                 <el-col :span="1">
                     <el-dropdown size="mini">
@@ -152,7 +145,7 @@
                     <el-col :offset="1" :span="3" v-for="(caedData,index) in classify.caedData">
                         <el-tooltip :content="caedData.name" placement="top" :visible-arrow="false">
                             <el-link href="img/ikun.png" :underline="false">
-                                <el-card class="box-card">
+                                <el-card class="box-card movie">
                                     <img height="120px" width="100%" :src="caedData.img"><br>
                                     <b><span>{{caedData.name}}</span></b><br><br>
                                     <span>{{caedData.info}}</span><br>
@@ -168,7 +161,18 @@
 
         <!-- 底部部分 -->
         <el-footer>
-            底部
+            <el-row :type="flex" :justify="start">
+                <el-col :span="8">
+                    <p>关于我们</p>
+                </el-col>
+                <el-col :span="8">
+                    <p>联系我们</p>
+                </el-col>
+                <el-col :span="8">
+                    <p>服务</p>
+                </el-col>
+            </el-row>
+            <div style="height: 80px;"></div>
         </el-footer>
 
     </el-container>
@@ -207,15 +211,43 @@
         </el-form>
 
     </el-dialog>
+
+    <!-- vip购买弹出框 -->
+    <el-dialog title="vip会员" :visible.sync="vipVisible" width="50%">
+        <el-link @click="login" :underline="false">
+            <el-avatar size="small" src="img/log.jpg"></el-avatar>
+            <span>请登录后购买vip</span>
+        </el-link>
+        <div style="height: 40px;"></div>
+        <el-row class="vip" :type="flex" justify="center" align="middle" :gutter="12">
+            <el-col :span="8">
+                <a href="#" style="text-decoration:none ">
+                    <el-card shadow="hover">
+                        <div>12个月</div>
+                        <div>￥<span>248</span></div>
+                    </el-card>
+                </a>
+            </el-col>
+            <el-col :span="8">
+                <a href="#" style="text-decoration:none ">
+                    <el-card shadow="hover">
+                        <div>3个月</div>
+                        <div>￥<span>78</span></div>
+                    </el-card>
+                </a>
+            </el-col>
+            <el-col :span="8">
+                <a href="#" style="text-decoration:none ">
+                    <el-card shadow="hover">
+                        <div>1个月</div>
+                        <div>￥<span>30</span></div>
+                    </el-card>
+                </a>
+            </el-col>
+        </el-row>
+    </el-dialog>
 </div>
 </body>
-
-<!-- <script src="../a_js/vue-2.6.14.js"></script>
-<script src="../a_js/vue-router.js"></script>
-<script src="../a_js/axios-0.26.js"></script>
-<script src="../a_js/element-ui-2.15.7.js"></script>
-<script src="../a_js/video-vue.js"></script>
-<script src="../a_js/video.min.js"></script> -->
 
 <script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
 <script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
@@ -258,6 +290,7 @@
 
                 },
             ],
+
             //登录
             //控制登录表单显示还是隐藏
             loginFormVisible: false,
@@ -266,6 +299,10 @@
                 username: '',
                 password: '',
             },
+
+            //vip购买弹出框
+            vipVisible: false,
+
             //电影分类
             classifys: [
                 {
@@ -329,6 +366,12 @@
             ],
         },
         methods: {
+            //vip购买弹框
+            vip() {
+                this.vipVisible = true
+                return false
+            },
+
             //重置表单
             resetForm(formName) {
                 this.$refs[formName].resetFields();
