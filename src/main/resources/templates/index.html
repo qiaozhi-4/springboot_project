@@ -24,6 +24,8 @@
 </head>
 
 <body>
+
+<p>用户信息：<span th:text="${#authentication.principal}"></span></p>
 <div id="app">
 
 
@@ -95,7 +97,7 @@
                     </el-tooltip>
                 </el-col>
                 <el-col :span="2">
-                    <el-link @click="login" :underline="false">
+                    <el-link href="loginUser" :underline="false">
                         <el-avatar size="small" src="img/log.jpg"></el-avatar>
                         <span class="qita">登录</span>
                     </el-link>
@@ -112,11 +114,11 @@
                         <el-carousel height="400px" direction="vertical">
                             <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
                                 <el-link href="img/ikun.png" :underline="false">
-                                    <!-- <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"
-                                        :name="item.title" /></i> -->
-                                    <div class="mohuImg" width="100%">
+                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"
+                                         :name="item.title" /></i>
+                                    <!-- <div class="mohuImg" width="100%">
                                         <video id="video1" class="video-js" controls preload="auto" width="640"
-                                               height="264" poster="resource/video-logo.jpg" data-setup="{}">
+                                            height="264" poster="resource/video-logo.jpg" data-setup="{}">
                                             <source src="resource/sample1.mp4" type="video/mp4" />
                                             <p class="vjs-no-js">
                                                 你的浏览器不支持视频播放器！请开启JavaScript脚本或者更换浏览器以正常观看视频：<a
@@ -124,7 +126,7 @@
                                                     target="_blank">supports HTML5 video</a>
                                             </p>
                                         </video>
-                                    </div>
+                                    </div> -->
                                 </el-link>
                                 <!-- <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title" /> -->
                             </el-carousel-item>
@@ -161,9 +163,12 @@
 
         <!-- 底部部分 -->
         <el-footer>
-            <el-row :type="flex" :justify="start">
+            <el-row type="flex" justify="start">
                 <el-col :span="8">
                     <p>关于我们</p>
+                    <p>用户信息：<span th:text="${#authentication.principal}"></span></p>
+                    <p>用户用户名信息：<span th:text="${#authentication.name}"></span></p>
+                    <p>用户权限信息：<span th:text="${#authentication.authorities}"></span></p>
                 </el-col>
                 <el-col :span="8">
                     <p>联系我们</p>
@@ -181,45 +186,16 @@
 
 
 
-    <!-- 登录表单 -->
-    <el-dialog title="添加用户" :visible.sync="loginFormVisible" :close-on-click-modal="false" :show-close="false">
 
-        <el-form :model="loginForm" ref="loginForm" label-width="160px">
-
-            <el-form-item label="用户名" label-width="60px">
-                <el-input v-model="loginForm.username" autocomplete="off"></el-input>
-            </el-form-item>
-
-            <el-form-item label="密码" label-width="60px">
-                <el-input v-model="loginForm.username" autocomplete="off"></el-input>
-            </el-form-item>
-
-            <el-form-item>
-                <el-button type="primary" @click="loginok('loginForm')">确 定</el-button>
-                <el-button @click="resetForm('loginForm')">重置</el-button>
-                <el-button @click="loginno('loginForm')">取 消</el-button>
-            </el-form-item>
-
-            <el-form-item>
-                <el-row>
-                    <el-col :span="6">第三方登录:</el-col>
-                    <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>
-                    </el-col>
-                </el-row>
-            </el-form-item>
-
-        </el-form>
-
-    </el-dialog>
 
     <!-- vip购买弹出框 -->
     <el-dialog title="vip会员" :visible.sync="vipVisible" width="50%">
-        <el-link @click="login" :underline="false">
+        <el-link href="loginUser" :underline="false">
             <el-avatar size="small" src="img/log.jpg"></el-avatar>
             <span>请登录后购买vip</span>
         </el-link>
         <div style="height: 40px;"></div>
-        <el-row class="vip" :type="flex" justify="center" align="middle" :gutter="12">
+        <el-row class="vip" type="flex" justify="center" align="middle" :gutter="12">
             <el-col :span="8">
                 <a href="#" style="text-decoration:none ">
                     <el-card shadow="hover">
@@ -255,7 +231,8 @@
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
 <script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
-<script>
+<script th:inline="javascript">
+    var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
     new Vue({
         el: '#app',
         data: {
@@ -296,8 +273,9 @@
             loginFormVisible: false,
             //登录表单数据
             loginForm: {
-                username: '',
-                password: '',
+                username: 'admin',
+                password: 'admin',
+                _csrf: csrf,
             },
 
             //vip购买弹出框
@@ -384,25 +362,31 @@
             loginok(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.loginFormVisible = false// 隐藏表单
-                        //把表单数据赋值给data
-                        let data = {
-                            username: this.loginForm.username,
-                            password: this.loginForm.password
-                        }
-                        //存入表格数组
-                        this.tableData.push(data)
+                        var params = new URLSearchParams();
+                        params.append('username', this.loginForm.username);
+                        params.append('password', this.loginForm.password);
+                        params.append('_csrf', this.loginForm._csrf);
+                        axios.post('/login', params)
+                            .then(response => {
+                                console.log('成功');
+                                console.log(response);
+                                this.loginFormVisible = false// 隐藏表单
+                                //提示
+                                // this.$message.success('登录成功');
+                            })
+                            .catch(error=> {
+                                console.log('请求失败');
+                                console.log(error);
+                                // this.$message.error('错误！！请求发送失败');
+                            });
+
+
                         //清除表单绑定的数据
-                        Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
+                        // Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
                         this.resetForm(formName)
-                        //提示
-                        this.$notify({
-                            title: '成功',
-                            message: '添加数据成功',
-                            type: 'success'
-                        });
                     } else {
                         console.log('error submit!!');
+                        this.$message.error('错误！！无效的输入');
                         return false;
                     }
                 });
@@ -414,25 +398,22 @@
                 Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
                 this.resetForm(formName)
                 //提示
-                this.$notify.info({
-                    title: '消息',
-                    message: '您取消了登录'
-                });
+                this.$message.info('您取消了登录');
             },
         },
 
         mounted: function () {
-            const options = {}
-            let player = videojs('video1', options, function () {
-                videojs.log('start playing...')
-                // 手动控制播放
-                this.play()
-                this.on('ended', function () {
-                    // 停止播放
-                    videojs.log('stopped!')
-                })
-            })
-            console.log(player)
+            // const options = {}
+            // let player = videojs('video1', options, function () {
+            //     videojs.log('start playing...')
+            //     // 手动控制播放
+            //     this.play()
+            //     this.on('ended', function () {
+            //         // 停止播放
+            //         videojs.log('stopped!')
+            //     })
+            // })
+            // console.log(player)
         },
     })
 </script>
