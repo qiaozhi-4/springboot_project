@@ -97,9 +97,13 @@
                     </el-tooltip>
                 </el-col>
                 <el-col :span="2">
-                    <el-link href="loginUser" :underline="false">
+                    <el-link th:if="${#authentication.name}" href="loginUser" :underline="false">
                         <el-avatar size="small" src="img/log.jpg"></el-avatar>
                         <span class="qita">登录</span>
+                    </el-link>
+                    <el-link th:if="${#authentication.name}"  :underline="false">
+                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
+                        <span class="qita">你以登录</span>
                     </el-link>
                 </el-col>
             </el-row>
@@ -166,9 +170,9 @@
             <el-row type="flex" justify="start">
                 <el-col :span="8">
                     <p>关于我们</p>
-                    <p>用户信息：<span th:text="${#authentication.principal}"></span></p>
                     <p>用户用户名信息：<span th:text="${#authentication.name}"></span></p>
                     <p>用户权限信息：<span th:text="${#authentication.authorities}"></span></p>
+                    <p>用户信息：<span th:text="${#authentication.principal}"></span></p>
                 </el-col>
                 <el-col :span="8">
                     <p>联系我们</p>
@@ -268,15 +272,6 @@
                 },
             ],
 
-            //登录
-            //控制登录表单显示还是隐藏
-            loginFormVisible: false,
-            //登录表单数据
-            loginForm: {
-                username: 'admin',
-                password: 'admin',
-                _csrf: csrf,
-            },
 
             //vip购买弹出框
             vipVisible: false,
@@ -354,52 +349,7 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            /* 呼出登录表单 ----------------------------------------*/
-            login() {
-                this.loginFormVisible = true
-            },
-            /* 确定登录 */
-            loginok(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        var params = new URLSearchParams();
-                        params.append('username', this.loginForm.username);
-                        params.append('password', this.loginForm.password);
-                        params.append('_csrf', this.loginForm._csrf);
-                        axios.post('/login', params)
-                            .then(response => {
-                                console.log('成功');
-                                console.log(response);
-                                this.loginFormVisible = false// 隐藏表单
-                                //提示
-                                // this.$message.success('登录成功');
-                            })
-                            .catch(error=> {
-                                console.log('请求失败');
-                                console.log(error);
-                                // this.$message.error('错误！！请求发送失败');
-                            });
 
-
-                        //清除表单绑定的数据
-                        // Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
-                        this.resetForm(formName)
-                    } else {
-                        console.log('error submit!!');
-                        this.$message.error('错误！！无效的输入');
-                        return false;
-                    }
-                });
-            },
-            /* 取消登录 */
-            loginno(formName) {
-                this.loginFormVisible = false
-                //清除表单绑定的数据
-                Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
-                this.resetForm(formName)
-                //提示
-                this.$message.info('您取消了登录');
-            },
         },
 
         mounted: function () {
