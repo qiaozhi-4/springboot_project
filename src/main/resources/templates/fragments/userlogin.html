@@ -8,10 +8,10 @@
 
 <h2>用户是否登录的头像显示</h2>
 
-<div th:fragment="userlogin">
+<div th:fragment="userlogin(info)">
     <el-link th:if="${#authentication.name == 'anonymousUser'}" href="loginUser" :underline="false">
         <el-avatar size="small" src="img/log.jpg"></el-avatar>
-        <span class="qita">登录</span>
+        <span class="qita">[[${info}]]</span>
     </el-link>
     <el-link th:if="${#authentication.name != 'anonymousUser'}"  :underline="false">
         <el-avatar size="small" src="img/log.jpg"></el-avatar>

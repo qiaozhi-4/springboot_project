@@ -32,84 +32,7 @@
     <el-container>
 
         <!-- 头部 -->
-        <el-header>
-            <!-- type="flex"开启 flex 布局 -->
-            <el-row :gutter="5" type="flex" align="middle">
-                <el-col :span="3" :offset="1">
-                    <a href="img/ikun.png"><img width="100%" src="img/ikun.png"></a>
-                    </form>
-                </el-col>
-                <el-col :span="1">
-                    <el-link class="shouye" href="img/ikun.png" :underline="false">首页</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-link class="qita" href="img/ikun.png" :underline="false">电视剧</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-link class="qita" href="img/ikun.png" :underline="false">电影</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-link class="qita" href="img/ikun.png" :underline="false">云影院</el-link>
-                </el-col>
-                <el-col :span="2">
-                    <el-link @click="vip" class="hyzx" :underline="false">会员充值</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-dropdown size="mini">
-                        <el-button class="headDropdown qita" size="mini" icon="el-icon-arrow-down" circle>
-                        </el-button>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(classify,index) in classifys">
-                                <el-link class="qita" :href="'#'+ classify.id" :underline="false">{{classify.name}}
-                                </el-link>
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-col>
-                <el-col :span="5" :offset="1">
-                    <el-input class="sousuo qita" placeholder="熊出没" v-model="inputHead">
-                        <span>|</span>
-                        <el-button class="shouye" slot="append" icon="el-icon-search">搜索</el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="1">
-                    <el-link class="qita" href="img/ikun.png" :underline="false"> <i class="el-icon-upload"></i>
-                    </el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-tooltip content="上传作品" placement="top">
-                        <el-link class="qita" href="img/ikun.png" :underline="false"> <i class="el-icon-upload"></i>
-                        </el-link>
-                    </el-tooltip>
-                </el-col>
-                <el-col :span="1">
-                    <el-tooltip content="客户端下载" placement="top">
-                        <el-link class="qita" href="img/ikun.png" :underline="false"> <i
-                                class="el-icon-s-platform"></i>
-                        </el-link>
-                    </el-tooltip>
-
-                </el-col>
-                <el-col :span="1">
-                    <el-tooltip content="历史播放" placement="top">
-                        <el-link class="qita" href="img/ikun.png" :underline="false"> <i class="el-icon-time"></i>
-                        </el-link>
-                    </el-tooltip>
-                </el-col>
-                <el-col :span="2">
-                    <!--Thymeleaf模板引擎片段复用【导航 栏】-->
-                    <div th:insert="~{fragments/userlogin::userlogin}"></div>
-<!--                    <el-link th:if="${#authentication.name == 'anonymousUser'}" href="loginUser" :underline="false">-->
-<!--                        <el-avatar size="small" src="img/log.jpg"></el-avatar>-->
-<!--                        <span class="qita">登录</span>-->
-<!--                    </el-link>-->
-<!--                    <el-link th:if="${#authentication.name != 'anonymousUser'}"  :underline="false">-->
-<!--                        <el-avatar size="small" src="img/log.jpg"></el-avatar>-->
-<!--                        <span class="qita">你以登录</span>-->
-<!--                    </el-link>-->
-                </el-col>
-            </el-row>
-        </el-header>
+        <div th:insert="~{fragments/header::header}"></div>
 
         <!-- 主体部分 -->
         <el-main width="1500px">
@@ -120,8 +43,12 @@
                         <el-carousel height="400px" direction="vertical">
                             <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
                                 <el-link href="img/ikun.png" :underline="false">
-                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"
-                                         :name="item.title" /></i>
+<!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
+<!--                                         :name="item.title" /></i>-->
+
+                                    <video width="1000px" height="600px" controls autoplay src="videolook/1176840-1-hd.mp4"></video>
+
+
                                     <!-- <div class="mohuImg" width="100%">
                                         <video id="video1" class="video-js" controls preload="auto" width="640"
                                             height="264" poster="resource/video-logo.jpg" data-setup="{}">
@@ -196,10 +123,11 @@
 
     <!-- vip购买弹出框 -->
     <el-dialog title="vip会员" :visible.sync="vipVisible" width="50%">
-        <el-link href="loginUser" :underline="false">
-            <el-avatar size="small" src="img/log.jpg"></el-avatar>
-            <span>请登录后购买vip</span>
-        </el-link>
+<!--        <el-link href="loginUser" :underline="false">-->
+<!--            <el-avatar size="small" src="img/log.jpg"></el-avatar>-->
+<!--            <span>请登录后购买vip</span>-->
+<!--        </el-link>-->
+        <div th:insert="~{fragments/userlogin::userlogin('请登录后购买vip')}"></div>
         <div style="height: 40px;"></div>
         <el-row class="vip" type="flex" justify="center" align="middle" :gutter="12">
             <el-col :span="8">
