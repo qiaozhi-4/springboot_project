@@ -1,0 +1,43 @@
+.barrage-stream {
+    position: absolute;
+    width: 100%;
+    height: 80%; /*留下20%显示控件*/
+    overflow: hidden;
+    z-index: 1008; /*不能超过2008*/
+    /*调试*/
+    border: 1px solid blue;
+}
+
+.barrage-stream .barrage-block {
+    z-index: 1;
+    position: relative;
+    height: 40px;
+    width: 100%;
+    color: #fff;
+    /*调试*/
+    border-bottom: red 2px solid;
+}
+
+.barrage-stream .barrage-block-item {
+    position: absolute;
+    display: inline-block;
+    width: 200px;
+    animation: barrage 5s linear;
+    animation-fill-mode: forwards;
+    color: red;
+}
+
+.barrage-stream .barrage-block-item:hover {
+    border: 1px dashed yellow;
+}
+
+@keyframes barrage {
+    from {
+        left: 100%;
+        transform: translateX(0);
+    }
+    to {
+        left: 0;
+        transform: translateX(-200%);
+    }
+}

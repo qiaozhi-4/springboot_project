@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>js片段</h2>
+
+<div th:fragment="js">
+
+    <script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
+    <script th:src="@{/js/barrage_stream_video.js}" src="../static/js/barrage_stream_video.js"></script>
+    <script th:src="@{/js/bootstrap.bundle.js}" src="../static/js/bootstrap.bundle.js"></script>
+    <script th:src="@{/js/echarts.min.js}" src="../static/js/echarts.min.js"></script>
+    <script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
+    <script th:src="@{/js/fontawesome.js}" src="../static/js/fontawesome.js"></script>
+    <script th:src="@{/js/jquery.jqzoom-core.js}" src="../static/js/jquery.jqzoom-core.js"></script>
+    <script th:src="@{/js/jquery.validate-1.19.3.js}" src="../static/js/jquery.validate-1.19.3.js"></script>
+    <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
+    <script th:src="@{/js/tinymce_vue.js}" src="../static/js/tinymce_vue.js"></script>
+    <script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
+    <script th:src="@{/js/video-upload-vue.js}" src="../static/js/video-upload-vue.js"></script>
+    <script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
+    <script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
+    <script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
+
+
+    <script th:inline="javascript">
+        var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
+        new Vue({
+            el: '#app',
+            data: {
+                changed: false,
+                //头部模糊搜索框内容
+                inputHead: '',
+                //轮播图片数组
+                imgList: [
+                    {
+                        name: "109951167468487275",
+                        src: "img/109951167468487275.jpg",
+
+                    },
+                    {
+                        name: "109951167468514107",
+                        src: "img/109951167468514107.jpg",
+
+                    },
+                    {
+                        name: "109951167468538175",
+                        src: "img/109951167468538175.jpg",
+
+                    },
+                    {
+                        name: "109951167468551304",
+                        src: "img/109951167468551304.jpg",
+
+                    },
+                    {
+                        name: "109951167468567569",
+                        src: "img/109951167468567569.jpg",
+
+                    },
+                ],
+
+
+                //vip购买弹出框
+                vipVisible: false,
+
+                //电影分类
+                classifys: [
+                    {
+                        id: 1,
+                        name: '喜剧',
+                        //电影数据
+                        caedData: [{
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄',
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }],
+                    },
+                    {
+                        id: 2,
+                        name: '冒险',
+                    },
+                    {
+                        id: 3,
+                        name: '动作',
+                    },
+                    {
+                        id: 4,
+                        name: '动漫',
+                    },
+                    {
+                        id: 5,
+                        name: '卧底',
+                    },
+                    {
+                        id: 6,
+                        name: '热血',
+                    },
+                    {
+                        id: 7,
+                        name: '偶像',
+                    },
+                    {
+                        id: 8,
+                        name: '都市',
+                    },
+                ],
+            },
+            methods: {
+                //vip购买弹框
+                vip() {
+                    this.vipVisible = true
+                    return false
+                },
+
+                //重置表单
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+
+            },
+
+            mounted: function () {
+                // const options = {}
+                // let player = videojs('video1', options, function () {
+                //     videojs.log('start playing...')
+                //     // 手动控制播放
+                //     this.play()
+                //     this.on('ended', function () {
+                //         // 停止播放
+                //         videojs.log('stopped!')
+                //     })
+                // })
+                // console.log(player)
+            },
+        })
+    </script>
+
+</div>
+
+</body>
+</html>

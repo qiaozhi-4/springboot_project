@@ -7,19 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <!--添加Bootstrap和fontawesome的样式-->
-    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet" />
-    <!-- 布局容器 -->
-    <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet" />
-    <!-- 布局 -->
-    <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet" />
-    <!-- 电影卡片样式 -->
-    <link th:href="@{/css/card.css}" href="../static/css/card.css" rel="stylesheet" />
-    <!-- 电影播放样式 -->
-    <link th:href="@{/css/video-js.custom.css}" href="../static/css/video-js.custom.css" rel="stylesheet" />
-    <link th:href="@{/css/video-js.min.css}" href="../static/css/video-js.min.css" rel="stylesheet" />
-    <!-- 自己的样式 -->
-    <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet" />
+    <div th:replace="~{fragments/css::css}"></div>
+
 
 </head>
 
@@ -37,7 +26,8 @@
         <div th:insert="~{fragments/header::header}"></div>
 
         <!-- 主体部分 -->
-        <el-main width="1500px">
+        <el-main >
+            <video width="1000px" height="600px" controls autoplay th:src="@{${session.movie}}"></video>
 
         </el-main>
 
@@ -45,44 +35,13 @@
     </el-container>
 
 
-
+    <!-- vip购买弹出框 -->
+    <div th:replace="~{fragments/vip::vip}"></div>
 
 </div>
 </body>
 
-<script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
-<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
-<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
-<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
-<script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
-<script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
-<script th:inline="javascript">
-    var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
-    new Vue({
-        el: '#app',
-        data: {
+<script th:replace="~{fragments/js::js}"></script>
 
-            dialogImageUrl: '',
-            dialogVisible: false
-        },
-        methods: {
-
-        },
-
-        mounted: function () {
-            // const options = {}
-            // let player = videojs('video1', options, function () {
-            //     videojs.log('start playing...')
-            //     // 手动控制播放
-            //     this.play()
-            //     this.on('ended', function () {
-            //         // 停止播放
-            //         videojs.log('stopped!')
-            //     })
-            // })
-            // console.log(player)
-        },
-    })
-</script>
 
 </html>
