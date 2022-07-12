@@ -29,6 +29,12 @@ public class MainController
     public String login() {
         return "login";
     }
+
+    // 播放页
+    @GetMapping("/play")
+    public String play() {
+        return "play";
+    }
     //第三方gitee登录
     @RequestMapping("/login/gitee")
     public String auth(Model model,
