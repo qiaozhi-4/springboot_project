@@ -6,7 +6,6 @@ import com.zking.entity.Img;
 import com.zking.entity.User;
 import com.zking.service.IImgService;
 import com.zking.service.IUserService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
