@@ -75,7 +75,7 @@
                        href="adminFilm.html"><span>电影管理</span></a>
                 </el-col>
             </el-row>
-            <el-row type="flex" justify="space-around">
+            <el-row type="flex" justify="space-around" style="height: 50px;">
                 <el-col :span="20" style="position: relative;height: 50px;">
                     <div class="grid-content bg-purple-dark admin-row2">
                         <span style="margin-left: 10px">电影管理</span>
@@ -97,36 +97,39 @@
                             </el-col>
                             <el-col :span="12">
                                 <div style="float: right;">
-                                    <el-button type="primary" @addFilm="">添加电影</el-button>
+                                    <el-button type="primary" @click="dialogFormVisible3 = true">添加电影</el-button>
                                 </div>
                             </el-col>
                         </el-row>
                         <template>
                             <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
                                       @selection-change="handleSelectionChange" @row-click="dj">
-                                <el-table-column prop="userImg" label="电影" width="120">
+                                <el-table-column prop="filmImg" label="电影" width="120">
                                     <template slot-scope="scope">
                                         <div class="demo-type">
                                             <div>
-                                                <el-image :src="scope.row.userImg"></el-image>
+                                                <el-image :src="scope.row.filmImg"></el-image>
                                             </div>
                                         </div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="name" label="电影名" width="120">
                                 </el-table-column>
-                                <el-table-column prop="sex" label="评分" width="120">
+                                <el-table-column prop="score" label="评分" width="120">
                                 </el-table-column>
-                                <el-table-column prop="sex" label="导演" width="120">
+                                <el-table-column prop="director" label="导演" width="120">
                                 </el-table-column>
-                                <el-table-column prop="sex" label="上映时间" width="120">
+                                <el-table-column prop="time" label="上映时间" width="120">
                                 </el-table-column>
-                                <el-table-column prop="sex" label="上映国家" width="120">
+                                <el-table-column prop="filmRegion" label="上映国家" width="120">
                                 </el-table-column>
-                                <el-table-column prop="sex" label="类型" width="120">
+                                <el-table-column prop="filmType" label="类型" width="120">
                                 </el-table-column>
-                                <el-table-column label="操作" >
-                                    <button></button>
+                                <el-table-column label="操作">
+                                    <el-button type="text" @click="dialogFormVisible = true">修改
+                                    </el-button>
+                                    <el-button type="text" @click="dialogFormVisible2 = true">下架
+                                    </el-button>
                                 </el-table-column>
                             </el-table>
                         </template>
@@ -146,6 +149,188 @@
         </el-footer>
 
     </el-container>
+
+    <el-dialog title="修改订单" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="电影名字" :label-width="formLabelWidth">
+                <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="评分" :label-width="formLabelWidth">
+                <el-input v-model="form.score" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="导演" :label-width="formLabelWidth">
+                <el-input v-model="form.director" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="国家" :label-width="formLabelWidth">
+                <el-input v-model="form.filmRegion" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="类型" :label-width="formLabelWidth">
+                <template>
+                    <el-select
+                            v-model="form.filmType"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            multiple-limit="3"
+                            placeholder="请选择类型">
+                        <el-option
+                                v-for="city in cities"
+                                :key="city.id"
+                                :label="city.name"
+                                :value="city.id">
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="modificationFilm">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="电影下架" :visible.sync="dialogFormVisible2">
+        <div style="margin-bottom: 20px">
+            <span>确定下架{{form.name}}吗？</span>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="removeFilm">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="添加订单" :visible.sync="dialogFormVisible3">
+        <el-form :model="form2">
+            <el-form-item label="电影封面" :label-width="formLabelWidth">
+                <el-upload
+                           action="#"
+                           list-type="picture-card"
+                           :file-list="imgList"
+                           :auto-upload="false"
+                           limit="1"
+                           :on-change="fn">
+                    <i slot="default" class="el-icon-plus"></i>
+                    <div slot="file" slot-scope="{file}">
+                        <img
+                                class="el-upload-list__item-thumbnail"
+                                :src="file.url" alt=""
+                        >
+                        <span class="el-upload-list__item-actions">
+                        <span
+                                class="el-upload-list__item-preview"
+                                @click="handlePictureCardPreview(file)"
+                        >
+                            <i class="el-icon-zoom-in"></i>
+                        </span>
+                        <span
+                                v-if="!disabled"
+                                class="el-upload-list__item-delete"
+                                @click="handleRemove(file)"
+                        >
+                          <i class="el-icon-delete"></i>
+                        </span>
+                      </span>
+                    </div>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl">
+                </el-dialog>
+            </el-form-item>
+            <el-form-item label="电影" :label-width="formLabelWidth">
+                <el-upload
+                        class="upload-demo"
+                        :auto-upload="false"
+                        drag
+                        action="/"
+                        limit="1"
+                        :before-remove="beforeRemove"
+                        :file-list="fileList"
+                        :on-change="fn2">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></br>只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="电影名" :label-width="formLabelWidth">
+                <el-input v-model="form2.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电影名" :label-width="formLabelWidth">
+                <el-input v-model="form2.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="导演" :label-width="formLabelWidth">
+                <el-input v-model="form2.info" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="主演" :label-width="formLabelWidth">
+                <template>
+                    <el-select
+                            v-model="form2.actor"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            multiple-limit="2"
+                            placeholder="请选择主演">
+                        <el-option
+                                v-for="actor in actors"
+                                :key="actor.name"
+                                :label="actor.name"
+                                :value="actor.name">
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-form-item>
+            <el-form-item label="演员" :label-width="formLabelWidth">
+                <template>
+                    <el-select
+                            v-model="form2.actors"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择演员">
+                        <el-option
+                                v-for="actor in actors"
+                                :key="actor.id"
+                                :label="actor.name"
+                                :value="actor.id">
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-form-item>
+            <el-form-item label="简介" :label-width="formLabelWidth">
+                <el-input type="textarea" v-model="form2.price" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="类型" :label-width="formLabelWidth">
+                <template>
+                    <el-select
+                            v-model="form2.filmType"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            multiple-limit="3"
+                            placeholder="请选择类型">
+                        <el-option
+                                v-for="city in cities"
+                                :key="city.id"
+                                :label="city.name"
+                                :value="city.id">
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-form-item>
+            <el-form-item label="VIP观看" :label-width="formLabelWidth">
+                <template>
+                    <el-radio v-model="form2.vip" label="1">需要</el-radio>
+                    <el-radio v-model="form2.vip" label="2">无须</el-radio>
+                </template>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="cancel">取 消</el-button>
+            <el-button type="primary" @click="addFilm">确 定</el-button>
+        </div>
+    </el-dialog>
 
 </div>
 
@@ -171,6 +356,39 @@
                 password: '',
             },
             tableData: [],
+            dialogFormVisible: false,
+            dialogFormVisible2: false,
+            dialogFormVisible3: false,
+            form: {
+                filmImg: '',
+                name: '',
+                score: 5.0,
+                director: '',
+                time: '',
+                filmRegion: '',
+                filmType: [],
+            },
+            form2: {
+                filmImg: null,
+                name: '',
+                score: 5.0,
+                director: '',
+                time: '',
+                filmRegion: '',
+                filmType: [],
+                vip: '1',
+                actors: [],
+                actor: '',
+            },
+            imgList: [],
+            fileList: [],
+            formLabelWidth: '150px',
+            /*文件上传*/
+            dialogImageUrl: '',
+            dialogVisible: false,
+            disabled: false,
+            cities: [],
+            actors: [],
         },
         methods: {
             toggleSelection(rows) {
@@ -189,13 +407,20 @@
                 return row.address;
             },
             dj(row) {
+                this.form = row;
                 console.log(row)
             },
-            handleEdit(index, row) {
-                console.log(index, row);
+            modificationFilm() {
+                console.log(this.form);
+                this.dialogFormVisible = false;
             },
-            handleDelete(index, row) {
-                console.log(index, row);
+            removeFilm(){
+                this.dialogFormVisible2 = false;
+            },
+            addFilm() {
+                console.log(this.form2);
+                this.tableData.push(this.form2);
+                this.dialogFormVisible3 = false;
             },
             //重置表单
             resetForm(loginForm) {
@@ -262,13 +487,51 @@
                     message: '您取消了登录'
                 });
             },
+            /*文件上传*/
+            handleRemove(file) {
+                this.imgList = [];
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
+            fn(file){
+                this.imgList.push(file)
+                console.log(this.imgList)
+            },
+            beforeRemove(){
+                this.fileList = []
+            },
+            fn2(file){
+                this.fileList.push(file)
+                console.log(this.fileList)
+            },
+            cancel(){
+                this.imgList = []
+                this.fileList = []
+                this.dialogFormVisible3 = false
+            }
         },
         mounted: function () {
-            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/user'
+            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/film'
             )
                 .then(response => {
                     this.tableData = response.data;
-                    console.log(response);
+                    console.log("电影",response);
+                })
+                .catch(data => console.log(response))
+            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/type'
+            )
+                .then(response => {
+                    this.cities = response.data;
+                    console.log("类型",response);
+                })
+                .catch(data => console.log(response))
+            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/actor'
+            )
+                .then(response => {
+                    this.actors = response.data;
+                    console.log("演员",response);
                 })
                 .catch(data => console.log(response))
         },

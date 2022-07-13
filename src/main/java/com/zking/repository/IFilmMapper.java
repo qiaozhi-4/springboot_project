@@ -18,4 +18,6 @@ public interface IFilmMapper extends BaseMapper<Film> {
     // 根据电影id查询电影的演员
     List<Actor> findAllActorByFilmId(@Param("fid") int id);
 
+    //模糊查询根据电影名查电影
+    List<Film> selectFilm(String selectInput);
 }
