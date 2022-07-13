@@ -18,7 +18,7 @@ public class WebSocketConfig /*implements WebSocketConfigurer*/
     {
         return new ServerEndpointExporter();
     }
-    
+
     // 暂时没用
     /*@Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry)

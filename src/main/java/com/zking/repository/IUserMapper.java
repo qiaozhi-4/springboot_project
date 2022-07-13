@@ -15,4 +15,6 @@ public interface IUserMapper extends BaseMapper<User> {
     // 根据用户id查询，用户有哪些权限
     List<String> findAllJurisdictionByUserId(@Param("uid") int id);
 
+//    根据名字查询用户
+    User findUserByUsername(String username);
 }

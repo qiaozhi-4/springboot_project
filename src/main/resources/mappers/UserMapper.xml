@@ -15,5 +15,8 @@
         SELECT name FROM jurisdiction j INNER JOIN user_jurisdiction uj ON j.id=uj.jurisdiction_id
         WHERE uj.user_id=#{uid}
     </select>
-
+<!--    根据名字查询用户-->
+    <select id="findUserByUsername" resultType="User">
+        SELECT * FROM user where username=#{username}
+    </select>
 </mapper>
