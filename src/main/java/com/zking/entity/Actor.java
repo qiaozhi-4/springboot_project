@@ -18,9 +18,9 @@ import java.util.Date;
 public class Actor {
     @TableId(type = IdType.AUTO)
     private Integer id;
+    private String headImg;
     private String name;
     private Date birthday;
     private String constellation;
     private String info;
-    private Integer imgId;
 }
