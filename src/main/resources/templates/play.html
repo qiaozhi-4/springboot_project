@@ -21,15 +21,14 @@
     <el-container>
 
 
-
         <!-- 头部 -->
         <div th:insert="~{fragments/header::header}"></div>
 
         <!-- 主体部分 -->
-        <el-main >
+        <el-main>
             <div style="height: 30px"></div>
             <!--自动播放属性autoplay-->
-<!--            <video width="1000px" height="600px" controls autoplay th:src="@{${session.movie}}"></video>-->
+            <!--            <video width="1000px" height="600px" controls autoplay th:src="@{${session.movie}}"></video>-->
 
         </el-main>
 
@@ -41,24 +40,64 @@
     <div th:replace="~{fragments/vip::vip}"></div>
 
 
-<!--弹幕测试-->
+    <!--登录表单-->
+    <el-dialog
+            title="登录"
+            :visible.sync="loginVisible"
+            width="50%">
+        <el-form action="/login" method="post" :model="loginForm" ref="loginForm" label-width="160px">
+
+            <el-form-item label="用户名" label-width="60px">
+                <el-input name="username" v-model="loginForm.username" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="密码" label-width="60px">
+                <el-input name="password" v-model="loginForm.password" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
+
+            <el-form-item label="" label-width="60px">
+                <input checked="checked" type="checkbox" name="remember-me"/>记住我<br/>
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-row>
+                    <el-col :span="6">第三方登录:</el-col>
+                    <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>
+                    </el-col>
+                </el-row>
+            </el-form-item>
+
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="loginVisible = false">取 消</el-button>
+    <el-button type="primary" @click="loginOk">确 定</el-button>
+  </span>
+    </el-dialog>
+
+    <!--弹幕测试-->
     <el-container>
         <el-main style="padding: 10px;">
             <el-container style="position: relative;">
                 <barrage-stream-video :barrage-msg-list="barrageMessages" :sources="sources" poster="/images/test.jpg"
-                                      style="border:2px solid blue;" @ready="ready" @start="start" @pause="pause" @stop="stop">
+                                      style="border:2px solid blue;" @ready="ready" @start="start" @pause="pause"
+                                      @stop="stop">
                 </barrage-stream-video>
             </el-container>
         </el-main>
         <el-aside style="padding: 10px; min-width: 400px; max-width: 40%;">
             <el-container style="background-color: #8cc5ff; height: 100%; flex-direction: column; align-items: center;">
                 <el-main style="overflow-y: auto; width: 100%;">
-                    <el-input ref="textareaElement" cols="10" type="textarea" readonly v-model="messages" placeholder="还没有弹幕"></el-input>
+                    <el-input ref="textareaElement" cols="10" type="textarea" readonly v-model="messages"
+                              placeholder="还没有弹幕"></el-input>
                 </el-main>
                 <el-footer>
                     <el-form :inline="true">
                         <el-form-item>
-                            <el-input v-model="message" @submit.native.prevent :disabled="! login" :placeholder="login ? '输入弹幕' : '登录后发送弹幕'"></el-input>
+                            <el-input v-model="message" @submit.native.prevent :disabled="! login"
+                                      :placeholder="login ? '输入弹幕' : '登录后发送弹幕'"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="send">发送弹幕</el-button>
