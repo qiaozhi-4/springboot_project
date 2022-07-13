@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -22,6 +21,7 @@
         <p>你还未登录！</p>
     </div>
 </div>
-<a href="../findC.html" th:href="@{/findC?id=1}">查看评论</a>
+<a th:href="@{/findC?id=1}">查看评论</a>
+<a th:href="@{/updateUser}">修改信息</a>
 </body>
 </html>

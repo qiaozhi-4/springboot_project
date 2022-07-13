@@ -1,6 +1,7 @@
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.App;
 import com.zking.entity.User;
+import com.zking.repository.IUserMapper;
 import com.zking.service.IActorService;
 import com.zking.service.ICommentService;
 import com.zking.service.IFilmService;
@@ -23,6 +24,8 @@ public class Test1 {
     @Autowired
     private FilmService filmService;
     @Autowired
+    private IUserMapper userMapper;
+    @Autowired
     private PasswordEncoder encoder;
 
     @Test
@@ -39,6 +42,11 @@ public class Test1 {
 
     @Test
     public void test3(){
-        System.out.println(filmService.findAllActorByFilmId(1));
+//        System.out.println(filmService.findAllActorByFilmId(1));
+        System.out.println(userMapper.findUserByUsername("admin"));
+        System.out.println("--------------------------");
+        User admin = userMapper.findUserByUsername("admin");
+        admin.setAddress("aaaa");
+        System.out.println(admin.toString());
     }
 }
