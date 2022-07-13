@@ -27,7 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RegisterController {
 
-    @Value("${upload.location}")
+    @Value("${upload.locationImg}")
     private  String location;
 
     private final IUserService userService;
