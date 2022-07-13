@@ -35,7 +35,7 @@ public class VideoPlayerController {
         model.addAttribute("movieId", id);
         model.addAttribute("userId", userId);
         model.addAttribute("login", sid != null);
-        return "barrageVideo";
+        return "play";
     }
 
     // TODO 登录模拟，自己定义API
