@@ -166,7 +166,7 @@
             mounted: function () {
                 console.log('开始发送请求')
                 //获取电影分类及其数据
-                axios.get(`getTypeAndFilm`)
+                axios.get('/getTypeAndFilm')
                     .then(resp => {
                         console.log('请求发送成功', resp)
                         this.typeAndFilm = resp.data

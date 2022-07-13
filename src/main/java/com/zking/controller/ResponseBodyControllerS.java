@@ -15,7 +15,7 @@ public class ResponseBodyControllerS {
 
     private final IFilmService filmService;
 
-    @GetMapping("getTypeAndFilm")
+    @GetMapping("/getTypeAndFilm")
     public List<Object> index() {
         return filmService.getTypeAndFilm();
     }
