@@ -59,6 +59,8 @@
                 loginForm: {
                     username: 'admin',
                     password: 'admin',
+                    _csrf:'',
+                    remember_me:'',
                 },
 
                 changed: false,
@@ -167,8 +169,9 @@
             },
             methods: {
                 //登录确定
-                loginOk(){
-
+                loginOk(formName){
+                    console.log(this.loginVisible)
+                    this.loginVisible = false
                 },
 
                 //vip购买弹框
@@ -236,6 +239,7 @@
                         .catch(err => this.$message.error('登录失败！'))
                 },
                 click: function () {
+                    this.loginVisible = true
                     // this.$confirm('你要去登录页面登录！现在登录？', '登录', {type: 'info',})
                     //     .then(_ => this.loginNow())
                     //     .catch(_ => this.login = false)
