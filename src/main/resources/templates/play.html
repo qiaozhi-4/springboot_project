@@ -55,12 +55,6 @@
                 <el-input name="password" v-model="loginForm.password" autocomplete="off"></el-input>
             </el-form-item>
 
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
-
-            <el-form-item label="" label-width="60px">
-                <input checked="checked" type="checkbox" name="remember_me"/>记住我<br/>
-            </el-form-item>
-
 
             <el-form-item>
                 <el-row>

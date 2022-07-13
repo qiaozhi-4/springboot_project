@@ -59,8 +59,7 @@
                 loginForm: {
                     username: 'admin',
                     password: 'admin',
-                    _csrf:'',
-                    remember_me:'',
+                    _csrf:csrf,
                 },
 
                 changed: false,
@@ -170,7 +169,16 @@
             methods: {
                 //登录确定
                 loginOk(formName){
-                    console.log(this.loginVisible)
+                    console.log(this.loginForm)
+                    let params = new URLSearchParams();
+                    params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+                    params.append('password', this.loginForm.password);
+                    params.append('_csrf', this.loginForm._csrf);
+                    axios.post(`login`, params)
+                        .then(resp => {
+                            console.log('请求发送失败', resp)
+                        })
+                        .catch(err => console.log('请求发送失败', err) )
                     this.loginVisible = false
                 },
 
