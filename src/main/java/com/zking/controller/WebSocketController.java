@@ -2,12 +2,15 @@ package com.zking.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zking.config.WebSocketConfig;
 import com.zking.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.security.PermitAll;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -18,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@ConditionalOnClass(value = WebSocketConfig.class)
+@PermitAll
 @Controller
 @RequiredArgsConstructor
 @ServerEndpoint("/ws/{movieId}/{userId}")
