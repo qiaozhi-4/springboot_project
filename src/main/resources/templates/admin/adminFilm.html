@@ -6,10 +6,10 @@
     <title>你的项目</title>
     <!--添加Bootstrap和fontawesome的样式-->
     <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
-    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../../static/css/bootstrap.css" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.css}" href="../../static/css/bootstrap.css" rel="stylesheet"/>
     <!-- 布局容器 -->
     <link th:href="@{/css/container.css}" href="../../static/css/container.css" rel="stylesheet"/>
-    <link th:href="@{/css/container.css}" href="../../static/css/admin.css" rel="stylesheet"/>
+    <link th:href="@{/css/admin.css}" href="../../static/css/admin.css" rel="stylesheet"/>
     <!-- 布局 -->
     <link th:href="@{/css/layout.css}" href="../../static/css/layout.css" rel="stylesheet"/>
     <!-- 下拉菜单按钮样式 -->
@@ -60,18 +60,25 @@
             </el-row>
             <el-row :gutter="2" type="flex" align="middle" style="height: 30px;font-size: 20px;color: white;">
                 <el-col :span="1" style="margin-left: 5%">
-                    <a class="btn text-decoration-none" style="color: white;" href="adminIndex.html"><i
+                    <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminIndex}"
+                       href="adminIndex.html"><i
                             class="el-icon-menu"></i></a>
                 </el-col>
                 <el-col :span="1" type="flex" align="left">
-                    <a class="btn text-decoration-none" style="color: white;" href="adminIndex.html"><span>主页</span></a>
+                    <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminIndex}"
+                       href="adminIndex.html"><span>主页</span></a>
                 </el-col>
                 <el-col :span="1" style="">
-                    <a class="btn text-decoration-none" style="color: white;" href="adminFilm.html"><i
+                    <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminFilm}"
+                       href="adminFilm.html"><i
                             class="el-icon-video-camera-solid"></i></a>
                 </el-col>
                 <el-col :span="4" type="flex" align="left">
                     <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminFilm}"
                        href="adminFilm.html"><span>电影管理</span></a>
                 </el-col>
             </el-row>
@@ -200,7 +207,7 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="添加订单" :visible.sync="dialogFormVisible3">
+    <el-dialog title="添加订单" :visible.sync="dialogFormVisible3" :before-close="cancel">
         <el-form :model="form2">
             <el-form-item label="电影封面" :label-width="formLabelWidth">
                 <el-upload
@@ -340,7 +347,11 @@
 <script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
-<script>
+<script th:inline="javascript">
+
+    var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
+    let params = new URLSearchParams();
+    params.append('_csrf', csrf);
 
     new Vue({
         el: '#app',
@@ -513,22 +524,19 @@
             }
         },
         mounted: function () {
-            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/film'
-            )
+            axios.post('/findAllFilmPage', params)
                 .then(response => {
                     this.tableData = response.data;
                     console.log("电影",response);
                 })
                 .catch(data => console.log(response))
-            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/type'
-            )
+            axios.post('/findAllType', params)
                 .then(response => {
                     this.cities = response.data;
                     console.log("类型",response);
                 })
                 .catch(data => console.log(response))
-            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/actor'
-            )
+            axios.post('/findAllActor', params)
                 .then(response => {
                     this.actors = response.data;
                     console.log("演员",response);

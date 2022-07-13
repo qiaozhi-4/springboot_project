@@ -1,6 +1,7 @@
 package com.zking.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -18,15 +19,18 @@ public class Film {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name;
+    @TableField("file_id")
     private Integer fileId;
     private String info;
+    @TableField("img_id")
     private Integer imgId;
     private String actor;
     private String director;
     private Integer vip;
     private Date time;
     private Double score;
-    private Integer heat;
+    private Long heat;
+    private Integer state;
 
 
 }

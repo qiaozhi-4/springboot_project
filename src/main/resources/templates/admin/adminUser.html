@@ -6,10 +6,10 @@
     <title>你的项目</title>
     <!--添加Bootstrap和fontawesome的样式-->
     <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
-    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../../static/css/bootstrap.css" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.css}" href="../../static/css/bootstrap.css" rel="stylesheet"/>
     <!-- 布局容器 -->
     <link th:href="@{/css/container.css}" href="../../static/css/container.css" rel="stylesheet"/>
-    <link th:href="@{/css/container.css}" href="../../static/css/admin.css" rel="stylesheet"/>
+    <link th:href="@{/css/admin.css}" href="../../static/css/admin.css" rel="stylesheet"/>
     <!-- 布局 -->
     <link th:href="@{/css/layout.css}" href="../../static/css/layout.css" rel="stylesheet"/>
     <!-- 下拉菜单按钮样式 -->
@@ -60,18 +60,25 @@
             </el-row>
             <el-row :gutter="2" type="flex" align="middle" style="height: 30px;font-size: 20px;color: white;">
                 <el-col :span="1" style="margin-left: 5%">
-                    <a class="btn text-decoration-none" style="color: white;" href="adminIndex.html"><i
+                    <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminIndex}"
+                       href="adminIndex.html"><i
                             class="el-icon-menu"></i></a>
                 </el-col>
                 <el-col :span="1" type="flex" align="left">
-                    <a class="btn text-decoration-none" style="color: white;" href="adminIndex.html"><span>主页</span></a>
+                    <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminIndex}"
+                       href="adminIndex.html"><span>主页</span></a>
                 </el-col>
                 <el-col :span="1" style="">
-                    <a class="btn text-decoration-none" style="color: white;" href="adminFilm.html"><i
+                    <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminFilm}"
+                       href="adminFilm.html"><i
                             class="el-icon-video-camera-solid"></i></a>
                 </el-col>
                 <el-col :span="4" type="flex" align="left">
                     <a class="btn text-decoration-none" style="color: white;"
+                       th:href="@{/adminFilm}"
                        href="adminFilm.html"><span>电影管理</span></a>
                 </el-col>
             </el-row>
@@ -89,9 +96,20 @@
             <el-row type="flex" justify="space-around">
                 <el-col :span="20">
                     <div class="adminFilm-main-row1-col2">
-                        <div style="margin-bottom: 20px">
-                            <span>所有用户</span>
-                        </div>
+                        <el-row type="flex" justify="space-around">
+                            <el-col :span="12">
+                                <div style="margin-bottom: 20px">
+                                    <a class="btn text-decoration-none" style="color: #409EFF;"
+                                       th:href="@{/adminIndex}"
+                                       href="adminUser.html"><span>返回</span></a>
+                                </div>
+                            </el-col>
+                            <el-col :span="12">
+                                <div>
+                                    <span>查看所有用户</span></a>
+                                </div>
+                            </el-col>
+                        </el-row>
                         <template>
                             <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
                                       @selection-change="handleSelectionChange" @row-click="dj">
@@ -104,15 +122,13 @@
                                         </div>
                                     </template>
                                 </el-table-column>
+                                <el-table-column prop="username" label="账号" width="120">
+                                </el-table-column>
                                 <el-table-column prop="name" label="昵称" width="120">
                                 </el-table-column>
                                 <el-table-column prop="sex" label="性别" width="120">
                                 </el-table-column>
                                 <el-table-column prop="vip" label="类型" width="120">
-                                </el-table-column>
-                                <el-table-column prop="birthday" label="生日" width="120">
-                                </el-table-column>
-                                <el-table-column prop="address" label="地区" width="120">
                                 </el-table-column>
                                 <el-table-column prop="email" label="邮箱" width="120">
                                 </el-table-column>
@@ -145,7 +161,7 @@
 
     </el-container>
 
-    <el-dialog title="修改订单" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改订单" :visible.sync="dialogFormVisible" :before-close="cancel">
         <el-form :model="form">
             <el-form-item label="用户头像" :label-width="formLabelWidth">
                 <el-upload
@@ -210,7 +226,11 @@
 <script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
-<script>
+<script th:inline="javascript">
+
+    var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
+    let params = new URLSearchParams();
+    params.append('_csrf', csrf);
 
     new Vue({
         el: '#app',
@@ -265,7 +285,7 @@
                 console.log(this.form);
                 this.dialogFormVisible = false;
             },
-            bannedUser(){
+            bannedUser() {
 
             },
             //重置表单
@@ -337,18 +357,17 @@
             handleRemove(file) {
                 this.imgList = [];
             },
-            fn(file){
+            fn(file) {
                 this.imgList.push(file)
                 console.log(this.imgList)
             },
-            cancel(){
+            cancel() {
                 this.imgList = []
                 this.dialogFormVisible = false
             },
         },
         mounted: function () {
-            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/user'
-            )
+            axios.post('/findAllUserPage', params)
                 .then(response => {
                     this.tableData = response.data;
                     console.log(response);

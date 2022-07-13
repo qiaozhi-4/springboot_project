@@ -34,6 +34,8 @@ public class User implements Serializable {
     private Date birthday;
     private String address;
     private String email;
-    private String time;
+    private Date time;
+    @TableField("last_login_time")
+    private Date lastLoginTime;
 }
 

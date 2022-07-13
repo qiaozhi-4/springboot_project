@@ -21,6 +21,14 @@ import java.util.List;
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
     private final IFilmMapper filmMapper;
 
+    public List<String> findAllTypeByFilmId(int id){
+        return filmMapper.findAllTypeByFilmId(id);
+    }
+
+    public String findAllRegionByFilmId(int id){
+        return filmMapper.findAllRegionByFilmId(id);
+    }
+
     public List<Actor> findAllActorByFilmId(int id){
         return filmMapper.findAllActorByFilmId(id);
     }
