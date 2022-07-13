@@ -18,15 +18,16 @@ public class Film {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name;
-    private Integer fileId;
+    private String mp4Src;
     private String info;
-    private Integer imgId;
+    private String imgSrc;
     private String actor;
     private String director;
     private Integer vip;
     private Date time;
     private Double score;
     private Integer heat;
+    private String region;
 
 
 }

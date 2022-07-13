@@ -1,8 +1,5 @@
 package com.zking.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zking.entity.Comment;
 import com.zking.entity.Film;
 import com.zking.entity.User;
@@ -21,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.zking.service.IUserService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -86,8 +81,8 @@ public class UserController {
         }
         //密码加密
         String pass = encoder.encode(password);
-        principal.setPass(pass);
-        principal.setImgId(imgId);
+        principal.setPassword(pass);
+        //principal.setImgId(imgId);
         principal.setName(name);
         principal.setAddress(address);
         principal.setEmail(email);

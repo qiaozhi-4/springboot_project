@@ -26,17 +26,16 @@ public class User  implements UserDetails {
     @TableId(type = AUTO)
     private Integer id;
     private String username;
-    @TableField("password")
-    private String pass;
-    @TableField("img_id")
-    private int imgId;
+    private String password;
+    private String headImg;
     private String name;
-    private String sex;
-    private int vip;
+    private Character sex;
+    private Integer vip;
     private Date birthday;
     private String address;
     private String email;
     private String time;
+    private String lastLoginTime;
 
     @TableField(exist = false)
     private List<GrantedAuthority> authorities;
@@ -75,7 +74,7 @@ public class User  implements UserDetails {
 
     @Override
     public String getPassword() {
-        return pass;
+        return password;
     }
 
     //默认使用恒等去判断是否是同一个对象，因为登录的同一个用户，如果再次登录就会封装

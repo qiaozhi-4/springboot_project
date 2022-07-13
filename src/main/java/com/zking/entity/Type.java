@@ -1,6 +1,5 @@
 package com.zking.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import static com.baomidou.mybatisplus.annotation.IdType.AUTO;
 
@@ -18,11 +16,10 @@ import static com.baomidou.mybatisplus.annotation.IdType.AUTO;
 @AllArgsConstructor
 //自动生成无参构造函数
 @NoArgsConstructor
-@TableName("img")
-public class Img implements Serializable {
+@TableName("type")
+public class Type implements Serializable {
+
     @TableId(type = AUTO)
     private Integer id;
-    @TableField("url")
-    private String url;
+    private String name;
 }
-
