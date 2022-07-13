@@ -22,5 +22,5 @@ public class Actor {
     private Date birthday;
     private String constellation;
     private String info;
-
+    private Integer imgId;
 }

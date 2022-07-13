@@ -22,6 +22,8 @@ public class Comment {
     private Integer filmId;
     private String conten;
     private Date time;
+    private String color;
+    private Double movieTime;
 
 
 
