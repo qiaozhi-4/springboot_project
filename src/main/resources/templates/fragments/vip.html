@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>vip购买弹出框</h2>
+
+<div th:fragment="vip">
+    <!-- vip购买弹出框 -->
+    <el-dialog title="vip会员" :visible.sync="vipVisible" width="50%">
+        <el-link th:if="${#authentication.name == 'anonymousUser'}" href="loginUser" :underline="false">
+            <el-avatar size="small" src="img/log.jpg"></el-avatar>
+            <span class="">请登录之后再购买VIP</span>
+        </el-link>
+        <el-link th:if="${#authentication.name != 'anonymousUser'}"  :underline="false">
+            <el-avatar size="small" src="img/log.jpg"></el-avatar>
+            <span th:text="${#authentication.name}"></span>
+        </el-link>
+        <div style="height: 40px;"></div>
+        <el-row class="vip" type="flex" justify="center" align="middle" :gutter="12">
+            <el-col :span="8">
+                <a href="#" style="text-decoration:none ">
+                    <el-card shadow="hover">
+                        <div>12个月</div>
+                        <div>￥<span>248</span></div>
+                    </el-card>
+                </a>
+            </el-col>
+            <el-col :span="8">
+                <a href="#" style="text-decoration:none ">
+                    <el-card shadow="hover">
+                        <div>3个月</div>
+                        <div>￥<span>78</span></div>
+                    </el-card>
+                </a>
+            </el-col>
+            <el-col :span="8">
+                <a href="#" style="text-decoration:none ">
+                    <el-card shadow="hover">
+                        <div>1个月</div>
+                        <div>￥<span>30</span></div>
+                    </el-card>
+                </a>
+            </el-col>
+        </el-row>
+    </el-dialog>
+</div>
+
+</body>
+</html>

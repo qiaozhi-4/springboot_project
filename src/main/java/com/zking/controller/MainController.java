@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.security.PermitAll;
+import javax.servlet.http.HttpSession;
 
 @PermitAll
 @Controller
@@ -28,6 +29,13 @@ public class MainController
     @GetMapping("/loginUser")
     public String login() {
         return "login";
+    }
+
+    // 播放页
+    @GetMapping("/play")
+    public String play(String movie, HttpSession session ) {
+        session.setAttribute("movie",movie);
+        return "play";
     }
     //第三方gitee登录
     @RequestMapping("/login/gitee")

@@ -6,20 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <!--添加Bootstrap和fontawesome的样式-->
-    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet" />
-    <!-- 布局容器 -->
-    <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet" />
-    <!-- 布局 -->
-    <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet" />
-    <!-- 电影卡片样式 -->
-    <link th:href="@{/css/card.css}" href="../static/css/card.css" rel="stylesheet" />
-    <!-- 电影播放样式 -->
-    <link th:href="@{/css/video-js.custom.css}" href="../static/css/video-js.custom.css" rel="stylesheet" />
-    <link th:href="@{/css/video-js.min.css}" href="../static/css/video-js.min.css" rel="stylesheet" />
-    <!-- 自己的样式 -->
-    <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet" />
+    <div th:replace="~{fragments/css::css}"></div>
 
 </head>
 
@@ -32,7 +19,7 @@
     <el-container>
 
         <!-- 头部 -->
-        <div th:insert="~{fragments/header::header}"></div>
+        <div th:replace="~{fragments/header::header}"></div>
 
         <!-- 主体部分 -->
         <el-main width="1500px">
@@ -43,10 +30,11 @@
                         <el-carousel height="400px" direction="vertical">
                             <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
                                 <el-link href="img/ikun.png" :underline="false">
-<!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
-<!--                                         :name="item.title" /></i>-->
+                                    <!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
+                                    <!--                                         :name="item.title" /></i>-->
 
-                                    <video width="1000px" height="600px" controls autoplay src="videolook/1176840-1-hd.mp4"></video>
+                                    <video width="1000px" height="600px" controls autoplay
+                                           src="videolook/1176840-1-hd.mp4"></video>
 
                                 </el-link>
                                 <!-- <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title" /> -->
@@ -67,7 +55,7 @@
 
                     <el-col :offset="1" :span="3" v-for="(caedData,index) in classify.caedData">
                         <el-tooltip :content="caedData.name" placement="top" :visible-arrow="false">
-                            <el-link href="img/ikun.png" :underline="false">
+                            <el-link :href="'play?movie=' + caedData.movie" :underline="false">
                                 <el-card class="box-card movie">
                                     <img height="120px" width="100%" :src="caedData.img"><br>
                                     <b><span>{{caedData.name}}</span></b><br><br>
@@ -81,6 +69,7 @@
             </div>
 
         </el-main>
+
 
         <!-- 底部部分 -->
         <el-footer>
@@ -104,186 +93,13 @@
     </el-container>
 
 
-
-
-
-
-
     <!-- vip购买弹出框 -->
-    <el-dialog title="vip会员" :visible.sync="vipVisible" width="50%">
-<!--        <el-link href="loginUser" :underline="false">-->
-<!--            <el-avatar size="small" src="img/log.jpg"></el-avatar>-->
-<!--            <span>请登录后购买vip</span>-->
-<!--        </el-link>-->
-        <div th:insert="~{fragments/userlogin::userlogin('请登录后购买vip')}"></div>
-        <div style="height: 40px;"></div>
-        <el-row class="vip" type="flex" justify="center" align="middle" :gutter="12">
-            <el-col :span="8">
-                <a href="#" style="text-decoration:none ">
-                    <el-card shadow="hover">
-                        <div>12个月</div>
-                        <div>￥<span>248</span></div>
-                    </el-card>
-                </a>
-            </el-col>
-            <el-col :span="8">
-                <a href="#" style="text-decoration:none ">
-                    <el-card shadow="hover">
-                        <div>3个月</div>
-                        <div>￥<span>78</span></div>
-                    </el-card>
-                </a>
-            </el-col>
-            <el-col :span="8">
-                <a href="#" style="text-decoration:none ">
-                    <el-card shadow="hover">
-                        <div>1个月</div>
-                        <div>￥<span>30</span></div>
-                    </el-card>
-                </a>
-            </el-col>
-        </el-row>
-    </el-dialog>
+    <div th:replace="~{fragments/vip::vip}"></div>
+
+
 </div>
 </body>
 
-<script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
-<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
-<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
-<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
-<script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
-<script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
-<script th:inline="javascript">
-    var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
-    new Vue({
-        el: '#app',
-        data: {
-            changed: false,
-            //头部模糊搜索框内容
-            inputHead: '',
-            //轮播图片数组
-            imgList: [
-                {
-                    name: "109951167468487275",
-                    src: "img/109951167468487275.jpg",
-
-                },
-                {
-                    name: "109951167468514107",
-                    src: "img/109951167468514107.jpg",
-
-                },
-                {
-                    name: "109951167468538175",
-                    src: "img/109951167468538175.jpg",
-
-                },
-                {
-                    name: "109951167468551304",
-                    src: "img/109951167468551304.jpg",
-
-                },
-                {
-                    name: "109951167468567569",
-                    src: "img/109951167468567569.jpg",
-
-                },
-            ],
-
-
-            //vip购买弹出框
-            vipVisible: false,
-
-            //电影分类
-            classifys: [
-                {
-                    id: 1,
-                    name: '喜剧',
-                    //电影数据
-                    caedData: [{
-                        img: 'img/log.jpg',
-                        name: '王小虎',
-                        info: '上海市普陀区金沙江路 1518 弄',
-                    }, {
-                        img: 'img/log.jpg',
-                        name: '王小虎',
-                        info: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                        img: 'img/log.jpg',
-                        name: '王小虎',
-                        info: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                        img: 'img/log.jpg',
-                        name: '王小虎',
-                        info: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                        img: 'img/log.jpg',
-                        name: '王小虎',
-                        info: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                        img: 'img/log.jpg',
-                        name: '王小虎',
-                        info: '上海市普陀区金沙江路 1518 弄'
-                    }],
-                },
-                {
-                    id: 2,
-                    name: '冒险',
-                },
-                {
-                    id: 3,
-                    name: '动作',
-                },
-                {
-                    id: 4,
-                    name: '动漫',
-                },
-                {
-                    id: 5,
-                    name: '卧底',
-                },
-                {
-                    id: 6,
-                    name: '热血',
-                },
-                {
-                    id: 7,
-                    name: '偶像',
-                },
-                {
-                    id: 8,
-                    name: '都市',
-                },
-            ],
-        },
-        methods: {
-            //vip购买弹框
-            vip() {
-                this.vipVisible = true
-                return false
-            },
-
-            //重置表单
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
-
-        },
-
-        mounted: function () {
-            // const options = {}
-            // let player = videojs('video1', options, function () {
-            //     videojs.log('start playing...')
-            //     // 手动控制播放
-            //     this.play()
-            //     this.on('ended', function () {
-            //         // 停止播放
-            //         videojs.log('stopped!')
-            //     })
-            // })
-            // console.log(player)
-        },
-    })
-</script>
+<script th:replace="~{fragments/js::js}"></script>
 
 </html>
