@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import static com.baomidou.mybatisplus.annotation.IdType.AUTO;
 
@@ -37,16 +38,15 @@ public class User  implements UserDetails {
     private String email;
     private String time;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+    @TableField(exist = false)
+    private List<GrantedAuthority> authorities;
 
     @Override
-    public String getPassword() {
-        return pass;
+    public String getUsername() {
+        return username;
     }
 
+    //继承后必须返回为true
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -65,6 +65,33 @@ public class User  implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        //不能返回null
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return pass;
+    }
+
+    //默认使用恒等去判断是否是同一个对象，因为登录的同一个用户，如果再次登录就会封装
+    //一个新的对象，这样会导致登录的用户永远不会相等，所以需要重写equals方法
+    @Override
+    public boolean equals(Object obj) {
+        //会话并发生效，使用username判断是否是同一个用户
+
+        if (obj instanceof User) {
+            //字符串的equals方法是已经重写过的
+            return ((User) obj).getUsername().equals(this.username);
+        } else {
+            return false;
+        }
+
+
     }
 }
 
