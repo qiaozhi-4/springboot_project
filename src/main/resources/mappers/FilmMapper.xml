@@ -19,4 +19,8 @@
         SELECT * FROM actor a INNER JOIN film_actor fa ON a.id=fa.actor_id
         WHERE fa.film_id=#{fid};
     </select>
+<!--    模糊查询根据电影名查电影-->
+    <select id="selectFilm" resultType="Film">
+        SELECT * from Film where name like CONCAT('%',#{name},'%')
+    </select>
 </mapper>

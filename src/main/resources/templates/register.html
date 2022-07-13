@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!--添加Bootstrap和fontawesome的样式-->
+    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
+
+</head>
+
+
+<body>
+
+
+<div id="app">
+    <h2>注册页面</h2>
+    <h2>[[${info}]]</h2>
+    <el-form action="/registerForm" method="post" :model="registerForm" ref="registerForm" label-width="160px"
+             enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <el-form-item label="用户名" label-width="60px">
+            <el-input name="username" v-model="registerForm.username" autocomplete="off" @blur="isuser"></el-input>
+        </el-form-item>
+
+        <el-form-item label="密码" label-width="60px">
+            <el-input name="password" v-model="registerForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="再次输入密码" label-width="60px">
+            <el-input name="password1" v-model="registerForm.password1" autocomplete="off" @blur="blur"></el-input>
+        </el-form-item>
+
+        <el-form-item  label="真实姓名" label-width="60px">
+            <el-input name="name" v-model="registerForm.name" autocomplete="off" @blur="isuser"></el-input>
+        </el-form-item>
+
+        <el-form-item label="性别" prop="resource">
+            <el-radio-group v-model="registerForm.sex">
+                <el-radio name="sex" label="男"></el-radio>
+                <el-radio name="sex" label="女"></el-radio>
+            </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="头像" >
+            <input  type="file" name="file"/><br/>
+        </el-form-item>
+
+        <el-form-item label="" label-width="60px">
+            <el-input type="submit" autocomplete="off">点击登录</el-input>
+        </el-form-item>
+    </el-form>
+
+
+
+
+
+</div>
+</body>
+
+<script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
+<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
+<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
+<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
+<script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
+<script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
+<script th:inline="javascript">
+    // <!--    <div th:if="${param.error}">登录失败！</div>-->
+    // <!--    <div th:if="${param.logou}">你已登出！</div>-->
+    var error = [[${param.error}]]; // 字符串会自动添加""，数字直接显示
+    var logout = [[${param.logout}]]; // 字符串会自动添加""，数字直接显示
+    // const access_token = window.document.getElementById('info')
+
+    new Vue({
+        el: '#app',
+        data: {
+            registerForm: {
+                username: '',
+                password: '',
+                password1: '',
+                name: '',
+                sex: '',
+                file:'',
+            },
+
+        },
+        methods: {
+            blur: function () {
+                console.log("触发了" + this.registerForm.password1)
+                if (!(this.registerForm.password === this.registerForm.password1)) {
+                    console.log("两次密码不一致重新输入")
+                    alert("两次密码不一致重新输入")
+                }
+            },
+            isuser: function () {
+                let that = this;
+                axios.get('http://localhost:8081/isusers', {
+                    params: {
+                        name: that.registerForm.username
+                    },
+                })
+                    .then(resp => {
+                        console.log(resp.data);
+                        if(!resp.data){
+                            alert("用户存在")
+                        }
+
+                    })
+                    .catch(err => console.log(`报错：$err`));
+
+            }
+        },
+        mounted: function () {
+
+        }
+
+    })
+</script>
+
+</html>

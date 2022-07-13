@@ -54,6 +54,13 @@
                 login: session,
                 color: 'black',
                 bgColor: 'white',
+                //登录表单
+                loginVisible: false,
+                loginForm: {
+                    username: 'admin',
+                    password: 'admin',
+                    _csrf:csrf,
+                },
 
                 changed: false,
                 //头部模糊搜索框内容
@@ -160,6 +167,21 @@
                 ],
             },
             methods: {
+                //登录确定
+                loginOk(formName){
+                    console.log(this.loginForm)
+                    let params = new URLSearchParams();
+                    params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+                    params.append('password', this.loginForm.password);
+                    params.append('_csrf', this.loginForm._csrf);
+                    axios.post(`login`, params)
+                        .then(resp => {
+                            console.log('请求发送失败', resp)
+                        })
+                        .catch(err => console.log('请求发送失败', err) )
+                    this.loginVisible = false
+                },
+
                 //vip购买弹框
                 vip() {
                     this.vipVisible = true
@@ -213,7 +235,7 @@
                         .catch(err => console.log('获取视频的弹幕失败！', err) || this.$message.error('发送失败！'))
                 },
                 loginNow: function () {
-                    axios.post(`loginUser`)
+                    axios.post(`/video/login`)
                         .then(resp => {
                             if (resp.data.success) {
                                 userId = resp.data.userId
@@ -225,9 +247,10 @@
                         .catch(err => this.$message.error('登录失败！'))
                 },
                 click: function () {
-                    this.$confirm('你要去登录页面登录！现在登录？', '登录', {type: 'info',})
-                        .then(_ => this.loginNow())
-                        .catch(_ => this.login = false)
+                    this.loginVisible = true
+                    // this.$confirm('你要去登录页面登录！现在登录？', '登录', {type: 'info',})
+                    //     .then(_ => this.loginNow())
+                    //     .catch(_ => this.login = false)
                 },
                 ready: function (player) {
                     this.player = player

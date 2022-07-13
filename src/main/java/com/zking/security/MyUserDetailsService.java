@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
     private final UserService userService;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,6 +31,7 @@ public class MyUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
+
         // 查询该用户权限并赋予权限
         StringBuilder authorities = new StringBuilder();
         int count = 1;
@@ -48,8 +50,16 @@ public class MyUserDetailsService implements UserDetailsService {
                 authorities.append(s);
             }
         }
+
+        com.zking.entity.User u = new com.zking.entity.User();
+
+        // User实现UserDetails接口
+        u.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(authorities)));
+        u.setPass(user.getPassword());
+        u.setUsername(username);
+        u.setId(user.getId());
+        u.setBirthday(user.getBirthday());
         // 返回该用户和权限security进行匹配
-        return new User(user.getUsername(), user.getPass(),
-                AuthorityUtils.commaSeparatedStringToAuthorityList(authorities.toString()));
+        return u;
     }
 }
