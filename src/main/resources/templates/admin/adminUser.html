@@ -87,28 +87,11 @@
         <!-- 主体部分 -->
         <el-main width="1500px" style="background-color: white">
             <el-row type="flex" justify="space-around">
-                <el-col :span="10">
-                    <div class="admin-main-row1-col1">
-                        <div>
-                            <div id="chart1" style="width: 100%;height:300px;"></div>
+                <el-col :span="20">
+                    <div class="adminFilm-main-row1-col2">
+                        <div style="margin-bottom: 20px">
+                            <span>所有用户</span>
                         </div>
-                    </div>
-                </el-col>
-                <el-col :span="12">
-                    <div class="admin-main-row1-col2">
-                        <el-row type="flex" justify="space-around">
-                            <el-col :span="12">
-                                <div style="margin-bottom: 20px">
-                                    <span>访问者信息</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="12">
-                                <div style="margin-bottom: 20px">
-                                    <a class="btn text-decoration-none" style="color: #409EFF;"
-                                       href="adminUser.html"><span>查看所有用户</span></a>
-                                </div>
-                            </el-col>
-                        </el-row>
                         <template>
                             <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
                                       @selection-change="handleSelectionChange" @row-click="dj">
@@ -125,10 +108,22 @@
                                 </el-table-column>
                                 <el-table-column prop="sex" label="性别" width="120">
                                 </el-table-column>
+                                <el-table-column prop="vip" label="类型" width="120">
+                                </el-table-column>
+                                <el-table-column prop="birthday" label="生日" width="120">
+                                </el-table-column>
+                                <el-table-column prop="address" label="地区" width="120">
+                                </el-table-column>
+                                <el-table-column prop="email" label="邮箱" width="120">
+                                </el-table-column>
+                                <el-table-column prop="time" label="注册时间" width="120">
+                                </el-table-column>
                                 <el-table-column prop="lastLoginTime" label="最近访问时间">
                                 </el-table-column>
                                 <el-table-column label="操作">
                                     <el-button type="text" @click="dialogFormVisible = true">修改
+                                    </el-button>
+                                    <el-button type="text" @click="dialogFormVisible2 = true">封禁
                                     </el-button>
                                 </el-table-column>
                             </el-table>
@@ -136,7 +131,7 @@
                         <el-pagination
                                 background
                                 layout="prev, pager, next"
-                                :total="tableData.length">
+                                :total="1000">
                         </el-pagination>
                     </div>
                 </el-col>
@@ -193,7 +188,17 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancel">取 消</el-button>
-            <el-button type="primary" @click="modificationFilm">确 定</el-button>
+            <el-button type="primary" @click="modificationUser">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="封禁用户" :visible.sync="dialogFormVisible2">
+        <div style="margin-bottom: 20px">
+            <span>确定封锁{{form.name}}吗？</span>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="bannedUser">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -206,43 +211,11 @@
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
 <script>
-    const option1 = {
-        title: {
-            text: '总用户人数',
-            subtext: '2022/7/9',
-            left: 'center'
-        },
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 'left'
-        },
-        series: [
-            {
-                name: 'Access From',
-                type: 'pie',
-                radius: '50%',
-                data: [
-                    {value: 1048, name: '普通用户'},
-                    {value: 735, name: 'VIP用户'},
-                    {value: 580, name: '游客'},
-                ],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
 
     new Vue({
         el: '#app',
         data: {
+            vip: 'VIP用户',
             //头部模糊搜索框内容
             inputHead: '',
             //登录
@@ -254,18 +227,17 @@
                 password: '',
             },
             tableData: [],
-            myChart1: null,
-            changed: false,
             dialogFormVisible: false,
-            form: {
-                userImg: '',
-                name: '',
-            },
+            dialogFormVisible2: false,
+            form: {},
             imgList: [],
             formLabelWidth: '150px',
+            /*文件上传*/
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
+            cities: [],
+            actors: [],
         },
         methods: {
             toggleSelection(rows) {
@@ -289,9 +261,12 @@
                     {url: row.userImg})
                 console.log(row)
             },
-            modificationFilm() {
+            modificationUser() {
                 console.log(this.form);
                 this.dialogFormVisible = false;
+            },
+            bannedUser(){
+
             },
             //重置表单
             resetForm(loginForm) {
@@ -362,10 +337,6 @@
             handleRemove(file) {
                 this.imgList = [];
             },
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
-            },
             fn(file){
                 this.imgList.push(file)
                 console.log(this.imgList)
@@ -376,15 +347,6 @@
             },
         },
         mounted: function () {
-            this.myChart1 = echarts.init(document.getElementById('chart1'))
-            axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/pie'
-            )
-                .then(response => {
-                    option1.series[0].data = response.data;
-                    this.myChart1.setOption(option1)
-                    console.log(option1);
-                })
-                .catch(data => console.log(response))
             axios.get('https://mock.apipost.cn/app/mock/project/949410be-c982-4283-9b26-3487b8223720/ajax/user'
             )
                 .then(response => {
