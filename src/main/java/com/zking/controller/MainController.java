@@ -1,6 +1,7 @@
 package com.zking.controller;
 
 import com.zking.entity.GitOAuth2User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -17,11 +18,12 @@ import javax.servlet.http.HttpSession;
 
 @PermitAll
 @Controller
-public class MainController
-{
-    @GetMapping({"/","/index"})
-    public String index()
-    {
+@RequiredArgsConstructor
+public class MainController {
+
+
+    @GetMapping({"/", "/index"})
+    public String index() {
         return "index";
     }
 
@@ -33,10 +35,11 @@ public class MainController
 
     // 播放页
     @GetMapping("/play")
-    public String play(String movie, HttpSession session ) {
-        session.setAttribute("movie",movie);
+    public String play(String movie, HttpSession session) {
+        session.setAttribute("movie", movie);
         return "play";
     }
+
     //第三方gitee登录
     @RequestMapping("/login/gitee")
     public String auth(Model model,

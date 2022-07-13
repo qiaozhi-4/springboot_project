@@ -9,6 +9,10 @@
     <select id="findAllType" resultType="Type">
         SELECT * FROM type;
     </select>
+    <!--根据类型查询电影-->
+    <select id="findFilmsByTypeId" resultType="Film">
+        SELECT * FROM film WHERE id IN (SELECT film_id  FROM film_type WHERE type_id = #{id});
+    </select>
 
 
 

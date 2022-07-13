@@ -82,6 +82,8 @@
                 //vip购买弹出框
                 vipVisible: false,
 
+                //电影分类以及当前分类的电影
+                typeAndFilm:[],
                 //电影分类
                 classifys: [
                     {
@@ -162,6 +164,13 @@
             },
 
             mounted: function () {
+                //获取电影分类及其数据
+                axios.post(`login`, params)
+                    .then(resp => {
+                        console.log('请求发送成功', resp)
+                        this.typeAndFilm = resp.data
+                    })
+                    .catch(err => this.$message.error('请求发送失败') )
                 // const options = {}
                 // let player = videojs('video1', options, function () {
                 //     videojs.log('start playing...')

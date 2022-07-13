@@ -15,7 +15,7 @@ public interface IFilmMapper extends BaseMapper<Film> {
     //查询所有电影类型
     List<Type> findAllType();
     //根据类型查询电影
-    List<Film> findByType(int id);
+    List<Film> findFilmsByTypeId(int id);
 
     // 根据电影id查询电影的类型
     List<String> findAllTypeByFilmId(@Param("fid") int id);
