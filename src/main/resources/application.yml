@@ -9,6 +9,7 @@ server:
 # -------------------- 自定义上传文件夹
 upload:
   location: D:/springboot/
+  locationImg: D:\springboot\img
 
 # -------------------- spring配置
 spring:
