@@ -55,7 +55,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
         // User实现UserDetails接口
         u.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(authorities)));
-        u.setPass(encoder.encode(user.getPassword()));
+        u.setPass(user.getPassword());
         u.setUsername(username);
         u.setId(user.getId());
         u.setBirthday(user.getBirthday());
