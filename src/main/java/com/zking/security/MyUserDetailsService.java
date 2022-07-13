@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,7 +60,6 @@ public class MyUserDetailsService implements UserDetailsService {
         u.setId(user.getId());
         u.setBirthday(user.getBirthday());
         // 返回该用户和权限security进行匹配
-        return new User(user.getUsername(), user.getPass(),
-                AuthorityUtils.commaSeparatedStringToAuthorityList(authorities.toString()));
+        return u;
     }
 }
