@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>js片段</h2>
+
+<div th:fragment="js">
+
+    <script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
+    <script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
+    <script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
+    <script th:src="@{/js/barrage_stream_video.js}" src="../static/js/barrage_stream_video.js"></script>
+    <script th:src="@{/js/bootstrap.bundle.js}" src="../static/js/bootstrap.bundle.js"></script>
+    <script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
+    <script th:src="@{/js/echarts.min.js}" src="../static/js/echarts.min.js"></script>
+    <script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
+    <script th:src="@{/js/fontawesome.js}" src="../static/js/fontawesome.js"></script>
+    <!--    <script th:src="@{/js/jquery.jqzoom-core.js}" src="../static/js/jquery.jqzoom-core.js"></script>-->
+    <!--    <script th:src="@{/js/jquery.validate-1.19.3.js}" src="../static/js/jquery.validate-1.19.3.js"></script>-->
+    <!--    <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>-->
+    <script th:src="@{/js/tinymce_vue.js}" src="../static/js/tinymce_vue.js"></script>
+    <script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
+    <script th:src="@{/js/video-upload-vue.js}" src="../static/js/video-upload-vue.js"></script>
+
+
+    <script th:inline="javascript">
+
+        //弹幕评论
+        Vue.component('barrage-stream-video', barrageStream)
+        // =============================2
+        // 来自后端，未登录用户userId假设为0，
+        // 注意：这些参数可以使用thymeleaf模板直接设置到路径中，而不需要定义变量
+        const movieId = [[${movieId}]]
+        let userId = [[${userId}]]
+        const session = [[${login}]]
+
+
+        var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
+        new Vue({
+            el: '#app',
+            data: {
+
+                //弹幕评论
+                sources: [
+                    {src: '/media/协程第一话.mp4', type: 'video/mp4'},
+                ],
+                player: null,
+                message: '',
+                barrageMessages: [],
+                login: session,
+                color: 'black',
+                bgColor: 'white',
+
+                changed: false,
+                //头部模糊搜索框内容
+                inputHead: '',
+                //轮播图片数组
+                imgList: [
+                    {
+                        name: "109951167468487275",
+                        src: "img/109951167468487275.jpg",
+
+                    },
+                    {
+                        name: "109951167468514107",
+                        src: "img/109951167468514107.jpg",
+
+                    },
+                    {
+                        name: "109951167468538175",
+                        src: "img/109951167468538175.jpg",
+
+                    },
+                    {
+                        name: "109951167468551304",
+                        src: "img/109951167468551304.jpg",
+
+                    },
+                    {
+                        name: "109951167468567569",
+                        src: "img/109951167468567569.jpg",
+
+                    },
+                ],
+
+
+                //vip购买弹出框
+                vipVisible: false,
+
+                //电影分类
+                classifys: [
+                    {
+                        id: 1,
+                        name: '喜剧',
+                        //电影数据
+                        caedData: [{
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄',
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }, {
+                            movie: 'videolook/1176840-1-hd.mp4',
+                            img: 'img/log.jpg',
+                            name: '王小虎',
+                            info: '上海市普陀区金沙江路 1518 弄'
+                        }],
+                    },
+                    {
+                        id: 2,
+                        name: '冒险',
+                    },
+                    {
+                        id: 3,
+                        name: '动作',
+                    },
+                    {
+                        id: 4,
+                        name: '动漫',
+                    },
+                    {
+                        id: 5,
+                        name: '卧底',
+                    },
+                    {
+                        id: 6,
+                        name: '热血',
+                    },
+                    {
+                        id: 7,
+                        name: '偶像',
+                    },
+                    {
+                        id: 8,
+                        name: '都市',
+                    },
+                ],
+            },
+            methods: {
+                //vip购买弹框
+                vip() {
+                    this.vipVisible = true
+                    return false
+                },
+
+                //重置表单
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+
+
+                //弹幕评论
+                setupMessageHeight() {
+                    let div = this.$refs.textareaElement.$el;
+                    let rect = div.parentElement.getBoundingClientRect()
+                    let height = rect.height - 40 - 4
+                    div.style.height = height + 'px'
+                    div.style.minHeight = 100 + 'px'
+                    div.firstChild.style.height = '100%'
+                },
+                send: function () {
+                    if (this.message.trim() === '') {
+                        return
+                    }
+                    /**
+                     * private Integer userId;
+                     * private String content;
+                     * private Date sendTime;
+                     * private Integer movieId;
+                     * private Double movieTime;
+                     * private String color;
+                     * private String bgColor;
+                     */
+                    console.log(this.player)
+                    let msg = {
+                        userId: userId,
+                        content: this.message.trim(), // 后端可以限制长度，VIP或者不限制
+                        sendTime: new Date(),
+                        movieId: movieId,
+                        movieTime: this.player.currentTime(),
+                        color: this.color, // 后端设定，或者VIP前端设定
+                        bgColor: this.bgColor,
+                    }
+                    this.message = ''
+                    this.barrageMessages.push(msg)
+
+                    // send with post
+                    axios.post(`/video/${movieId}/message`, msg)
+                        .then(resp => console.log('发送弹幕成功！', resp.data) || this.$message.success('发送弹幕成功！'))
+                        .catch(err => console.log('获取视频的弹幕失败！', err) || this.$message.error('发送失败！'))
+                },
+                loginNow: function () {
+                    axios.post(`loginUser`)
+                        .then(resp => {
+                            if (resp.data.success) {
+                                userId = resp.data.userId
+                                this.login = true
+                            } else {
+                                userId = 0
+                            }
+                        })
+                        .catch(err => this.$message.error('登录失败！'))
+                },
+                click: function () {
+                    this.$confirm('你要去登录页面登录！现在登录？', '登录', {type: 'info',})
+                        .then(_ => this.loginNow())
+                        .catch(_ => this.login = false)
+                },
+                ready: function (player) {
+                    this.player = player
+                },
+                start: function (player) {
+                    console.log('start: ', player)
+                },
+                stop: function (player) {
+                    console.log('stop: ', player)
+                },
+                pause: function (player) {
+                    console.log('pause: ', player)
+                },
+
+            },
+
+            mounted: function () {
+                // const options = {}
+                // let player = videojs('video1', options, function () {
+                //     videojs.log('start playing...')
+                //     // 手动控制播放
+                //     this.play()
+                //     this.on('ended', function () {
+                //         // 停止播放
+                //         videojs.log('stopped!')
+                //     })
+                // })
+                // console.log(player)
+
+                //弹幕评论
+                window.addEventListener('resize', this.setupMessageHeight)
+                // websocket配置
+                const socket = new WebSocket(`ws://localhost:8080/ws/${movieId}/${userId}`)
+                socket.onerror = err => console.log('WebSocket Error', err)
+                socket.onopen = () => console.log('WebSocket Connected!')
+                socket.onmessage = event => {
+                    let message = JSON.parse(event.data)
+                    /**
+                     * private Integer userId;
+                     * private String content;
+                     * private Date sendTime;
+                     * private Integer movieId;
+                     * private Double movieTime;
+                     * private String color;
+                     * private String bgColor;
+                     */
+                    if (message.movieId === movieId && userId !== message.userId) {
+                        this.barrageMessages.push(message)
+                    }
+                }
+                window.onbeforeunload = () => socket && socket.close()
+
+                // 初始消息
+                axios.get(`/video/${movieId}/barrages`)
+                    .then(resp => {
+                        let data = resp.data
+                        console.log(data)
+                        this.barrageMessages = resp.data
+                    })
+                    .catch(err => console.log('获取视频的弹幕失败！', err))
+
+                // 设置样式
+                setTimeout(this.setupMessageHeight, 2000)
+            },
+
+            //弹幕评论
+            computed: {
+                messages: function () {
+                    return this.barrageMessages.map(v => `${v.userId}: [${parseFloat(v.movieTime).toFixed(2)}] ${v.content}`).join('\n')
+                },
+            },
+            //弹幕评论
+            beforeDestroy: function () {
+                window.removeEventListener("resize", this.getBarrageStreamList);
+                window.removeEventListener("resize", this.setupMessageHeight);
+            },
+        })
+    </script>
+
+</div>
+
+</body>
+</html>

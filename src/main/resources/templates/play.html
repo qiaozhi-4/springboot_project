@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <div th:replace="~{fragments/css::css}"></div>
+
+
+</head>
+
+<body>
+
+
+<div id="app">
+
+
+    <el-container>
+
+
+
+        <!-- 头部 -->
+        <div th:insert="~{fragments/header::header}"></div>
+
+        <!-- 主体部分 -->
+        <el-main >
+            <div style="height: 30px"></div>
+            <!--自动播放属性autoplay-->
+<!--            <video width="1000px" height="600px" controls autoplay th:src="@{${session.movie}}"></video>-->
+
+        </el-main>
+
+
+    </el-container>
+
+
+    <!-- vip购买弹出框 -->
+    <div th:replace="~{fragments/vip::vip}"></div>
+
+
+<!--弹幕测试-->
+    <el-container>
+        <el-main style="padding: 10px;">
+            <el-container style="position: relative;">
+                <barrage-stream-video :barrage-msg-list="barrageMessages" :sources="sources" poster="/images/test.jpg"
+                                      style="border:2px solid blue;" @ready="ready" @start="start" @pause="pause" @stop="stop">
+                </barrage-stream-video>
+            </el-container>
+        </el-main>
+        <el-aside style="padding: 10px; min-width: 400px; max-width: 40%;">
+            <el-container style="background-color: #8cc5ff; height: 100%; flex-direction: column; align-items: center;">
+                <el-main style="overflow-y: auto; width: 100%;">
+                    <el-input ref="textareaElement" cols="10" type="textarea" readonly v-model="messages" placeholder="还没有弹幕"></el-input>
+                </el-main>
+                <el-footer>
+                    <el-form :inline="true">
+                        <el-form-item>
+                            <el-input v-model="message" @submit.native.prevent :disabled="! login" :placeholder="login ? '输入弹幕' : '登录后发送弹幕'"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="send">发送弹幕</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-footer>
+            </el-container>
+        </el-aside>
+    </el-container>
+
+    <el-divider></el-divider>
+    <el-container>
+        <div class="">
+            <span class="demonstration">选择前景色（VIP）</span>
+            <el-color-picker v-model="color"></el-color-picker>
+        </div>
+        <div class="">
+            <span class="demonstration">选择背景色（VIP）</span>
+            <el-color-picker v-model="bgColor"></el-color-picker>
+        </div>
+        <div style="margin: 0 1rem;"></div>
+        <el-button-group>
+            <el-button @click="click('t1')">t1</el-button>
+            <el-button @click="click('t2')">t2</el-button>
+            <el-button @click="click('t3')">t3</el-button>
+        </el-button-group>
+    </el-container>
+
+</div>
+</body>
+
+<script th:replace="~{fragments/js::js}"></script>
+
+
+</html>

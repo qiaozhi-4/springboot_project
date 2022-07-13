@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>css片段</h2>
+
+<div th:fragment="css">
+    <!--添加Bootstrap和fontawesome的样式-->
+    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet" />
+    <link th:href="@{/css/bootstrap.css}" href="../static/css/bootstrap.css" rel="stylesheet" />
+    <!-- 布局容器 -->
+    <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet" />
+    <!-- 布局 -->
+    <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet" />
+    <!-- 电影卡片样式 -->
+    <link th:href="@{/css/card.css}" href="../static/css/card.css" rel="stylesheet" />
+    <!-- 电影播放样式 -->
+    <link th:href="@{/css/video-js.custom.css}" href="../static/css/video-js.custom.css" rel="stylesheet" />
+    <link th:href="@{/css/video-js.min.css}" href="../static/css/video-js.min.css" rel="stylesheet" />
+    <!--弹幕-->
+    <link th:href="@{/css/barrage_stream.css}" href="../static/css/barrage_stream.css" rel="stylesheet" />
+    <!-- 自己的样式 -->
+    <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet" />
+
+</div>
+
+</body>
+</html>

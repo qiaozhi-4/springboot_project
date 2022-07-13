@@ -1,295 +1,105 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
-    <title>你的项目</title>
-    <!--添加Bootstrap和fontawesome的样式-->
-    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
-    <!-- 布局容器 -->
-    <link th:href="@{/css/container.css}" href="../static/css/container.css" rel="stylesheet"/>
-    <!-- 布局 -->
-    <link th:href="@{/css/layout.css}" href="../static/css/layout.css" rel="stylesheet"/>
-    <!-- 下拉菜单按钮样式 -->
-    <link th:href="@{/css/mycss1.css}" href="../static/css/mycss1.css" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <div th:replace="~{fragments/css::css}"></div>
+
 </head>
+
 <body>
 
-<a href="/login/gitee">
-    <img width="45px" src="/images/logo-black.svg"><span>gitee登录</span>
-</a>
-<a href="/login/gitee">
-    <img width="45px" src="/images/gitee图标.svg"><span>gitee登录</span>
-</a>
 
 <div id="app">
 
-    <!--主体布局-->
+
     <el-container>
 
         <!-- 头部 -->
-        <el-header>
-            <!-- type="flex"开启 flex 布局 -->
-            <el-row :gutter="5" type="flex" align="middle">
-                <el-col :span="3" :offset="1">
-                    <a href="/"><img width="100%" src="../static/images/ikun.png"></a>
-                    </form>
-                </el-col>
-                <el-col :span="1">
-                    <el-link href="/" :underline="false">首页</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false">电视剧</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false">电影</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false">云影院</el-link>
-                </el-col>
-                <el-col :span="2">
-                    <el-link href="img/ikun.png" :underline="false">会员中心</el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-dropdown>
-                        <el-button class="headDropdown" size="mini" icon="el-icon-arrow-down" circle></el-button>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>黄金糕</el-dropdown-item>
-                            <el-dropdown-item>狮子头</el-dropdown-item>
-                            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                            <el-dropdown-item>双皮奶</el-dropdown-item>
-                            <el-dropdown-item>蚵仔煎</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-col>
-                <el-col :span="5" :offset="1">
-                    <el-input placeholder="熊出没" v-model="inputHead">
-                        <el-button slot="append" icon="el-icon-search">搜索</el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="1">
-                    <el-link href="img/ikun.png" :underline="false"><i class="el-icon-upload"></i></el-link>
-                </el-col>
-                <el-col :span="1">
-                    <el-tooltip content="上传作品" placement="top">
-                        <el-link href="img/ikun.png" :underline="false"><i class="el-icon-upload"></i></el-link>
-                    </el-tooltip>
-                </el-col>
-                <el-col :span="1">
-                    <el-tooltip content="客户端下载" placement="top">
-                        <el-link href="img/ikun.png" :underline="false"><i class="el-icon-s-platform"></i>
-                        </el-link>
-                    </el-tooltip>
-
-                </el-col>
-                <el-col :span="1">
-                    <el-tooltip content="历史播放" placement="top">
-                        <el-link href="img/ikun.png" :underline="false"><i class="el-icon-time"></i></el-link>
-                    </el-tooltip>
-                </el-col>
-                <el-col :span="2">
-                    <el-link @click="login" :underline="false">
-                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
-                        登录
-                    </el-link>
-                </el-col>
-            </el-row>
-        </el-header>
+        <div th:replace="~{fragments/header::header}"></div>
 
         <!-- 主体部分 -->
         <el-main width="1500px">
             <!-- 轮播部分 -->
-            <el-row type="flex" justify="space-around">
+            <el-row class="lunbo" type="flex" justify="space-around">
                 <el-col :span="22">
                     <div>
-                        <el-carousel class="lunbo" height="400px" direction="vertical">
-                            <el-carousel-item v-for="item in imgList" :key="item.name">
-                                <!-- <el-link href="img/ikun.png" :underline="false"> <i class="el-icon-time"></i></el-link> -->
-                                <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title"/>
+                        <el-carousel height="400px" direction="vertical">
+                            <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
+                                <el-link href="img/ikun.png" :underline="false">
+                                    <!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
+                                    <!--                                         :name="item.title" /></i>-->
+
+                                    <video width="1000px" height="600px" controls autoplay
+                                           src="videolook/1176840-1-hd.mp4"></video>
+
+                                </el-link>
+                                <!-- <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title" /> -->
                             </el-carousel-item>
                         </el-carousel>
                     </div>
                 </el-col>
             </el-row>
-            <el-row type="flex" justify="space-around">
-                <el-col :span="22">
 
-                </el-col>
-            </el-row>
+            <!-- 电影分类 -->
+            <div v-for="(classify,index) in classifys">
+                <el-row>
+                    <el-col :id="classify.id" class="className" :push="1" :span="1">
+                        <h2>{{classify.name}}</h2>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="0">
+
+                    <el-col :offset="1" :span="3" v-for="(caedData,index) in classify.caedData">
+                        <el-tooltip :content="caedData.name" placement="top" :visible-arrow="false">
+                            <el-link :href="'play?movie=' + caedData.movie" :underline="false">
+                                <el-card class="box-card movie">
+                                    <img height="120px" width="100%" :src="caedData.img"><br>
+                                    <b><span>{{caedData.name}}</span></b><br><br>
+                                    <span>{{caedData.info}}</span><br>
+                                </el-card>
+                            </el-link>
+                        </el-tooltip>
+                    </el-col>
+
+                </el-row>
+            </div>
+
         </el-main>
+
 
         <!-- 底部部分 -->
         <el-footer>
-            底部
+            <el-row type="flex" justify="start">
+                <el-col :span="8">
+                    <p>关于我们</p>
+                    <p>用户用户名信息：<span th:text="${#authentication.name}"></span></p>
+                    <p>用户权限信息：<span th:text="${#authentication.authorities}"></span></p>
+                    <p>用户信息：<span th:text="${#authentication.principal}"></span></p>
+                </el-col>
+                <el-col :span="8">
+                    <p>联系我们</p>
+                </el-col>
+                <el-col :span="8">
+                    <p>服务</p>
+                </el-col>
+            </el-row>
+            <div style="height: 80px;"></div>
         </el-footer>
 
     </el-container>
 
-    <!-- 登录表单 -->
-    <el-dialog title="添加用户" :visible.sync="loginFormVisible" :close-on-click-modal="false" :show-close="false">
 
-        <el-form :model="loginForm" ref="loginForm" label-width="160px">
+    <!-- vip购买弹出框 -->
+    <div th:replace="~{fragments/vip::vip}"></div>
 
-            <el-form-item label="用户名" prop="username" label-width="60px">
-                <el-input v-model="loginForm.username" autocomplete="off"></el-input>
-            </el-form-item>
 
-            <el-form-item label="密码" prop="password" label-width="60px">
-                <el-input v-model="loginForm.password" autocomplete="off"></el-input>
-            </el-form-item>
-
-            <el-form-item>
-                <el-button type="primary" @click="loginOk('loginForm')">确 定</el-button>
-                <el-button @click="resetForm('loginForm')">重置</el-button>
-                <el-button @click="loginNo('loginForm')">取 消</el-button>
-            </el-form-item>
-
-            <el-form-item>
-                <el-row>
-                    <el-col :span="6">第三方登录:</el-col>
-                    <el-col :span="2"><a href="/login/gitee"><img width="25px" src="/images/logo-black.svg"></a>
-                    </el-col>
-                </el-row>
-            </el-form-item>
-
-        </el-form>
-
-    </el-dialog>
-
-    <h3>请登出：
-        <form action="/logout" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><br/>
-            <button type="submit">点击登出</button>
-        </form>
-    </h3>
-
-    <div>
-        <p>用户信息：<span th:text="${#session?.getAttribute('SPRING_SECURITY_CONTEXT')}"></span></p>
-
-        已经登录的用户名：<span th:text="${#authentication.name}"></span>
-        <!--        已经登录的头像：<img th:src="${#authentication.avatarUrl}">-->
-    </div>
 </div>
-
-<!--js脚本-->
-<script th:src="@{/js/vue-2.6.14.min.js}" src="../static/js/vue-2.6.14.min.js"></script>
-<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
-<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
-<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            //头部模糊搜索框内容
-            inputHead: '',
-            //轮播图片数组
-            imgList: [
-                {
-                    name: "109951167468487275",
-                    src: "img/109951167468487275.jpg",
-
-                },
-                {
-                    name: "109951167468514107",
-                    src: "img/109951167468514107.jpg",
-
-                },
-                {
-                    name: "109951167468538175",
-                    src: "img/109951167468538175.jpg",
-
-                },
-                {
-                    name: "109951167468551304",
-                    src: "img/109951167468551304.jpg",
-
-                },
-                {
-                    name: "109951167468567569",
-                    src: "img/109951167468567569.jpg",
-
-                },
-            ],
-            //登录
-            //控制登录表单显示还是隐藏
-            loginFormVisible: false,
-            //登录表单数据
-            loginForm: {
-                username: '',
-                password: '',
-            }
-        },
-        methods: {
-            //重置表单
-            resetForm(loginForm) {
-                this.$refs[loginForm].resetFields();
-            },
-            /* 呼出登录表单 ----------------------------------------*/
-            login() {
-                this.loginFormVisible = true
-            },
-            /* 确定登录 */
-            loginOk(loginForm) {
-                this.$refs[loginForm].validate((valid) => {
-                    if (valid) {
-                        this.loginFormVisible = false// 隐藏表单
-                        //把表单数据赋值给data
-                        let data = {
-                            username: this.loginForm.username,
-                            password: this.loginForm.password
-                        }
-                        const params = new URLSearchParams();
-                        params.append('username', this.loginForm.username);
-                        params.append('password', this.loginForm.password);
-                        //发送请求到后端删除sql数据
-                        axios.get('/login', params)
-                            .then((response) => {
-                                if (response.data) {
-                                    this.$message({
-                                        type: 'success',
-                                        message: '登录成功!'
-                                    });
-                                } else {
-                                    this.$message({
-                                        type: 'info',
-                                        message: '登录败败!'
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                    this.$message({
-                                        type: 'error',
-                                        message: '登录请求失败!'
-                                    });
-                                    console.log(error)
-                                }
-                            )
-                        //清除表单绑定的数据
-                        Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
-                        this.resetForm(loginForm)
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
-            /* 取消登录 */
-            loginNo(loginForm) {
-                this.loginFormVisible = false
-                //清除表单绑定的数据
-                Object.keys(this.loginForm).forEach(key => this.loginForm[key] = '');
-                this.resetForm(loginForm)
-                //提示
-                this.$notify.info({
-                    title: '消息',
-                    message: '您取消了登录'
-                });
-            },
-        },
-        mounted: function () {
-            console.log('已经加载Vue……')
-        },
-    });
-</script>
 </body>
+
+<script th:replace="~{fragments/js::js}"></script>
+
 </html>
