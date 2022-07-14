@@ -80,60 +80,6 @@ public class adminController {
         //当前时间减去一个月后的时间
         String format = simpleDateFormat.format(calendar.getTime());
         List<User> users = userService.list(new QueryWrapper<User>().gt("last_login_time", format));
-        ArrayList<String> imgs = new ArrayList<>();
-        for (User u: users) {
-            Img img = imgService.getOne(new QueryWrapper<Img>().eq("id", u.getImgId()));
-            imgs.add(img.getUrl());
-        }
         return UserDto.userDtos(users, imgs);
-    }
-
-    @RolesAllowed("admin") // 必须admin角色才能访问
-    @PostMapping("/findAllUserPage")
-    @ResponseBody
-    public List<UserDto> findAllUserPage() {
-        List<User> users = userService.list();
-        ArrayList<String> imgs = new ArrayList<>();
-        for (User u: users) {
-            Img img = imgService.getOne(new QueryWrapper<Img>().eq("id", u.getImgId()));
-            imgs.add(img.getUrl());
-        }
-        return UserDto.userDtos(users, imgs);
-    }
-
-    @RolesAllowed("admin") // 必须admin角色才能访问
-    @PostMapping("/findAllFilmPage")
-    @ResponseBody
-    public List<FilmDto> findAllFilmPage() {
-        List<Film> films = filmService.list();
-        ArrayList<String> files = new ArrayList<>();
-        ArrayList<String> imgs = new ArrayList<>();
-        ArrayList<String> filmRegions = new ArrayList<>();
-        ArrayList<List<String>> filmTypes = new ArrayList<>();
-        for (Film film: films) {
-            File file = fileService.getOne(new QueryWrapper<File>().eq("id", film.getFileId()));
-            files.add(file.getUrl());
-            Img img = imgService.getOne(new QueryWrapper<Img>().eq("id", film.getImgId()));
-            imgs.add(img.getUrl());
-            String region = filmService.findAllRegionByFilmId(film.getId());
-            filmRegions.add(region);
-            List<String> filmType = filmService.findAllTypeByFilmId(film.getId());
-            filmTypes.add(filmType);
-        }
-        return FilmDto.filmDtos(films, files, imgs, filmRegions, filmTypes);
-    }
-
-    @RolesAllowed("admin") // 必须admin角色才能访问
-    @PostMapping("/findAllType")
-    @ResponseBody
-    public List<Type> findAllType() {
-        return typeService.list();
-    }
-
-    @RolesAllowed("admin") // 必须admin角色才能访问
-    @PostMapping("/findAllActor")
-    @ResponseBody
-    public List<Actor> findAllActor() {
-        return actorService.list();
     }
 }
