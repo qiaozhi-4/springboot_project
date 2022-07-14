@@ -1,5 +1,6 @@
 package com.zking.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zking.entity.User;
 import com.zking.repository.IUserMapper;
@@ -13,20 +14,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserService extends ServiceImpl<IUserMapper, User> implements IUserService {
-    private final IUserMapper userMapper;
 
+    @Override
     //根据用户id查询，用户有哪些角色
     public List<String> findAllRoleByUserId(int id) {
-        return userMapper.findAllRoleByUserId(id);
+        return getBaseMapper().findAllRoleByUserId(id);
     }
 
-    //根据角色id查询，拥有哪些权限
-    public List<String> findAllJurisdictionByUserId(int id) {
-        return userMapper.findAllJurisdictionByUserId(id);
+    // 根据用户id查询，用户有哪些权限
+    @Override
+    public List<String> findAllAuthoritySByUserId(int id) {
+        return getBaseMapper().findAllAuthoritySByUserId(id);
     }
 
-
-
+    //登录【根据用户名查询用户】
+    @Override
+    public User findUserByUsername(String userName) {
+        return getOne(new QueryWrapper<User>().eq("username", userName));
+    }
 
 
 }

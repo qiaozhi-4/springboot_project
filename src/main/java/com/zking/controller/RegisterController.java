@@ -2,9 +2,7 @@ package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
-import com.zking.entity.Img;
 import com.zking.entity.User;
-import com.zking.service.IImgService;
 import com.zking.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,11 +26,10 @@ import java.util.UUID;
 public class RegisterController {
 
     @Value("${upload.locationImg}")
-    private  String location;
+    private String location;
 
     private final IUserService userService;
     private final PasswordEncoder encoder;
-    private final IImgService iImgService;
 
 
     //注册页面
@@ -40,15 +37,16 @@ public class RegisterController {
     public String register() {
         return "register";
     }
+
     @PostMapping("registerForm")
-    public String registerForm(MultipartFile file, String username, String password, String name, String sex, Model model) throws IOException, ParseException {
-        model.addAttribute("info","");
-        if(file.getOriginalFilename().equals("")){
-            model.addAttribute("info","头像不为空");
+    public String registerForm(MultipartFile file, String username, String password, String name, Character sex, Model model) throws IOException, ParseException {
+        model.addAttribute("info", "");
+        if (file.getOriginalFilename().equals("")) {
+            model.addAttribute("info", "头像不为空");
             return "register";
         }
-        if(username != null && password !=null && name !=null){
-            model.addAttribute("info","请填写必要信息");
+        if (username != null && password != null && name != null) {
+            model.addAttribute("info", "请填写必要信息");
             return "register";
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -60,17 +58,18 @@ public class RegisterController {
         file.transferTo(dest);
         System.out.println("path => " + path);
 
-        Img img = new Img(null, location+path);
-        boolean save1 = iImgService.save(img);
-        if (!save1) {
-            model.addAttribute("info","头像上传失败");
-            return "register";
-        }
+        //Img img = new Img(null, location+path);
+        //boolean save1 = iImgService.save(img);
+        //if (!save1) {
+        //    model.addAttribute("info","头像上传失败");
+        //    return "register";
+        //}
 
-        User user = new User(0,username,pass,img.getId(),name,sex,0,null,null,null,parse,null);
+        //User user = new User(0,username,pass,"",name,sex,null,null,null,null,parse,null,null);
+        User user = new User();
         boolean save = userService.save(user);
         if (!save) {
-            model.addAttribute("info","注册失败请重试");
+            model.addAttribute("info", "注册失败请重试");
             return "register";
         }
         return "login";

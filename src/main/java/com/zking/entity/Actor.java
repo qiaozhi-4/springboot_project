@@ -1,7 +1,6 @@
 package com.zking.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -19,11 +18,9 @@ import java.util.Date;
 public class Actor {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    @TableField("img_id")
-    private Integer imgId;
+    private String headImg;
     private String name;
     private Date birthday;
     private String constellation;
     private String info;
-    private Integer imgId;
 }

@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zking.entity.GitOAuth2User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -54,7 +51,7 @@ public class SecurityConfig {
                 .loginPage("/loginUser")
                 .loginProcessingUrl("/login")
                 .failureUrl("/loginUser?error")
-                .defaultSuccessUrl("/successUser");
+                .defaultSuccessUrl("/");
         http.logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginUser?logout");

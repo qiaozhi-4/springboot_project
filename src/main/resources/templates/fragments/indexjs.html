@@ -82,6 +82,8 @@
                 //vip购买弹出框
                 vipVisible: false,
 
+                //电影分类以及当前分类的电影
+                typeAndFilm:[],
                 //电影分类
                 classifys: [
                     {
@@ -90,32 +92,32 @@
                         //电影数据
                         caedData: [{
                             movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
+                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
                             name: '王小虎',
                             info: '上海市普陀区金沙江路 1518 弄',
                         }, {
                             movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
+                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
                             name: '王小虎',
                             info: '上海市普陀区金沙江路 1518 弄'
                         }, {
                             movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
+                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
                             name: '王小虎',
                             info: '上海市普陀区金沙江路 1518 弄'
                         }, {
                             movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
+                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
                             name: '王小虎',
                             info: '上海市普陀区金沙江路 1518 弄'
                         }, {
                             movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
+                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
                             name: '王小虎',
                             info: '上海市普陀区金沙江路 1518 弄'
                         }, {
                             movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
+                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
                             name: '王小虎',
                             info: '上海市普陀区金沙江路 1518 弄'
                         }],
@@ -162,6 +164,14 @@
             },
 
             mounted: function () {
+                console.log('开始发送请求')
+                //获取电影分类及其数据
+                axios.get('/getTypeAndFilm')
+                    .then(resp => {
+                        console.log('请求发送成功', resp)
+                        this.typeAndFilm = resp.data
+                    })
+                    .catch(err => this.$message.error('请求发送失败') )
                 // const options = {}
                 // let player = videojs('video1', options, function () {
                 //     videojs.log('start playing...')

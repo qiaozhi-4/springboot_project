@@ -1,10 +1,9 @@
 package com.zking.security;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zking.entity.User;
 import com.zking.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,8 +24,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         // 获取用户
-        com.zking.entity.User user =
-                userService.getOne(new QueryWrapper<com.zking.entity.User>().eq("username", username), false);
+        User user = userService.findUserByUsername(username);
         // 判断数据库是否有该用户
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
@@ -35,10 +33,10 @@ public class MyUserDetailsService implements UserDetailsService {
         // 查询该用户权限并赋予权限
         StringBuilder authorities = new StringBuilder();
         int count = 1;
-        for (String s : userService.findAllJurisdictionByUserId(user.getId())) {
+        for (String s : userService.findAllAuthoritySByUserId(user.getId())) {
             if (count++ > 1) {
                 authorities.append(",").append(s);
-            }else {
+            } else {
                 authorities.append(s);
             }
         }
@@ -46,20 +44,16 @@ public class MyUserDetailsService implements UserDetailsService {
         for (String s : userService.findAllRoleByUserId(user.getId())) {
             if (count++ > 1) {
                 authorities.append(",").append(s);
-            }else {
+            } else {
                 authorities.append(s);
             }
         }
 
-        com.zking.entity.User u = new com.zking.entity.User();
 
         // User实现UserDetails接口
-        u.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(authorities)));
-        u.setPass(user.getPassword());
-        u.setUsername(username);
-        u.setId(user.getId());
-        u.setBirthday(user.getBirthday());
+        user.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(authorities)));
+
         // 返回该用户和权限security进行匹配
-        return u;
+        return user;
     }
 }

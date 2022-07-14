@@ -4,6 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--必须填写namespace属性，是接口路径-->
 <mapper namespace="com.zking.repository.IFilmMapper">
+
+    <!--查询所有电影类型-->
+    <select id="findAllType" resultType="Type">
+        SELECT * FROM type;
+    </select>
+    <!--根据类型查询电影-->
+    <select id="findFilmsByTypeId" resultType="Film">
+        SELECT * FROM film WHERE id IN (SELECT film_id  FROM film_type WHERE type_id = #{id});
+    </select>
+
+
+
     <!--根据电影id查询电影的类型-->
     <select id="findAllTypeByFilmId" resultType="String">
         SELECT name FROM type t INNER JOIN film_type ft ON t.id=ft.type_id

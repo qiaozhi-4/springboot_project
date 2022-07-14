@@ -77,10 +77,10 @@ public class VideoPlayerController {
         // 从数据库中获取数据【当前视频】
         List<Comment> messages = new ArrayList<>();
         int movieId = id;
-        messages.add(new Comment(1, 1, movieId, "第1条", new Date(), 1.1, "#fff123"));
-        messages.add(new Comment(2, 1, movieId, "第2条", new Date(), 2.2, "#fff123"));
-        messages.add(new Comment(3, 1, movieId, "第3条", new Date(), 3.3, "#fff123"));
-        messages.add(new Comment(4, 1, movieId, "第4条", new Date(), 4.4, "#fff123"));
+        //messages.add(new Comment(1, 1, movieId, "第1条", new Date(), 1.1, "#fff123"));
+        //messages.add(new Comment(2, 1, movieId, "第2条", new Date(), 2.2, "#fff123"));
+        //messages.add(new Comment(3, 1, movieId, "第3条", new Date(), 3.3, "#fff123"));
+        //messages.add(new Comment(4, 1, movieId, "第4条", new Date(), 4.4, "#fff123"));
 
         return messages;
     }
