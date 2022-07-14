@@ -111,11 +111,11 @@
                         <template>
                             <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
                                       @selection-change="handleSelectionChange" @row-click="dj">
-                                <el-table-column prop="filmImg" label="电影" width="120">
+                                <el-table-column prop="imgSrc" label="电影" width="120">
                                     <template slot-scope="scope">
                                         <div class="demo-type">
                                             <div>
-                                                <el-image :src="scope.row.filmImg"></el-image>
+                                                <el-image :src="scope.row.imgSrc"></el-image>
                                             </div>
                                         </div>
                                     </template>
@@ -128,9 +128,9 @@
                                 </el-table-column>
                                 <el-table-column prop="time" label="上映时间" width="120">
                                 </el-table-column>
-                                <el-table-column prop="filmRegion" label="上映国家" width="120">
+                                <el-table-column prop="region" label="上映国家" width="120">
                                 </el-table-column>
-                                <el-table-column prop="filmType" label="类型" width="120">
+                                <el-table-column prop="types" label="类型" width="120">
                                 </el-table-column>
                                 <el-table-column label="操作">
                                     <el-button type="text" @click="dialogFormVisible = true">修改

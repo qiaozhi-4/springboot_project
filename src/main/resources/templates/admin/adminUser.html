@@ -111,13 +111,18 @@
                             </el-col>
                         </el-row>
                         <template>
-                            <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
-                                      @selection-change="handleSelectionChange" @row-click="dj">
-                                <el-table-column prop="userImg" label="头像" width="120">
+                            <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                                      height="auto"
+                                      border
+                                      stripe
+                                      @row-click="dj"
+                                      @selection-change="handleSelectionChange"
+                            >
+                                <el-table-column prop="headImg" label="头像" width="120">
                                     <template slot-scope="scope">
                                         <div class="demo-type">
                                             <div>
-                                                <el-avatar :src="scope.row.userImg"></el-avatar>
+                                                <el-avatar :src="scope.row.headImg"></el-avatar>
                                             </div>
                                         </div>
                                     </template>
@@ -145,9 +150,13 @@
                             </el-table>
                         </template>
                         <el-pagination
-                                background
-                                layout="prev, pager, next"
-                                :total="1000">
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="pageSize"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalNum">
                         </el-pagination>
                     </div>
                 </el-col>
@@ -247,6 +256,9 @@
                 password: '',
             },
             tableData: [],
+            currentPage: 1,//默认显示第一页
+            pageSize: 5,//默认每页显示5条
+            totalNum: 100, //总页数
             dialogFormVisible: false,
             dialogFormVisible2: false,
             form: {},
@@ -282,8 +294,32 @@
                 console.log(row)
             },
             modificationUser() {
+                let img = this.form.headImg;
+                this.form.headImg = this.imgList[0];
                 console.log(this.form);
-                this.dialogFormVisible = false;
+                console.log(this.form.headImg);
+                params = new URLSearchParams();
+                params.append('_csrf', csrf);
+                params.append('user', this.form);
+                axios.post('/updateUser', params)
+                    .then(response => {
+                        if (response.data) {
+                            this.form.headImg = this.imgList[0].url;
+                            this.$message({
+                                message: '恭喜你，这是一条成功消息',
+                                type: 'success'
+                            });
+                        } else {
+                            this.form.headImg = img;
+                        }
+                        this.imgList = []
+                        this.dialogFormVisible = false;
+                    })
+                    .catch(data => {
+                        this.form.headImg = img;
+                        this.$message('修改失败');
+                        console.log(response);
+                    })
             },
             bannedUser() {
 
@@ -365,6 +401,15 @@
                 this.imgList = []
                 this.dialogFormVisible = false
             },
+            // 分页
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize = val;    //动态改变
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage = val;    //动态改变
+            }
         },
         mounted: function () {
             axios.get('/findAllUser')
