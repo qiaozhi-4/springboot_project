@@ -109,8 +109,13 @@
                             </el-col>
                         </el-row>
                         <template>
-                            <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
-                                      @selection-change="handleSelectionChange" @row-click="dj">
+                            <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                                      height="550px"
+                                      border
+                                      stripe
+                                      @row-click="dj"
+                                      @selection-change="handleSelectionChange"
+                            >
                                 <el-table-column prop="imgSrc" label="电影" width="120">
                                     <template slot-scope="scope">
                                         <div class="demo-type">
@@ -141,9 +146,12 @@
                             </el-table>
                         </template>
                         <el-pagination
-                                background
-                                layout="prev, pager, next"
-                                :total="1000">
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-size="pageSize"
+                                layout="total, prev, pager, next, jumper"
+                                :total="tableData.length">
                         </el-pagination>
                     </div>
                 </el-col>
@@ -367,6 +375,8 @@
                 password: '',
             },
             tableData: [],
+            currentPage: 1,//默认显示第一页
+            pageSize: 5,//默认每页显示5条
             dialogFormVisible: false,
             dialogFormVisible2: false,
             dialogFormVisible3: false,
@@ -521,22 +531,31 @@
                 this.imgList = []
                 this.fileList = []
                 this.dialogFormVisible3 = false
-            }
+            },
+            // 分页
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize = val;    //动态改变
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage = val;    //动态改变
+            },
         },
         mounted: function () {
-            axios.post('/findAllFilm', params)
+            axios.get('/findAllFilm', params)
                 .then(response => {
                     this.tableData = response.data;
                     console.log("电影",response);
                 })
                 .catch(data => console.log(response))
-            axios.post('/findAllType', params)
+            axios.get('/findAllType', params)
                 .then(response => {
                     this.cities = response.data;
                     console.log("类型",response);
                 })
                 .catch(data => console.log(response))
-            axios.post('/findAllActor', params)
+            axios.get('/findAllActor', params)
                 .then(response => {
                     this.actors = response.data;
                     console.log("演员",response);
