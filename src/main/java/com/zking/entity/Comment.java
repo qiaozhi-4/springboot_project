@@ -23,6 +23,8 @@ public class Comment {
     private String conten;
     private Date time;
     private Double filmTime; // 发送弹幕时视频的播放时间
+    private String color; // 字体前景色
+    private String bgColor; // 字体背景色
 
 
 
