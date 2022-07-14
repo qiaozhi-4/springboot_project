@@ -45,7 +45,7 @@ public class RegisterController {
             model.addAttribute("info", "头像不为空");
             return "register";
         }
-        if (username != null && password != null && name != null) {
+        if (username == null && password == null && name == null) {
             model.addAttribute("info", "请填写必要信息");
             return "register";
         }
@@ -58,15 +58,8 @@ public class RegisterController {
         file.transferTo(dest);
         System.out.println("path => " + path);
 
-        //Img img = new Img(null, location+path);
-        //boolean save1 = iImgService.save(img);
-        //if (!save1) {
-        //    model.addAttribute("info","头像上传失败");
-        //    return "register";
-        //}
 
-        //User user = new User(0,username,pass,"",name,sex,null,null,null,null,parse,null,null);
-        User user = new User();
+        User user = new User(0,username,pass,"/img"+path,name,sex,0,null,null,null,parse,null,null);
         boolean save = userService.save(user);
         if (!save) {
             model.addAttribute("info", "注册失败请重试");
