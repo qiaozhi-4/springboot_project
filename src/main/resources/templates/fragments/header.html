@@ -35,8 +35,8 @@
                     <el-button class="headDropdown qita" size="mini" icon="el-icon-arrow-down" circle>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="(type,index) in classifys">
-                            <el-link class="qita" :href="'#'+ type.id" :underline="false">{{type.name}}
+                        <el-dropdown-item v-for="(type,index) in typeAndFilm">
+                            <el-link class="qita" :href="'#'+ type.type.id" :underline="false">{{type.type.name}}
                             </el-link>
                         </el-dropdown-item>
                     </el-dropdown-menu>

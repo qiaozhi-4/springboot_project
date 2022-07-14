@@ -84,8 +84,6 @@
 
                 //电影分类以及当前分类的电影
                 typeAndFilm:[],
-                //电影分类
-                classifys:[],
             },
             methods: {
                 //vip购买弹框
@@ -105,7 +103,6 @@
                     .then(resp => {
                         console.log('请求发送成功', resp)
                         this.typeAndFilm = resp.data
-                        this.classifys = resp.data.type
                     })
                     .catch(err => this.$message.error('请求发送失败') )
                 // const options = {}
