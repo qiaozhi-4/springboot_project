@@ -318,12 +318,12 @@
                 params.append('_csrf', csrf);
                 params.append('user', this.form);
                 params.append('file', this.imgList[0]);
-                axios.get('/updateUser', params)
+                axios.get('/updateUser', this.form)
                     .then(response => {
                         if (response.data) {
                             this.form.headImg = this.imgList[0].url;
                             this.$message({
-                                message: '恭喜你，这是一条成功消息',
+                                message: '用户信息已更新',
                                 type: 'success'
                             });
                         }
