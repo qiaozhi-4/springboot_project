@@ -2,8 +2,8 @@ package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.dto.UserCount;
-import com.zking.entity.*;
-import com.zking.service.impl.*;
+import com.zking.entity.User;
+import com.zking.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class adminController {
     private final UserService userService;
-    private final FilmService filmService;
-    private final FileService fileService;
-    private final TypeService typeService;
-    private final ActorService actorService;
 
     @RolesAllowed("admin")
     @GetMapping("adminIndex")
@@ -75,6 +71,7 @@ public class adminController {
         calendar.add(Calendar.MONTH, -1); //当前时间减去一个月
         //当前时间减去一个月后的时间
         String format = simpleDateFormat.format(calendar.getTime());
-        return userService.list(new QueryWrapper<User>().gt("last_login_time", format));
+        List<User> users = userService.list(new QueryWrapper<User>().gt("last_login_time", format));
+        return users;
     }
 }
