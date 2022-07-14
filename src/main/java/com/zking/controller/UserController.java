@@ -8,6 +8,7 @@ import com.zking.repository.IFilmMapper;
 import com.zking.repository.IUserMapper;
 import com.zking.service.IFilmService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +17,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.zking.service.IUserService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -28,9 +32,9 @@ public class UserController {
 
     private final IUserService userSevice;
     private final IFilmMapper filmMapper;
-    private final IFilmService filmService;
-    private final IUserMapper userMapper;
     private final ICommentMapper commentMapper;
+    @Value("${upload.locationImg}")
+    private String location;
     private final PasswordEncoder encoder;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -70,25 +74,34 @@ public class UserController {
         return p;
     }
 
+    @GetMapping("/update")
+    public String updateUse(){
+        return "updateUser";
+    }
     //修改用户信息
-    @GetMapping("/updateUser")
-    public String updateUser(Model model, Integer imgId, String name, String address, String email , String password){
+    @PostMapping("/updateUsers")
+    public String updateUser(Model model, MultipartFile file, String name, String address, String email , String password)throws IOException {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         User principal =(User) authentication.getPrincipal();
-        if (imgId == null) {
+        if (file == null) {
+            model.addAttribute("info","头像不为空");
             return "updateUser";
         }
+        String imgname = UUID.randomUUID() + file.getOriginalFilename();
+        String path = "/" + imgname;
+        File dest = new File(location, path);
+        file.transferTo(dest);
         //密码加密
         String pass = encoder.encode(password);
         principal.setPassword(pass);
-        //principal.setImgId(imgId);
+        principal.setHeadImg(path);
         principal.setName(name);
         principal.setAddress(address);
         principal.setEmail(email);
         //修改
         userSevice.saveOrUpdate(principal);
         model.addAttribute("info","修改成功");
-        return "updateUser";
+        return "redirect:update";
     }
 }
