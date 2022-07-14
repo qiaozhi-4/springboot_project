@@ -19,7 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -89,9 +90,9 @@ public class adminController {
 
     //获取所有演员
     @RolesAllowed("admin") // 必须admin角色才能访问
-    @PostMapping("/updateUser")
+    @GetMapping("/updateUser")
     @ResponseBody
-    public boolean updateUser(User user, MultipartFile file) throws IOException {
+    public boolean updateUser( User user,  MultipartFile file) throws IOException {
         //把文件传入本地
         String imgname = UUID.randomUUID() + file.getOriginalFilename();
         String path = "/" + imgname;
