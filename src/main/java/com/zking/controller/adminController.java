@@ -2,9 +2,8 @@ package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.dto.UserCount;
-import com.zking.entity.*;
-import com.zking.service.IFilmService;
-import com.zking.service.impl.*;
+import com.zking.entity.User;
+import com.zking.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,6 +72,6 @@ public class adminController {
         //当前时间减去一个月后的时间
         String format = simpleDateFormat.format(calendar.getTime());
         List<User> users = userService.list(new QueryWrapper<User>().gt("last_login_time", format));
-        return UserDto.userDtos(users, imgs);
+        return users;
     }
 }
