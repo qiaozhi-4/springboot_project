@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 // TODO 弹幕【前端】实体类
 @Data @AllArgsConstructor @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BarrageMessageDTO
+public class CommentDTO
 {
     public enum Type
     {
