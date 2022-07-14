@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.dto.FilmDTO;
 import com.zking.dto.UserCount;
 import com.zking.entity.Actor;
+import com.zking.entity.Type;
 import com.zking.entity.User;
 import com.zking.service.IActorService;
 import com.zking.service.IFilmService;
+import com.zking.service.ITypeService;
 import com.zking.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,11 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @DenyAll
 @Controller
@@ -29,22 +29,23 @@ public class adminController {
     private final IUserService userService;
     private final IFilmService filmService;
     private final IActorService actorService;
+    private final ITypeService typeService;
 
     @RolesAllowed("admin")
     @GetMapping("adminIndex")
-    public String adminIndex(){
+    public String adminIndex() {
         return "/admin/adminIndex";
     }
 
     @RolesAllowed("admin")
     @GetMapping("adminFilm")
-    public String adminFilm(){
+    public String adminFilm() {
         return "/admin/adminFilm";
     }
 
     @RolesAllowed("admin")
     @GetMapping("adminUser")
-    public String adminUser(){
+    public String adminUser() {
         return "/admin/adminUser";
     }
 
@@ -53,17 +54,25 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @GetMapping("/findAllUser")
     @ResponseBody
-    public List<User> findAllUser(){
+    public List<User> findAllUser() {
         return userService.list();
     }
 
+
+    //获取所有类型
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/findAllType")
+    @ResponseBody
+    public List<Type> findAllType() {
+        return typeService.list();
+    }
 
 
     //admin需要获取电影以及他的所有类型
     @RolesAllowed("admin") // 必须admin角色才能访问
     @GetMapping("/findAllFilm")
     @ResponseBody
-    public List<FilmDTO> findAllFilm(){
+    public List<FilmDTO> findAllFilm() {
         return filmService.getAllFilms();
     }
 
@@ -72,8 +81,24 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @GetMapping("/findAllActor")
     @ResponseBody
-    public List<Actor> findAllActor(){
+    public List<Actor> findAllActor() {
         return actorService.list();
+    }
+
+
+    //获取所有演员
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/updateUser")
+    @ResponseBody
+    public boolean updateUser(User user, File file) throws FileNotFoundException {
+        //把文件传入本地
+        FileInputStream inputStream = new FileInputStream(file);
+        String name =  "/img/" +UUID.randomUUID() + file.getName();
+        FileOutputStream outputStream = new FileOutputStream("D:\\springboot" + name);
+
+        user.setHeadImg(name);
+
+        return userService.updateById(user);
     }
 
 

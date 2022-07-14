@@ -8,6 +8,12 @@
 <body>
 <div id="app">
   <h1>NPlayer在Vue中使用示例</h1>
+  <h3>
+    说明：<br/>
+    1. 弹幕直接在屏幕下方编写发送，右边的发送按钮删除掉，已经没用！ <br/>
+    2. 无法禁用弹幕，但是后端可以控制：能否发送给其他用户、颜色能否生效，这些作为登录用户、VIP功能就可以<br/>
+    3. 自己设计样式就可以使用
+  </h3>
   <div style="display: flex; flex-direction: column;">
     <header></header>
     <main style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 60vh;">
@@ -44,24 +50,19 @@
         <el-col :span="20" :offset="2">
           <el-button-group>
             <el-button type="primary" @click="loginClick">登录</el-button>
+            <el-button type="primary" @click="loginClick(1)">登出</el-button>
+            <el-button type="primary" @click="loginClick(2)">测试弹幕插件</el-button>
           </el-button-group>
         </el-col>
       </el-row>
     </footer>
   </div>
 </div>
-<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
-
-
-
-<script th:src="@{/js/vue-2.6.14.min.js}" src="../static/js/vue-2.6.14.min.js"></script>
-<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
-<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
-
+<script src="../video/vue-2.6.14.min.js"></script>
+<script src="../element/js/axios-0.26.js"></script>
+<script src="../element/js/element-ui-2.15.7.js"></script>
 <!--nplayer脚本-->
-<script th:src="@{/js/player/nplayer.min.js}" src="../static/js/player/nplayer.min.js"></script>
-<script th:src="@{/js/player/danmaku.min.js}" src="../static/js/player/"danmaku.min.js"></script>
-
+<script src="nplayer.min.js"></script>
 <script src="danmaku.min.js"></script>
 <script src="nplayer_vue_1.0.12.min.js"></script>
 <script>
@@ -91,6 +92,10 @@
   let movieId = 10 // thymeleaf模板model参数
   let host = 'http://localhost:8080' // 测试用
 
+  // 手动配置视频路径的方法：
+  // this.options.src = '../video/resource/协程第一话.mp4'
+  // this.player.updateOptions(this.options)
+
   Vue.use(NPlayerVue)
   new Vue({
     el: '#app',
@@ -98,13 +103,15 @@
       player: null,
       danmaku: null,
       options: {
-        plugins: [new NPlayerDanmaku({})],
+        controls:  [
+          ['play', 'volume', 'time', 'spacer', 'airplay', 'settings', 'web-fullscreen', 'fullscreen'],
+          ['progress']
+        ],
+        plugins: [new NPlayerDanmaku({
+          autoInsert: true,
+        })],
         src: '../video/resource/协程第一话.mp4',
-        // 手动配置视频路径
-        // this.options.src = '../video/resource/协程第一话.mp4'
-        // this.$refs.player.player.updateOptions(this.options)
       },
-      // ====================
       messageList: [], // 后端发送的数据，应该按发送时间排序！不是电影时间！
       message: '', // 单条字幕，暂时没用到
       isLogin: false, // 已经登录
@@ -120,20 +127,32 @@
     methods: {
       setPlayer(player) {
         this.player = player;
-        this.danmaku = player.danmaku
         this.player.on('DanmakuSend', msg => {
           this.sendMessage(msg)
         })
-        this.player.on(player.danmaku.DANMAKU_UPDATE_OPTIONS, () => {
-          console.log(player.danmaku.opts)
+        this.danmaku = this.player.danmaku
+        this.player.on('DanmakuUpdateOptions', () => {
+          console.log(`更新弹幕配置：`, this.danmaku.opts)
         })
+      },
+      // +++
+      setDanmaku() {
+        console.log(this.danmaku.el)
+        this.danmaku.appendItems(this.messageList) // +++
       },
       sendMessage(msg) {
         if (! this.isLogin) {
-          this.$alert('登录后可以发送消息。')
+          this.$alert('登录后其他人也能看到你发送的弹幕！')
           return
         }
-        // color: "#FFFFFF" force: true isMe: true text: "123" time: 9.747125 type: "scroll"
+        // +++
+        let vip = true
+        if (! vip) {
+          // 不是vip，颜色不能调整
+          msg.color = '#FFFFFF'
+        }
+
+        // msg对象：color: "#FFFFFF" force: true isMe: true text: "123" time: 9.747125 type: "scroll"
         if (msg.text.trim() === '') {
           return
         }
@@ -141,13 +160,13 @@
           text: msg.text.trim(),
           color: msg.color,
           time: msg.time.toFixed(2),
-          type: msg.type,
+          type: 'top', // msg.type, +++
           isMe: msg.isMe,
           force: msg.force,
           userId: userId,
           movieId: movieId,
           sendTime: new Date().getTime(),
-          bgColor: '#ffffff',
+          bgColor: '#ffffff', // 这个插件没法调整背景色
         }
         this.messageList.push(data)
         axios.post(`${host}/video/${movieId}/message`, data)
@@ -164,9 +183,10 @@
         this.socket.onmessage = event => {
           let message = JSON.parse(event.data)
           // 测试
-          this.updateDanmakuMessages(message)
           console.log('收到消息：', message)
+          this.updateDanmakuMessages(message)
           if (message.movieId === movieId && userId !== message.userId) {
+            message.isMe = false // +++
             this.messageList.push(message)
           } else {
             console.log('收到一条【恶意】消息（包含用户自己的重复消息）：', message)
@@ -186,7 +206,18 @@
           })
           .catch(err => this.$message.error('登录失败！'))
       },
-      loginClick: function () {
+      loginClick: function (i) {
+        // 测试
+        if (i === 2){
+          this.isLogin = true
+          this.setDanmaku()
+          return
+        }
+        if (i === 1){
+          this.isLogin = false
+          return;
+        }
+
         this.$confirm('你要去登录页面登录！现在登录？', '登录', {type: 'info',})
           .then(_ => this.loginNow())
           .catch(_ => this.isLogin = false)
@@ -201,14 +232,18 @@
       },
     },
     mounted() {
+      // 测试
+      if (location.protocol !== 'http') {
+        return
+      }
+      this.setupWebSocket()
       axios.defaults.withCredentials = true
       axios.get(`${host}/video/${movieId}/barrages`)
         .then(res => {
           this.messageList = (console.log(res) || res.data)
-          this.danmaku.appendItems(this.messageList)
+          this.setDanmaku()
         })
         .catch(err => this.$message.error('获取弹幕失败！'))
-      this.setupWebSocket()
     },
   })
 </script>
