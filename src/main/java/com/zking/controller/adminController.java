@@ -1,9 +1,7 @@
 package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.zking.dto.FilmDto;
 import com.zking.dto.UserCount;
-import com.zking.dto.UserDto;
 import com.zking.entity.*;
 import com.zking.service.IFilmService;
 import com.zking.service.impl.*;
@@ -26,11 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class adminController {
     private final UserService userService;
-    private final FilmService filmService;
-    private final ImgService imgService;
-    private final FileService fileService;
-    private final TypeService typeService;
-    private final ActorService actorService;
 
     @RolesAllowed("admin")
     @GetMapping("adminIndex")
@@ -70,7 +63,7 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/recentLoginUser")
     @ResponseBody
-    public List<UserDto> recentLoginUser() {
+    public List<User> recentLoginUser() {
         // 获取当前时间减去一个月
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
