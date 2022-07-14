@@ -15,10 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -90,13 +92,13 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @GetMapping("/updateUser")
     @ResponseBody
-    public boolean updateUser(User user, File file) throws FileNotFoundException {
+    public boolean updateUser( User user,  MultipartFile file) throws IOException {
         //把文件传入本地
-        FileInputStream inputStream = new FileInputStream(file);
-        String name =  "/img/" +UUID.randomUUID() + file.getName();
-        FileOutputStream outputStream = new FileOutputStream("D:\\springboot" + name);
-
-        user.setHeadImg(name);
+        String imgname = UUID.randomUUID() + file.getOriginalFilename();
+        String path = "/" + imgname;
+        File dest = new File("D:\\springboot", path);
+        file.transferTo(dest);
+        user.setHeadImg(path);
 
         return userService.updateById(user);
     }
