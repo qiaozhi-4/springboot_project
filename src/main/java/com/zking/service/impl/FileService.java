@@ -2,11 +2,8 @@ package com.zking.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zking.entity.File;
-import com.zking.entity.Img;
 import com.zking.repository.IFileMapper;
-import com.zking.repository.IImgMapper;
 import com.zking.service.IFileService;
-import com.zking.service.IImgService;
 import org.springframework.stereotype.Service;
 //@RequiredArgsConstructor
 
