@@ -2,27 +2,33 @@ package com.zking.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zking.dto.CommentDTO;
+import com.zking.entity.Comment;
+import com.zking.service.ICommentService;
 import com.zking.service.impl.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO 后台测试，前后端分离测试，需要开启跨域
 @Controller @Slf4j @RequiredArgsConstructor
 @RequestMapping("/video")
-@CrossOrigin(origins = {"http://localhost:63343"}, allowCredentials = "true", methods = {RequestMethod.POST, RequestMethod.GET})
+@CrossOrigin(origins = {"http://localhost:8081"}, allowCredentials = "true", methods = {RequestMethod.POST, RequestMethod.GET})
 public class VideoPlayerController
 {
     private final WebSocketService socketService;
     // 测试用，实际从数据库中获取用户ID，这里100开始测试
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(100);
+    private final RestTemplate restTemplate;
+    private final ICommentService commentService;
 
     /**
      * 访问后端视频页面：没有登录则表示用户无法发弹幕
@@ -49,8 +55,17 @@ public class VideoPlayerController
     //  如果是登录后转发到视频页面，需要记录用户当前视频的播放时间
     @PostMapping("login")
     @ResponseBody
-    public Map<String, Object> login(Model model, HttpSession session)
+    public Map<String, Object> login(String username,String password,Model model, HttpSession session)
     {
+        //后端发送登录请求
+        // 封装参数，千万不要替换为Map与HashMap，否则参数无法传递
+        MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<String, Object>();
+        paramMap.add("username", username);
+        paramMap.add("password", password);
+        // 1、使用postForObject请求接口
+        String r = restTemplate.postForObject("http://localhost:8081/login", paramMap, String.class);
+
+
         // 模拟登录
         int id = ATOMIC_INTEGER.getAndIncrement();
         model.addAttribute("userId", id);
@@ -86,6 +101,7 @@ public class VideoPlayerController
         // 比如:时间是未来的事件,超过现在了,恶意调用API导致,电影ID不存在也可能...
         socketService.sendMessage(message);
         // 保存到数据库
+        commentService.save(Comment.from(message));
         // ..................SQL
         result.put("success", true);
         result.put("op", "消息发送成功");
@@ -98,39 +114,12 @@ public class VideoPlayerController
     @ResponseBody
     public List<CommentDTO> messages(@PathVariable Integer id)
     {
-        // 从数据库中获取数据【当前视频】
-        int movieId = id;
-        return mockMessages(movieId);
+        ArrayList<CommentDTO> commentDTOS = new ArrayList<>();
+        // 获取当前视频所有评论
+        for (Comment comment : commentService.findAllCommentByFilmId(id)) {
+            commentDTOS.add(Comment.to(comment));
+        }
+        return commentDTOS;
     }
 
-    // ===============================测试代码
-    private final Random random = new Random();
-    private List<CommentDTO> mockMessages(int movieId)
-    {
-        List<CommentDTO> messages = new ArrayList<>();
-        //messages.add(BarrageMessage.to(new BarrageMessage(1, "第1条", random(), movieId, 1.1, "#fff123", "white", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(3, "第2条", random(), movieId, 2.2, "#fff123", "yellow", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(6, "第3条", random(), movieId, 1.1, "#faa123", "black", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(3, "第4条", random(), movieId, 3.1, "#11f123", "black", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(2, "第5条", random(), movieId, 2.1, "#ffd233", "white", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(4, "第7条", random(), movieId, 4.1, "#ffff23", "white", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(7, "第741321条", random(), movieId, 5.51, "#123123", "black", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(10, "第8111条", random(), movieId, 1.23, "#ee1123", "white", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(100, "第111条", random(), movieId, 4.4, "#121ff", "white", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(101, "第1323条", random(), movieId, 6.15, "#ffff23", "yellow", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(101, "第12321q1条", random(), movieId, 2.16, "#fff123", "white", type(), false)));
-        //messages.add(BarrageMessage.to(new BarrageMessage(4, "第1aaaaaaaaaaa条", random(), movieId, 3.11, "#f12123", "yellow", type(), false)));
-        return messages;
-    }
-    private String type()
-    {
-        int r = random.nextInt(100);
-        return r < 50 ? "top" : (r < 75 ? "bottom" : "scroll");
-    }
-    private Timestamp random()
-    {
-        long now = new Date().getTime();
-        long minus = 3600L * 1000 * random.nextInt(100) * 10;
-        return new Timestamp(now - minus);
-    }
 }

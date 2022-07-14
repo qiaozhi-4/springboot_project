@@ -85,72 +85,7 @@
                 //电影分类以及当前分类的电影
                 typeAndFilm:[],
                 //电影分类
-                classifys: [
-                    {
-                        id: 1,
-                        name: '喜剧',
-                        //电影数据
-                        caedData: [{
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄',
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/videolookimg1653448347460_1Av12280714,.png',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }],
-                    },
-                    {
-                        id: 2,
-                        name: '冒险',
-                    },
-                    {
-                        id: 3,
-                        name: '动作',
-                    },
-                    {
-                        id: 4,
-                        name: '动漫',
-                    },
-                    {
-                        id: 5,
-                        name: '卧底',
-                    },
-                    {
-                        id: 6,
-                        name: '热血',
-                    },
-                    {
-                        id: 7,
-                        name: '偶像',
-                    },
-                    {
-                        id: 8,
-                        name: '都市',
-                    },
-                ],
+                classifys:[],
             },
             methods: {
                 //vip购买弹框
@@ -170,6 +105,7 @@
                     .then(resp => {
                         console.log('请求发送成功', resp)
                         this.typeAndFilm = resp.data
+                        this.classifys = resp.data.type
                     })
                     .catch(err => this.$message.error('请求发送失败') )
                 // const options = {}
