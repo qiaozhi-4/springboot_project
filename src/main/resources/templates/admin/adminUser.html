@@ -278,7 +278,7 @@
             dj(row) {
                 this.form = row;
                 this.imgList.push(
-                    {url: row.userImg})
+                    {url: row.headImg})
                 console.log(row)
             },
             modificationUser() {
@@ -367,7 +367,7 @@
             },
         },
         mounted: function () {
-            axios.post('/findAllUserPage', params)
+            axios.get('/findAllUser')
                 .then(response => {
                     this.tableData = response.data;
                     console.log(response);

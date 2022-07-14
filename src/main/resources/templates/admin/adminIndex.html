@@ -118,8 +118,13 @@
                             </el-col>
                         </el-row>
                         <template>
-                            <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
-                                      @selection-change="handleSelectionChange" @row-click="dj">
+                            <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                                      height="auto"
+                                      border
+                                      stripe
+                                      @row-click="dj"
+                                      @selection-change="handleSelectionChange"
+                            >
                                 <el-table-column prop="headImg" label="头像" width="120">
                                     <template slot-scope="scope">
                                         <div class="demo-type">
@@ -142,10 +147,15 @@
                             </el-table>
                         </template>
                         <el-pagination
-                                background
-                                layout="prev, pager, next"
-                                :total="tableData.length">
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="pageSize"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalNum">
                         </el-pagination>
+
                     </div>
                 </el-col>
             </el-row>
@@ -265,7 +275,10 @@
                 username: '',
                 password: '',
             },
-            tableData: [],
+            tableData: [],  //数据
+            currentPage: 1,//默认显示第一页
+            pageSize: 5,//默认每页显示5条
+            totalNum: 100, //总页数
             myChart1: null,
             changed: false,
             dialogFormVisible: false,
@@ -298,7 +311,7 @@
             dj(row) {
                 this.form = row;
                 this.imgList.push(
-                    {url: row.userImg})
+                    {url: row.headImg})
                 console.log(row)
             },
             modificationFilm() {
@@ -378,14 +391,24 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             },
-            fn(file){
+            fn(file) {
                 this.imgList.push(file)
                 console.log(this.imgList)
             },
-            cancel(){
+            cancel() {
                 this.imgList = []
                 this.dialogFormVisible = false
             },
+            // 分页
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize = val;    //动态改变
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage = val;    //动态改变
+            }
+
         },
         mounted: function () {
             this.myChart1 = echarts.init(document.getElementById('chart1'))
