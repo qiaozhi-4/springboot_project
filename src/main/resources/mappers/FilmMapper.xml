@@ -21,11 +21,6 @@
         SELECT name FROM type t INNER JOIN film_type ft ON t.id=ft.type_id
         WHERE ft.film_id=#{fid};
     </select>
-    <!--根据电影id查询电影的地区-->
-    <select id="findAllRegionByFilmId" resultType="String">
-        SELECT name FROM region r INNER JOIN film_region fr ON r.id=fr.region_id
-        WHERE fr.film_id=#{fid};
-    </select>
     <!--根据电影id查询电影的演员-->
     <select id="findAllActorByFilmId" resultType="Actor">
         SELECT * FROM actor a INNER JOIN film_actor fa ON a.id=fa.actor_id

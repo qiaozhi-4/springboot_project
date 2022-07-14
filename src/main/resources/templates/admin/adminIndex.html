@@ -211,7 +211,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancel">取 消</el-button>
-            <el-button type="primary" @click="modificationFilm">确 定</el-button>
+            <el-button type="primary" @click="modificationUser">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -259,8 +259,7 @@
     };
 
     var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
-    let params = new URLSearchParams();
-    params.append('_csrf', csrf);
+    let params;
 
     new Vue({
         el: '#app',
@@ -314,8 +313,19 @@
                     {url: row.headImg})
                 console.log(row)
             },
-            modificationFilm() {
+            modificationUser() {
+                this.form.headImg = this.imgList[0];
                 console.log(this.form);
+                console.log(this.form.headImg);
+                params = new URLSearchParams();
+                params.append('_csrf', csrf);
+                params.append('film', this.form);
+                axios.post('/recentLoginUser', params)
+                    .then(response => {
+                        this.form.headImg = this.imgList[0].url;
+                    })
+                    .catch(data => console.log(response))
+                this.imgList = []
                 this.dialogFormVisible = false;
             },
             //重置表单
@@ -411,6 +421,8 @@
 
         },
         mounted: function () {
+            params = new URLSearchParams();
+            params.append('_csrf', csrf);
             this.myChart1 = echarts.init(document.getElementById('chart1'))
             axios.post('/userCount', params)
                 .then(response => {
