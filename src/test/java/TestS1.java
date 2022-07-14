@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -90,5 +91,12 @@ public class TestS1 {
             user.setLastLoginTime(dateFormat.format(date));
             userService.save(user);
         }
+    }
+
+
+
+    @Test
+    public void test7() throws FileNotFoundException {
+
     }
 }
