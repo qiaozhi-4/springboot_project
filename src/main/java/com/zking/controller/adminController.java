@@ -3,6 +3,7 @@ package com.zking.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.dto.UserCount;
 import com.zking.entity.Actor;
+import com.zking.entity.Film;
 import com.zking.entity.User;
 import com.zking.service.IActorService;
 import com.zking.service.IFilmService;
@@ -63,6 +64,15 @@ public class adminController {
     @ResponseBody
     public List<Object> findAllTypeAndFilm(){
         return filmService.getTypeAndFilm();
+    }
+
+
+    //获取所有用户分类以及分类电影
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/findAllFilm")
+    @ResponseBody
+    public List<Film> findAllFilm(){
+        return filmService.list();
     }
 
 
