@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import static com.baomidou.mybatisplus.annotation.IdType.AUTO;
@@ -33,7 +32,7 @@ public class User  implements UserDetails {
     private String name;
     private Character sex;
     private Integer vip;
-    private Date birthday;
+    private String birthday;
     private String address;
     private String email;
     private String time;
