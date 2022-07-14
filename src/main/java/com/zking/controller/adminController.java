@@ -1,6 +1,7 @@
 package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zking.dto.FilmDTO;
 import com.zking.dto.UserCount;
 import com.zking.entity.Actor;
 import com.zking.entity.User;
@@ -57,12 +58,13 @@ public class adminController {
     }
 
 
-    //获取所有用户分类以及分类电影
+
+    //admin需要获取电影以及他的所有类型
     @RolesAllowed("admin") // 必须admin角色才能访问
-    @GetMapping("/findAllTypeAndFilm")
+    @GetMapping("/findAllFilm")
     @ResponseBody
-    public List<Object> findAllTypeAndFilm(){
-        return filmService.getTypeAndFilm();
+    public List<FilmDTO> findAllFilm(){
+        return filmService.getAllFilms();
     }
 
 
