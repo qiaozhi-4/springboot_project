@@ -45,21 +45,21 @@
             </el-row>
 
             <!-- 电影分类 -->
-            <div v-for="(classify,index) in classifys">
+            <div v-for="(element,index) in typeAndFilm">
                 <el-row>
-                    <el-col :id="classify.id" class="className" :push="1" :span="1">
-                        <h2>{{classify.name}}</h2>
+                    <el-col :id="element.type.id" class="className" :push="1" :span="1">
+                        <h2>{{element.type.name}}</h2>
                     </el-col>
                 </el-row>
                 <el-row :gutter="0">
 
-                    <el-col :offset="1" :span="3" v-for="(caedData,index) in classify.caedData">
-                        <el-tooltip :content="caedData.name" placement="top" :visible-arrow="false">
-                            <el-link :href="'play?movie=' + caedData.movie" :underline="false">
+                    <el-col :offset="1" :span="3" v-for="(film,index) in element.films">
+                        <el-tooltip :content="film.name" placement="top" :visible-arrow="false">
+                            <el-link :href="'play?movie=' + film.mp4Src" :underline="false">
                                 <el-card class="box-card movie">
-                                    <img height="120px" width="100%" :src="caedData.img"><br>
-                                    <b><span>{{caedData.name}}</span></b><br><br>
-                                    <span>{{caedData.info}}</span><br>
+                                    <img height="120px" width="100%" :src="film.imgSrc"><br>
+                                    <b><span>{{film.name}}</span></b><br><br>
+                                    <span>{{film.info}}</span><br>
                                 </el-card>
                             </el-link>
                         </el-tooltip>
