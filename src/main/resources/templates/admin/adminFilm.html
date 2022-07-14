@@ -524,7 +524,7 @@
             }
         },
         mounted: function () {
-            axios.post('/findAllFilmPage', params)
+            axios.post('/findAllFilm', params)
                 .then(response => {
                     this.tableData = response.data;
                     console.log("电影",response);
