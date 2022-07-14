@@ -1,6 +1,7 @@
 package com.zking.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zking.dto.FilmDTO;
 import com.zking.entity.Actor;
 import com.zking.entity.Film;
 import com.zking.entity.Type;
@@ -9,10 +10,7 @@ import com.zking.service.IFilmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //生成带有必需参数的构造函数，必需的参数是最终字段和具有约束的字段，例如@NonNull ，final
 //@RequiredArgsConstructor
@@ -36,6 +34,22 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
             list.add(map);
         }
         return list;
+    }
+
+
+    //admin需要获取电影以及他的所有类型
+    @Override
+    public List<FilmDTO> getAllFilms() {
+        List<FilmDTO> filmDTOS = new ArrayList<>();
+        //查询所有电影
+        List<Film> list = list();
+        for (Film film : list) {
+            StringBuilder stringBuilder = new StringBuilder();
+            //查询电影所有类型
+            getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type));
+            filmDTOS.add( FilmDTO.getFilmDTO(film,stringBuilder.toString()));
+        }
+        return filmDTOS;
     }
 
 
