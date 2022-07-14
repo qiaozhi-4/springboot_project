@@ -42,6 +42,16 @@ public class adminController {
         return "/admin/adminUser";
     }
 
+
+    //获取所用用户
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/findAllUser")
+    @ResponseBody
+    public List<User> findAllUser(){
+        return userService.list();
+    }
+
+
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/userCount")
     @ResponseBody
