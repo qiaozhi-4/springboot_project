@@ -117,6 +117,7 @@
                                       stripe
                                       @row-click="dj"
                                       @selection-change="handleSelectionChange"
+                                      style="width: 100%"
                             >
                                 <el-table-column prop="headImg" label="头像" width="120">
                                     <template slot-scope="scope">
@@ -292,13 +293,11 @@
                 console.log(row)
             },
             modificationUser() {
-                let img = this.form.headImg;
-                this.form.headImg = this.imgList[0];
                 console.log(this.form);
-                console.log(this.form.headImg);
                 params = new URLSearchParams();
                 params.append('_csrf', csrf);
                 params.append('user', this.form);
+                params.append('file', this.imgList[0]);
                 axios.post('/updateUser', params)
                     .then(response => {
                         if (response.data) {
@@ -307,14 +306,11 @@
                                 message: '恭喜你，这是一条成功消息',
                                 type: 'success'
                             });
-                        } else {
-                            this.form.headImg = img;
                         }
                         this.imgList = []
                         this.dialogFormVisible = false;
                     })
                     .catch(data => {
-                        this.form.headImg = img;
                         this.$message('修改失败');
                         console.log(response);
                     })
