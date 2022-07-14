@@ -16,4 +16,5 @@ public interface IUserService extends IService<User> {
 
     //登录【根据用户名查询用户】
     User findUserByUsername(String userName);
+
 }

@@ -2,8 +2,11 @@ package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.dto.UserCount;
+import com.zking.entity.Actor;
 import com.zking.entity.User;
-import com.zking.service.impl.UserService;
+import com.zking.service.IActorService;
+import com.zking.service.IFilmService;
+import com.zking.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +25,9 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class adminController {
-    private final UserService userService;
+    private final IUserService userService;
+    private final IFilmService filmService;
+    private final IActorService actorService;
 
     @RolesAllowed("admin")
     @GetMapping("adminIndex")
@@ -41,6 +46,34 @@ public class adminController {
     public String adminUser(){
         return "/admin/adminUser";
     }
+
+
+    //获取所有用户
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/findAllUser")
+    @ResponseBody
+    public List<User> findAllUser(){
+        return userService.list();
+    }
+
+
+    //获取所有用户分类以及分类电影
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/findAllTypeAndFilm")
+    @ResponseBody
+    public List<Object> findAllTypeAndFilm(){
+        return filmService.getTypeAndFilm();
+    }
+
+
+    //获取所有演员
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @GetMapping("/findAllActor")
+    @ResponseBody
+    public List<Actor> findAllActor(){
+        return actorService.list();
+    }
+
 
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/userCount")
