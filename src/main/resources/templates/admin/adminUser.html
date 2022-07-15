@@ -22,74 +22,7 @@
     <el-container>
 
         <!-- 头部 -->
-        <el-header id="admin-el-header" style="height: 200px;">
-            <!-- type="flex"开启 flex 布局 -->
-            <el-row :gutter="5" type="flex" align="middle" style="height: 80px;">
-                <el-col :span="3" :offset="1">
-                    <a href="/"><img width="100%" height="60px" th:src="@{/images/ikun.png}"
-                                     src="../../static/images/ikun.png"></a>
-                    </form>
-                </el-col>
-                <el-col :span="8" :offset="1">
-                    <el-input placeholder="熊出没" v-model="inputHead">
-                        <el-button slot="append" icon="el-icon-search" style="margin: -11px 0;">搜索</el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="6" :offset="1">
-                </el-col>
-                <el-col :span="1">
-                    <el-dropdown>
-                        <el-badge :value="12" class="item">
-                            <i class="el-icon-bell"></i>
-                        </el-badge>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>黄金糕</el-dropdown-item>
-                            <el-dropdown-item>狮子头</el-dropdown-item>
-                            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                            <el-dropdown-item>双皮奶</el-dropdown-item>
-                            <el-dropdown-item>蚵仔煎</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-col>
-                <el-col :span="2">
-                    <el-link @click="login" :underline="false">
-                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
-                        登录
-                    </el-link>
-                </el-col>
-            </el-row>
-            <el-row :gutter="2" type="flex" align="middle" style="height: 30px;font-size: 20px;color: white;">
-                <el-col :span="1" style="margin-left: 5%">
-                    <a class="btn text-decoration-none" style="color: white;"
-                       th:href="@{/adminIndex}"
-                       href="adminIndex.html"><i
-                            class="el-icon-menu"></i></a>
-                </el-col>
-                <el-col :span="1" type="flex" align="left">
-                    <a class="btn text-decoration-none" style="color: white;"
-                       th:href="@{/adminIndex}"
-                       href="adminIndex.html"><span>主页</span></a>
-                </el-col>
-                <el-col :span="1" style="">
-                    <a class="btn text-decoration-none" style="color: white;"
-                       th:href="@{/adminFilm}"
-                       href="adminFilm.html"><i
-                            class="el-icon-video-camera-solid"></i></a>
-                </el-col>
-                <el-col :span="4" type="flex" align="left">
-                    <a class="btn text-decoration-none" style="color: white;"
-                       th:href="@{/adminFilm}"
-                       href="adminFilm.html"><span>电影管理</span></a>
-                </el-col>
-            </el-row>
-            <el-row type="flex" justify="space-around" style="height: 50px;">
-                <el-col :span="20" style="position: relative;height: 50px;">
-                    <div class="grid-content bg-purple-dark admin-row2">
-                        <span style="margin-left: 10px">主页</span>
-                    </div>
-                </el-col>
-            </el-row>
-        </el-header>
+        <div th:replace="~{fragments/header::header2}"></div>
 
         <!-- 主体部分 -->
         <el-main width="1500px" style="background-color: white">
