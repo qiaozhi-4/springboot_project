@@ -3,7 +3,9 @@ package com.zking.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zking.dto.CommentDTO;
 import com.zking.entity.Comment;
+import com.zking.entity.Film;
 import com.zking.service.ICommentService;
+import com.zking.service.IFilmService;
 import com.zking.service.impl.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class VideoPlayerController
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(100);
     private final RestTemplate restTemplate;
     private final ICommentService commentService;
+    private final IFilmService filmService;
 
     /**
      * 访问后端视频页面：没有登录则表示用户无法发弹幕
@@ -47,6 +50,12 @@ public class VideoPlayerController
     public String index(@PathVariable Integer id, HttpSession session, Model model)
     {
         id = id == null ? 0 : id;
+
+        //获取用户点击的电影
+        Film film = filmService.getById(id);
+        model.addAttribute("film", film);
+
+        //获取用户认证信息
         SecurityContext context = SecurityContextHolder.getContext(); // 上下文
         Authentication authentication = context.getAuthentication(); // 认证信息
         if (!"anonymousUser".equals(authentication.getPrincipal())){

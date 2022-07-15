@@ -97,6 +97,18 @@ public class TestS1 {
 
     @Test
     public void test7() throws FileNotFoundException {
+        String path = "D:\\springboot\\videolook\\videolookshort";        //要遍历的路径
+        File file = new File(path);        //获取其file对象
+        File[] fs = file.listFiles();    //遍历path下的文件和目录，放在File数组中
+        int id = 1;
+        for (File f : fs) {                    //遍历File[]数组
+            if (!f.isDirectory()) {    //若非目录(即文件)，则打印
+                if (id > 26) {
+                    return;
+                }
+                System.out.println("/videolook/videolookshort/" + f.getName());
+            }
 
+        }
     }
 }

@@ -28,6 +28,7 @@ public class Film {
     private Double score;
     private Integer heat;
     private String region;
+    private String coverSrc;
 
 
 }
