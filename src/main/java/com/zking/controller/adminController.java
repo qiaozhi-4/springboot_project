@@ -130,6 +130,14 @@ public class adminController {
         return filmService.updateById(film);
     }
 
+    //电影添加
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @PostMapping("/addFilm")
+    @ResponseBody
+    public boolean addFilm(Film film,MultipartFile img,MultipartFile file,List<Integer> actors,List<Integer> types) {
+        return filmService.updateById(film);
+    }
+
 
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/userCount")
