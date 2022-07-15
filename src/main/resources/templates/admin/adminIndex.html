@@ -314,11 +314,17 @@
             },
             modificationUser() {
                 console.log(this.form);
-                params = new URLSearchParams();
+                console.log('图片：', this.imgList[0]);
+                // 前端POST异步发送文件：
+                params = new FormData()
+                params.append('file', this.imgList[0].raw) // 文件 ===============
                 params.append('_csrf', csrf);
-                params.append('user', this.form);
-                params.append('file', this.imgList[0]);
-                axios.get('/updateUser', this.form)
+                params.append('id', this.form.id);
+                params.append('name', this.form.name);
+                let res = {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }
+                axios.post('/updateUser', params, res)
                     .then(response => {
                         if (response.data) {
                             this.form.headImg = this.imgList[0].url;
