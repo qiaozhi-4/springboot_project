@@ -20,6 +20,8 @@ import java.util.*;
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
 
 
+
+
     //主页需要获取分类,以及这个分类的所有电影
     @Override
     public List<Object> getTypeAndFilm() {
