@@ -173,20 +173,18 @@
             },
             //发送登录请求
             loginNow: function () {
-                axios.post(`/login`)
+                let params = new URLSearchParams();
+                params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
+                params.append('password', this.loginForm.password);
+                params.append('_csrf', this.loginForm._csrf);
+                axios.post(`/video/login`, params)
                     .then(resp => {
-                        if (resp.data.success) {
-                            userId = resp.data.userId
-                            this.isLogin = true
-                            this.setupWebSocket()
-                        } else {
-                            userId = 0
-                        }
+                        console.log(resp)
                     })
                     .catch(err => this.$message.error('登录请求失败！' + err))
             },
             loginClick: function (i) {
-                this.loginVisible =false;
+                this.loginVisible =true;
             },
             send() {
                 this.$alert('请在视频下方发送弹幕！')

@@ -11,4 +11,7 @@ public interface IFilmService extends IService<Film>{
     List<Object> getTypeAndFilm();
 
     List<FilmDTO> getAllFilms();
+
+    //查询前五热度电影
+    List<Film> selectHeat();
 }

@@ -45,7 +45,7 @@ spring:
     multipart:
       location:
       max-file-size: 1GB
-      max-request-size: 10MB
+      max-request-size: 1GB
 # -------------------- Thymeleaf模板引擎配置
   thymeleaf:
     cache: false # 缓存HTML模板，开发环境中必须使用false，部署环境使用true
