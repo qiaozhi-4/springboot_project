@@ -17,26 +17,8 @@
 
         <!--主体-->
         <el-main>
-            <div style="display: flex; flex-direction: column;">
-                <header></header>
-                <main style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 700px; max-width: 1200px">
-                    <div style="flex-grow: 1;">
-                        <n-player ref="player" :options="options" :set="setPlayer"/>
-                    </div>
-                </main>
-                <el-divider></el-divider>
-                <footer>
-                    <el-row>
-                        <el-col :span="20" :offset="2">
-                            <el-button-group>
-                                <el-button type="primary" @click="loginClick">登录</el-button>
-                                <el-button type="primary" @click="loginClick(1)">登出</el-button>
-                                <el-button type="primary" @click="loginClick(2)">测试弹幕插件</el-button>
-                            </el-button-group>
-                        </el-col>
-                    </el-row>
-                </footer>
-            </div>
+            <!--视频显示-->
+            <div th:replace="~{fragments/nplayerMain::main}"></div>
         </el-main>
 
     </el-container>
@@ -204,7 +186,7 @@
                     .catch(err => this.$message.error('登录请求失败！' + err))
             },
             loginClick: function (i) {
-                loginVisible =false;
+                this.loginVisible =false;
             },
             send() {
                 this.$alert('请在视频下方发送弹幕！')
