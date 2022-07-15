@@ -6,7 +6,6 @@ import com.zking.entity.User;
 import com.zking.repository.ICommentMapper;
 import com.zking.repository.IFilmMapper;
 import com.zking.repository.IUserMapper;
-import com.zking.service.IFilmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -18,12 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.zking.service.IUserService;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -31,20 +27,21 @@ import java.util.*;
 public class UserController {
 
     private final IUserService userSevice;
+    private final IUserMapper userMapper;
     private final IFilmMapper filmMapper;
     private final ICommentMapper commentMapper;
     @Value("${upload.locationImg}")
     private String location;
     private final PasswordEncoder encoder;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
     //测试页面
     @GetMapping("/test")
     public String updateUser(){
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        System.out.println(authentication.getPrincipal());
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        Authentication authentication = context.getAuthentication();
+//        System.out.println(authentication.getPrincipal());
         return "test";
     }
 
@@ -64,6 +61,7 @@ public class UserController {
         res.put("data",data);
         return res;
     }
+    //查评论
     @ResponseBody
     @GetMapping("findC")
     public Map<String,Object> find(HttpServletRequest request){
@@ -104,4 +102,17 @@ public class UserController {
         model.addAttribute("info","修改成功");
         return "redirect:update";
     }
+
+    //用户的封号
+    @GetMapping("deleteUser")
+    public String delete(){
+        //当前登录的用户
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        User principal =(User) authentication.getPrincipal();
+        principal.setVip(-1);
+        userMapper.updateById(principal);
+        return "redirect:test";
+    }
+
 }
