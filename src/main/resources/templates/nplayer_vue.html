@@ -58,13 +58,17 @@
     </footer>
   </div>
 </div>
-<script src="../video/vue-2.6.14.min.js"></script>
-<script src="../element/js/axios-0.26.js"></script>
-<script src="../element/js/element-ui-2.15.7.js"></script>
+
+<script th:src="@{/js/vue-2.6.14.min.js}" src="../static/js/vue-2.6.14.min.js"></script>
+<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
+<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
+
 <!--nplayer脚本-->
-<script src="nplayer.min.js"></script>
-<script src="danmaku.min.js"></script>
-<script src="nplayer_vue_1.0.12.min.js"></script>
+
+<script th:src="@{/js/player/nplayer.min.js}" src="../static/js/player/nplayer.min.js"></script>
+<script th:src="@{/js/player/danmaku.min.js}" src="../static/js/player/danmaku.min.js"></script>
+<script th:src="@{/js/player/nplayer_vue_1.0.12.min.js}" src="../static/js/player/nplayer_vue_1.0.12.min.js"></script>
+
 <script>
   /*后端API
   * /video/{id} - 打开指定id的视频页面

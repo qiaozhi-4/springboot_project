@@ -1,17 +1,9 @@
 package com.zking.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zking.entity.Authority;
 import com.zking.entity.Comment;
-import com.zking.entity.Role;
-import com.zking.entity.User;
-
 import com.zking.repository.ICommentMapper;
-
-import com.zking.repository.IUserMapper;
 import com.zking.service.ICommentService;
-import com.zking.service.IUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,4 +14,9 @@ import java.util.List;
 @Service
 public class CommentService extends ServiceImpl<ICommentMapper, Comment> implements ICommentService {
 
+    //通过电影查询所有评论
+    @Override
+    public List<Comment> findAllCommentByFilmId(int id) {
+        return getBaseMapper().findAllCommentByFilmId(id);
+    }
 }

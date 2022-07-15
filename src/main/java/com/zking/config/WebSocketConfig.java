@@ -1,6 +1,8 @@
 package com.zking.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
@@ -25,4 +27,11 @@ public class WebSocketConfig /*implements WebSocketConfigurer*/
         registry.addHandler(new SessionWebSocketHandler(), "/session")
                 .addInterceptors(new HttpSessionHandshakeInterceptor());
     }*/
+
+
+    //配置发送请求所需的bean
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

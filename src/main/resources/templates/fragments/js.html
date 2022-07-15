@@ -65,106 +65,13 @@
                 changed: false,
                 //头部模糊搜索框内容
                 inputHead: '',
-                //轮播图片数组
-                imgList: [
-                    {
-                        name: "109951167468487275",
-                        src: "img/109951167468487275.jpg",
 
-                    },
-                    {
-                        name: "109951167468514107",
-                        src: "img/109951167468514107.jpg",
-
-                    },
-                    {
-                        name: "109951167468538175",
-                        src: "img/109951167468538175.jpg",
-
-                    },
-                    {
-                        name: "109951167468551304",
-                        src: "img/109951167468551304.jpg",
-
-                    },
-                    {
-                        name: "109951167468567569",
-                        src: "img/109951167468567569.jpg",
-
-                    },
-                ],
 
 
                 //vip购买弹出框
                 vipVisible: false,
 
-                //电影分类
-                classifys: [
-                    {
-                        id: 1,
-                        name: '喜剧',
-                        //电影数据
-                        caedData: [{
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄',
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            movie: 'videolook/1176840-1-hd.mp4',
-                            img: 'img/log.jpg',
-                            name: '王小虎',
-                            info: '上海市普陀区金沙江路 1518 弄'
-                        }],
-                    },
-                    {
-                        id: 2,
-                        name: '冒险',
-                    },
-                    {
-                        id: 3,
-                        name: '动作',
-                    },
-                    {
-                        id: 4,
-                        name: '动漫',
-                    },
-                    {
-                        id: 5,
-                        name: '卧底',
-                    },
-                    {
-                        id: 6,
-                        name: '热血',
-                    },
-                    {
-                        id: 7,
-                        name: '偶像',
-                    },
-                    {
-                        id: 8,
-                        name: '都市',
-                    },
-                ],
+
             },
             methods: {
                 //登录确定
@@ -174,7 +81,7 @@
                     params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
                     params.append('password', this.loginForm.password);
                     params.append('_csrf', this.loginForm._csrf);
-                    axios.post(`login`, params)
+                    axios.post(`/video/login`, params)
                         .then(resp => {
                             console.log('请求发送失败', resp)
                         })

@@ -1,13 +1,12 @@
 package com.zking.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zking.entity.Authority;
 import com.zking.entity.Comment;
-import com.zking.entity.Role;
-import com.zking.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface ICommentService extends IService<Comment>{
-
+    //通过电影查询所有评论
+    List<Comment> findAllCommentByFilmId(@Param("fid") int id);
 }

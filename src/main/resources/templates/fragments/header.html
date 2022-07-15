@@ -12,20 +12,20 @@
         <!-- type="flex"开启 flex 布局 -->
         <el-row :gutter="5" type="flex" align="middle">
             <el-col :span="3" :offset="1">
-                <a href="img/ikun.png"><img width="100%" src="img/ikun.png"></a>
+                <a href="/"><img width="100%" src="img/log.png"></a>
                 </form>
             </el-col>
             <el-col :span="1">
-                <el-link class="shouye" href="img/ikun.png" :underline="false">首页</el-link>
+                <el-link class="shouye" href="/" :underline="false">首页</el-link>
             </el-col>
             <el-col :span="1">
-                <el-link class="qita" href="img/ikun.png" :underline="false">电视剧</el-link>
+                <el-link class="qita" href="/" :underline="false">电视剧</el-link>
             </el-col>
             <el-col :span="1">
-                <el-link class="qita" href="img/ikun.png" :underline="false">电影</el-link>
+                <el-link class="qita" href="/" :underline="false">电影</el-link>
             </el-col>
             <el-col :span="1">
-                <el-link class="qita" href="img/ikun.png" :underline="false">云影院</el-link>
+                <el-link class="qita" href="/" :underline="false">云影院</el-link>
             </el-col>
             <el-col :span="2">
                 <el-link @click="vip" class="hyzx" :underline="false">会员充值</el-link>
@@ -35,8 +35,8 @@
                     <el-button class="headDropdown qita" size="mini" icon="el-icon-arrow-down" circle>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item v-for="(classify,index) in classifys">
-                            <el-link class="qita" :href="'#'+ classify.id" :underline="false">{{classify.name}}
+                        <el-dropdown-item v-for="(type,index) in typeAndFilm">
+                            <el-link class="qita" :href="'#'+ type.type.id" :underline="false">{{type.type.name}}
                             </el-link>
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -48,18 +48,18 @@
                 </el-input>
             </el-col>
             <el-col :span="1">
-                <el-link class="qita" href="img/ikun.png" :underline="false"><i class="el-icon-upload"></i>
+                <el-link class="qita" href="/" :underline="false"><i class="el-icon-upload"></i>
                 </el-link>
             </el-col>
             <el-col :span="1">
                 <el-tooltip content="上传作品" placement="top">
-                    <el-link class="qita" href="img/ikun.png" :underline="false"><i class="el-icon-upload"></i>
+                    <el-link class="qita" href="/" :underline="false"><i class="el-icon-upload"></i>
                     </el-link>
                 </el-tooltip>
             </el-col>
             <el-col :span="1">
                 <el-tooltip content="客户端下载" placement="top">
-                    <el-link class="qita" href="img/ikun.png" :underline="false"><i
+                    <el-link class="qita" href="/" :underline="false"><i
                             class="el-icon-s-platform"></i>
                     </el-link>
                 </el-tooltip>
@@ -67,18 +67,18 @@
             </el-col>
             <el-col :span="1">
                 <el-tooltip content="历史播放" placement="top">
-                    <el-link class="qita" href="img/ikun.png" :underline="false"><i class="el-icon-time"></i>
+                    <el-link class="qita" href="/" :underline="false"><i class="el-icon-time"></i>
                     </el-link>
                 </el-tooltip>
             </el-col>
             <el-col :span="2">
                 <el-link th:if="${#authentication.name == 'anonymousUser'}" href="loginUser" :underline="false">
-                    <el-avatar size="small" src="img/log.jpg"></el-avatar>
+                    <el-avatar size="small" src="img/head.jpg"></el-avatar>
                     <span class="qita">点击登录</span>
                 </el-link>
                 <el-dropdown>
                     <el-link th:if="${#authentication.name != 'anonymousUser'}" :underline="false">
-                        <el-avatar size="small" src="img/log.jpg"></el-avatar>
+                        <el-avatar size="small" th:src="${#authentication.principal.headImg}"></el-avatar>
                         <span class="qita" th:text="${#authentication.name}"></span>
                     </el-link>
                     <el-dropdown-menu slot="dropdown">
