@@ -1,0 +1,30 @@
+<!--登录表单-->
+<el-dialog th:fragment="login"
+        title="登录"
+        :visible.sync="loginVisible"
+        width="50%">
+    <el-form action="/login" method="post" :model="loginForm" ref="loginForm" label-width="160px">
+
+        <el-form-item label="用户名" label-width="60px">
+            <el-input name="username" v-model="loginForm.username" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="密码" label-width="60px">
+            <el-input name="password" v-model="loginForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+
+
+        <el-form-item>
+            <el-row>
+                <el-col :span="6">第三方登录:</el-col>
+                <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>
+                </el-col>
+            </el-row>
+        </el-form-item>
+
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="loginVisible = false">取 消</el-button>
+    <el-button type="primary" @click="loginOk">确 定</el-button>
+  </span>
+</el-dialog>
