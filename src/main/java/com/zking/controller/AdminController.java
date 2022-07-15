@@ -29,7 +29,7 @@ import java.util.*;
 @DenyAll
 @Controller
 @RequiredArgsConstructor
-public class adminController {
+public class AdminController {
     private final IUserService userService;
     private final IFilmService filmService;
     private final IActorService actorService;

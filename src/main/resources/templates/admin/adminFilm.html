@@ -283,9 +283,9 @@
 </div>
 
 <!--js脚本-->
+<script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/vue-2.6.14.min.js}" src="../../static/js/vue-2.6.14.min.js"></script>
 <script th:src="@{/js/vue-router.js}" src="../../static/js/vue-router.js"></script>
-<script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
 <script th:inline="javascript">
@@ -372,7 +372,7 @@
                 params.append('director', this.form.director);
                 params.append('region', this.form.region);
                 params.append('types', this.types);
-                axios.post('/updateUser', params)
+                axios.post('/updateFilm', params)
                     .then(response => {
                         if (response.data) {
                             this.$message({
@@ -391,7 +391,7 @@
                 params = new URLSearchParams()
                 params.append('_csrf', csrf);
                 params.append('id', this.form.id);
-                axios.post('/updateUser', params)
+                axios.post('/bannedFilm', params)
                     .then(response => {
                         if (response.data) {
                             this.$message({
@@ -408,7 +408,7 @@
             },
             addFilm() {
                 console.log(this.form2);
-                const actorS = this.form2.actor[0]+this.form2.actor[1]
+                let actorS = this.form2.actor[0]+'/'+this.form2.actor[1]
                 // 前端POST异步发送文件：
                 params = new FormData()
                 params.append('img', this.imgList[0].raw) // 图片 ===============
@@ -422,10 +422,11 @@
                 params.append('info', this.form2.info);
                 params.append('types', this.form2.types);
                 params.append('vip', this.form2.vip);
+                console.log(params)
                 let res = {
                     headers: {'Content-Type': 'multipart/form-data'}
                 }
-                axios.post('/updateUser', params, res)
+                axios.post('/addFilm', params, res)
                     .then(response => {
                         if (response.data) {
                             this.tableData.push(this.form2);
