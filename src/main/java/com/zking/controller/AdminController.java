@@ -156,7 +156,7 @@ public class AdminController {
             //插入数据库
             film.setCoverSrc(cope);
         }
-        return filmService.addFilms(film,actors,types);
+        return filmService.addFilms(film, actors, types);
     }
 
     //电影更改类型
@@ -164,7 +164,7 @@ public class AdminController {
     @PostMapping("/updateFilmType")
     @ResponseBody
     public boolean updateFilmType(Integer filmId, List<Integer> types) throws IOException {
-
+        filmService.updateFilmType(filmId,types);
         return false;
     }
 
