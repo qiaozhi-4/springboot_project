@@ -96,8 +96,7 @@ public class adminController {
 
         if (file != null) {
             //把文件传入本地
-            String imgname = UUID.randomUUID() + file.getOriginalFilename();
-            String path = "/" + imgname;
+            String path = "/" + UUID.randomUUID() + file.getOriginalFilename();
             File dest = new File("D:\\springboot", path);
             file.transferTo(dest);
             user.setHeadImg(path);
