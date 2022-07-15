@@ -3,47 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <link href="../element/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
+  <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet" />
 </head>
 <body>
 <div id="app">
-  <h1>NPlayer在Vue中使用示例</h1>
-  <h3>
-    说明：<br/>
-    1. 弹幕直接在屏幕下方编写发送，右边的发送按钮删除掉，已经没用！ <br/>
-    2. 无法禁用弹幕，但是后端可以控制：能否发送给其他用户、颜色能否生效，这些作为登录用户、VIP功能就可以<br/>
-    3. 自己设计样式就可以使用
-  </h3>
   <div style="display: flex; flex-direction: column;">
     <header></header>
-    <main style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 60vh;">
+    <main style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 700px; max-width: 1200px">
       <div style="flex-grow: 1;">
         <n-player ref="player" :options="options" :set="setPlayer"/>
       </div>
-      <div style="flex-shrink: 1; flex-basis: 30%; background-color: lightcyan; padding: 1rem; display: flex; flex-direction: column;">
-        <div style="flex-grow: 1;">
-          <div style="background-color: #5daf34; margin-bottom: 1rem; overflow-y: auto; height: 100%; max-height: 80vh;">
-            <div v-if="messageList.length === 0">暂时没有弹幕！</div>
-            <div v-else>
-              <span v-for="msg of messageList">[{{msg.time}}]: {{msg.text}} - {{msg.userId}}<br/></span>
-            </div>
-          </div>
-        </div>
-        <div style="min-height: 1rem; flex-grow: 0;"></div>
-        <div style="">
-          <el-form :inline="true" style="display: flex; flex-direction: row;">
-            <el-form-item style="margin: 0; flex-grow: 1;">
-              <el-input style="width: 100%;" v-model="message" @submit.native.prevent :disabled="! isLogin"
-                        :placeholder="isLogin ? '输入弹幕' : '登录后发送弹幕'"></el-input>
-            </el-form-item>
-            <div style="min-width: 8px; flex-shrink: 1; flex-grow: 0;"></div>
-            <el-form-item style="margin: 0; flex-grow: 0;">
-              <el-button @click="send">发送弹幕</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-    </main>
+     </main>
     <el-divider></el-divider>
     <footer>
       <el-row>
@@ -69,7 +39,7 @@
 <script th:src="@{/js/player/danmaku.min.js}" src="../static/js/player/danmaku.min.js"></script>
 <script th:src="@{/js/player/nplayer_vue_1.0.12.min.js}" src="../static/js/player/nplayer_vue_1.0.12.min.js"></script>
 
-<script>
+<script  th:inline="javascript">
   /*后端API
   * /video/{id} - 打开指定id的视频页面
   * /video/login - AJAX异步登录，测试用
@@ -92,9 +62,8 @@
    private String bgColor; // 弹幕颜色
    */
 
-  let userId = 0 // 这几个字段如果用thymeleaf模板，应该为thymeleaf语法：[[${model的参数}]]
-  let movieId = 10 // thymeleaf模板model参数
-  let host = 'http://localhost:8080' // 测试用
+  let userId = [[${userId}]] // 这几个字段如果用thymeleaf模板，应该为thymeleaf语法
+  let movieId = [[${movieId}]] // thymeleaf模板model参数
 
   // 手动配置视频路径的方法：
   // this.options.src = '../video/resource/协程第一话.mp4'
@@ -114,7 +83,7 @@
         plugins: [new NPlayerDanmaku({
           autoInsert: true,
         })],
-        src: '../video/resource/协程第一话.mp4',
+        src: '../videolook/10206688-1-hd.mp4',
       },
       messageList: [], // 后端发送的数据，应该按发送时间排序！不是电影时间！
       message: '', // 单条字幕，暂时没用到
@@ -181,7 +150,7 @@
         if (this.socket) {
           this.socket.close()
         }
-        this.socket = new WebSocket(`ws://localhost:8080/ws/${movieId}/${userId}`)
+        this.socket = new WebSocket(`http://localhost:8081//ws/${movieId}/${userId}`)
         this.socket.onerror = err => console.log('WebSocket Error', err)
         this.socket.onopen = () => console.log('WebSocket Connected!')
         this.socket.onmessage = event => {

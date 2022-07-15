@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -91,36 +90,9 @@ public class adminController {
 
     //更改用户信息
     @RolesAllowed("admin") // 必须admin角色才能访问
-    @GetMapping("/updateUser")
+    @PostMapping("/updateUser")
     @ResponseBody
-    public boolean updateUser(User user, MultipartFile file, HttpServletRequest request) throws IOException {
-        Enumeration enu = request.getParameterNames();
-        while (enu.hasMoreElements()) {
-            String paraName = (String) enu.nextElement();
-            System.out.println(paraName + ": " + request.getParameter(paraName));
-        }
-
-        Map map = request.getParameterMap();
-        Set keSet = map.entrySet();
-        for (Iterator itr = keSet.iterator(); itr.hasNext(); ) {
-            Map.Entry me = (Map.Entry) itr.next();
-            Object ok = me.getKey();
-            Object ov = me.getValue();
-            String[] value = new String[1];
-            if (ov instanceof String[]) {
-                value = (String[]) ov;
-            } else {
-                value[0] = ov.toString();
-            }
-
-            for (int k = 0; k < value.length; k++) {
-                System.out.println(ok + "=" + value[k]);
-            }
-        }
-
-        String body = request.getQueryString();
-        System.out.println(body);
-
+    public boolean updateUser(User user, MultipartFile file) throws IOException {
 
         if (file != null) {
             //把文件传入本地
