@@ -64,16 +64,28 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     public boolean addFilms(Film film, List<Integer> actors, List<Integer> types) {
         boolean save = save(film);
         Integer filmId = film.getId();
-        actors.forEach(actorId -> getBaseMapper().insert2(filmId, actorId));
-        types.forEach(typeId -> getBaseMapper().insert1(filmId, typeId));
+        getBaseMapper().addFilmType(filmId,types);
+        getBaseMapper().addFilmActor(filmId,actors);
         return save;
     }
 
     //电影更改类型
     @Override
     public boolean updateFilmType(Integer filmId, List<Integer> types) {
+        getBaseMapper().deleteFilmType(filmId);
         return getBaseMapper().addFilmType(filmId, types) != 0;
     }
+
+    //电影演员更改
+    @Override
+    public boolean updateFilmActor(Integer filmId, List<Integer> actors) {
+        getBaseMapper().deleteFilmActor(filmId);
+        return getBaseMapper().addFilmActor(filmId,actors) != 0;
+    }
+
+
+
+
 
 
     public List<Actor> findAllActorByFilmId(int id){

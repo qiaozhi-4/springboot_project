@@ -35,5 +35,7 @@ public class TestFilmServiceS {
         integers.add(88);
         integers.add(99);
         filmService.updateFilmType(1,integers);
+
+        filmService.updateFilmActor(1,integers);
     }
 }

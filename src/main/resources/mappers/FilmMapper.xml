@@ -63,9 +63,32 @@
     <!--设置电影类型-->
     <insert id="addFilmType" parameterType="int">
         insert into film_type (film_id, type_id) values
-        <foreach collection="types" open="(" close=")" item="typeId" separator=",">
-            #{filmId}, #{typeId}
+        <foreach collection="types"  item="typeId" separator=",">
+            (#{filmId}, #{typeId})
         </foreach>
     </insert>
+
+    <!--删除电影类型-->
+    <delete id="deleteFilmType" parameterType="int">
+        delete
+        from film_type
+        where film_id = #{id};
+    </delete>
+
+
+    <!--设置电影演员-->
+    <insert id="addFilmActor" parameterType="int">
+        insert into film_actor (film_id, actor) values
+        <foreach collection="actors"  item="actorId" separator=",">
+            (#{filmId}, #{actorId})
+        </foreach>
+    </insert>
+
+    <!--删除电影类型-->
+    <delete id="deleteFilmType" parameterType="int">
+        delete
+        from film_actor
+        where film_id = #{id};
+    </delete>
 
 </mapper>

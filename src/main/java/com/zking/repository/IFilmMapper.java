@@ -36,6 +36,16 @@ public interface IFilmMapper extends BaseMapper<Film> {
     int insert2(@Param("film") int film , @Param("actor")int actor);
 
 
-    //将电影ID与演员ID插入数据库
+    //设置电影类型
     int addFilmType(@Param("filmId")Integer filmId,  @Param("types")List<Integer> types);
+
+    //删除电影的类型
+    int deleteFilmType(Integer filmId);
+
+
+    //设置电影演员
+    int addFilmActor(@Param("filmId")Integer filmId,  @Param("actors")List<Integer> actors);
+
+    //删除电影的演员
+    int deleteFilmActor(Integer filmId);
 }
