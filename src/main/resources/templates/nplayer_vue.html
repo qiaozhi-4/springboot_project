@@ -189,8 +189,9 @@
                     }
                 }
             },
+            //发送登录请求
             loginNow: function () {
-                axios.post(`${host}/video/login`)
+                axios.post(`/login`)
                     .then(resp => {
                         if (resp.data.success) {
                             userId = resp.data.userId
@@ -200,12 +201,10 @@
                             userId = 0
                         }
                     })
-                    .catch(err => this.$message.error('登录失败！'))
+                    .catch(err => this.$message.error('登录请求失败！' + err))
             },
             loginClick: function (i) {
-                this.$confirm('你要去登录页面登录！现在登录？', '登录', {type: 'info',})
-                    .then(_ => this.loginNow())
-                    .catch(_ => this.isLogin = false)
+                loginVisible =false;
             },
             send() {
                 this.$alert('请在视频下方发送弹幕！')

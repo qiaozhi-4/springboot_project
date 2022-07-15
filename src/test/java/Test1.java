@@ -1,7 +1,6 @@
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.App;
 import com.zking.entity.User;
-import com.zking.service.impl.FileService;
 import com.zking.service.impl.FilmService;
 import com.zking.service.impl.UserService;
 import org.junit.Test;
@@ -24,8 +23,6 @@ public class Test1 {
     private FilmService filmService;
     @Autowired
     private PasswordEncoder encoder;
-    @Autowired
-    private FileService fileService;
 
     @Test
     public void test1(){

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.dto.FilmDTO;
 import com.zking.dto.UserCount;
 import com.zking.entity.Actor;
+import com.zking.entity.Film;
 import com.zking.entity.Type;
 import com.zking.entity.User;
 import com.zking.service.IActorService;
@@ -93,7 +94,6 @@ public class adminController {
     @PostMapping("/updateUser")
     @ResponseBody
     public boolean updateUser(User user, MultipartFile file) throws IOException {
-
         if (file != null) {
             //把文件传入本地
             String path = "/" + UUID.randomUUID() + file.getOriginalFilename();
@@ -101,8 +101,33 @@ public class adminController {
             file.transferTo(dest);
             user.setHeadImg(path);
         }
-
         return userService.updateById(user);
+    }
+
+    //用户封禁
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @PostMapping("/bannedUser")
+    @ResponseBody
+    public boolean bannedUser(User user) {
+        user.setVip(-1);
+        return userService.updateById(user);
+    }
+
+    //电影修改
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @PostMapping("/updateFilm")
+    @ResponseBody
+    public boolean updateFilm(Film film) {
+        return filmService.updateById(film);
+    }
+
+    //电影下架
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @PostMapping("/bannedFilm")
+    @ResponseBody
+    public boolean bannedFilm(Film film) {
+        film.setVip(-1);
+        return filmService.updateById(film);
     }
 
 
