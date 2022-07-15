@@ -46,7 +46,7 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         for (Film film : list) {
             StringBuilder stringBuilder = new StringBuilder();
             //查询电影所有类型
-            getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type));
+            getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
             filmDTOS.add( FilmDTO.getFilmDTO(film,stringBuilder.toString()));
         }
         return filmDTOS;
