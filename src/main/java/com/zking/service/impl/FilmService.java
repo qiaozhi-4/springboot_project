@@ -59,6 +59,16 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         return getBaseMapper().selectHeat();
     }
 
+    //电影添加
+    @Override
+    public boolean addFilms(Film film, List<Integer> actors, List<Integer> types) {
+        boolean save = save(film);
+        Integer filmId = film.getId();
+        actors.forEach(actorId -> getBaseMapper().insert2(filmId, actorId));
+        types.forEach(typeId -> getBaseMapper().insert1(filmId, typeId));
+        return save;
+    }
+
 
     public List<Actor> findAllActorByFilmId(int id){
         return getBaseMapper().findAllActorByFilmId(id);

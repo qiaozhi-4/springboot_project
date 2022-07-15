@@ -154,32 +154,15 @@ public class AdminController {
             String cope = Ffmpeg.cope(filmName);
             film.setCoverSrc(cope);
         }
-        return filmService.save(film);
+        return filmService.addFilms(film,actors,types);
     }
 
-    //电影添加
+    //电影更改类型
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/updateFilmType")
     @ResponseBody
     public boolean updateFilm(Film film, MultipartFile img, MultipartFile file, List<Integer> actors, List<Integer> types) throws IOException {
-        if (file != null && img != null) {
-            //把封面传入本地
-            String imgPath = "/videolook/videolookimg/" + UUID.randomUUID() + img.getOriginalFilename();
-            File imgFile = new File("D:\\springboot", imgPath);
-            img.transferTo(imgFile);
-            film.setImgSrc(imgPath);//存入数据库的路径
 
-            //把电影传入本地
-            String filmName = UUID.randomUUID() + file.getOriginalFilename();
-            String filePath = "/videolook/" + filmName;
-            File filmFile = new File("D:\\springboot", filePath);
-            file.transferTo(filmFile);
-            film.setImgSrc(filePath);//存入数据库的路径
-
-            //剪切视频工具
-            String cope = Ffmpeg.cope(filmName);
-            film.setCoverSrc(cope);
-        }
         return filmService.save(film);
     }
 

@@ -14,4 +14,8 @@ public interface IFilmService extends IService<Film>{
 
     //查询前五热度电影
     List<Film> selectHeat();
+
+    //电影添加
+    boolean addFilms(Film film,List<Integer> actors, List<Integer> types);
+
 }
