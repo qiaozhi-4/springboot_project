@@ -91,7 +91,7 @@ public class adminController {
 
     //更改用户信息
     @RolesAllowed("admin") // 必须admin角色才能访问
-    @GetMapping("/updateUser")
+    @PostMapping("/updateUser")
     @ResponseBody
     public boolean updateUser(User user, MultipartFile file, HttpServletRequest request) throws IOException {
         Enumeration enu = request.getParameterNames();
