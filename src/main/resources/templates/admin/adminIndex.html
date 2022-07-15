@@ -314,11 +314,13 @@
             },
             modificationUser() {
                 console.log(this.form);
+                console.log('图片：', this.imgList[0]);
                 params = new URLSearchParams();
                 params.append('_csrf', csrf);
-                params.append('user', this.form);
+                params.append('id', this.form.id);
+                params.append('name', this.form.name);
                 params.append('file', this.imgList[0]);
-                axios.get('/updateUser', this.form)
+                axios.post('/updateUser', params)
                     .then(response => {
                         if (response.data) {
                             this.form.headImg = this.imgList[0].url;
