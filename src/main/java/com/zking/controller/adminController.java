@@ -11,6 +11,7 @@ import com.zking.service.IActorService;
 import com.zking.service.IFilmService;
 import com.zking.service.ITypeService;
 import com.zking.service.IUserService;
+import com.zking.util.Ffmpeg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,7 +97,7 @@ public class adminController {
     public boolean updateUser(User user, MultipartFile file) throws IOException {
         if (file != null) {
             //把文件传入本地
-            String path = "/" + UUID.randomUUID() + file.getOriginalFilename();
+            String path = "/img/" + UUID.randomUUID() + file.getOriginalFilename();
             File dest = new File("D:\\springboot", path);
             file.transferTo(dest);
             user.setHeadImg(path);
@@ -134,8 +135,52 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/addFilm")
     @ResponseBody
-    public boolean addFilm(Film film,MultipartFile img,MultipartFile file,List<Integer> actors,List<Integer> types) {
-        return filmService.updateById(film);
+    public boolean addFilm(Film film, MultipartFile img, MultipartFile file, List<Integer> actors, List<Integer> types) throws IOException {
+        if (file != null && img != null) {
+            //把封面传入本地
+            String imgPath = "/videolook/videolookimg/" + UUID.randomUUID() + img.getOriginalFilename();
+            File imgFile = new File("D:\\springboot", imgPath);
+            img.transferTo(imgFile);
+            film.setImgSrc(imgPath);//存入数据库的路径
+
+            //把电影传入本地
+            String filmName = UUID.randomUUID() + file.getOriginalFilename();
+            String filePath = "/videolook/" + filmName;
+            File filmFile = new File("D:\\springboot", filePath);
+            file.transferTo(filmFile);
+            film.setImgSrc(filePath);//存入数据库的路径
+
+            //剪切视频工具
+            String cope = Ffmpeg.cope(filmName);
+            film.setCoverSrc(cope);
+        }
+        return filmService.save(film);
+    }
+
+    //电影添加
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @PostMapping("/updateFilmType")
+    @ResponseBody
+    public boolean updateFilm(Film film, MultipartFile img, MultipartFile file, List<Integer> actors, List<Integer> types) throws IOException {
+        if (file != null && img != null) {
+            //把封面传入本地
+            String imgPath = "/videolook/videolookimg/" + UUID.randomUUID() + img.getOriginalFilename();
+            File imgFile = new File("D:\\springboot", imgPath);
+            img.transferTo(imgFile);
+            film.setImgSrc(imgPath);//存入数据库的路径
+
+            //把电影传入本地
+            String filmName = UUID.randomUUID() + file.getOriginalFilename();
+            String filePath = "/videolook/" + filmName;
+            File filmFile = new File("D:\\springboot", filePath);
+            file.transferTo(filmFile);
+            film.setImgSrc(filePath);//存入数据库的路径
+
+            //剪切视频工具
+            String cope = Ffmpeg.cope(filmName);
+            film.setCoverSrc(cope);
+        }
+        return filmService.save(film);
     }
 
 

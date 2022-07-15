@@ -1,5 +1,6 @@
+package com.zking.util;
+
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,19 +11,17 @@ import java.util.List;
 
 @Slf4j
 public class Ffmpeg {
-    @Test
-    public void test() throws IOException {
+    public static void test() throws IOException {
         String path = "D:\\springboot\\videolook\\";        //要遍历的路径
         File file = new File(path);        //获取其file对象
         File[] fs = file.listFiles();    //遍历path下的文件和目录，放在File数组中
         for (File f : fs) {                    //遍历File[]数组
             if (!f.isDirectory())        //若非目录(即文件)，则打印
-                System.out.println(cope(f.getName()));
-
+                cope(f.getName());
         }
     }
 
-    private String cope(String filename) throws IOException {
+    public static String cope(String filename) throws IOException {
         // 在服务端安装ffmpeg，路径配置到环境变量或者yml配置文件中
         String ffmpeg = "D:\\springboot\\老师的工具\\ffmpeg-5.0.1-essentials_build\\bin/ffmpeg.exe";
         // 一些参数
@@ -48,13 +47,12 @@ public class Ffmpeg {
         // 处理命令
         log.info("[ffmpeg] 视频处理：{} => {}", input, output);
         processVideo(command);
-
+        return output.substring(13);
         // 其他业务逻辑……
         // 返回路径到前端：output
-        return output.substring(13);
     }
 
-    private void processVideo(String[] command) throws IOException {
+    private static void processVideo(String[] command) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         Process process = processBuilder.command(command).start();
 
@@ -71,7 +69,7 @@ public class Ffmpeg {
         log.info("[ffmpeg] 视频处理完毕，请保存路径！");
     }
 
-    private String getOutputPath(String input, int duration) {
+    private static String getOutputPath(String input, int duration) {
         File file = new File(input);
         String name = "videolookshort\\" + file.getName();
         int index = name.lastIndexOf('.');
