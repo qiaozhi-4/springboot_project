@@ -52,6 +52,11 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         return filmDTOS;
     }
 
+    @Override
+    public List<Film> selectHeat() {
+        return getBaseMapper().selectHeat();
+    }
+
 
     public List<Actor> findAllActorByFilmId(int id){
         return getBaseMapper().findAllActorByFilmId(id);

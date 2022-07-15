@@ -30,4 +30,10 @@
     <select id="selectFilm" resultType="Film">
         SELECT * from Film where name like CONCAT('%',#{name},'%')
     </select>
+
+
+<!--    查询电影前五-->
+    <select id="selectHeat" resultType="Film">
+        SELECT * from Film ORDER BY heat DESC LIMIT 5
+    </select>
 </mapper>
