@@ -152,6 +152,8 @@ public class AdminController {
 
             //剪切视频工具
             String cope = Ffmpeg.cope(filmName);
+
+            //插入数据库
             film.setCoverSrc(cope);
         }
         return filmService.addFilms(film,actors,types);
@@ -161,9 +163,9 @@ public class AdminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/updateFilmType")
     @ResponseBody
-    public boolean updateFilm(Film film, MultipartFile img, MultipartFile file, List<Integer> actors, List<Integer> types) throws IOException {
+    public boolean updateFilmType(Integer filmId, List<Integer> types) throws IOException {
 
-        return filmService.save(film);
+        return false;
     }
 
 

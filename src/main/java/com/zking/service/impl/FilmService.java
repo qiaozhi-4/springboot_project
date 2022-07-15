@@ -69,6 +69,12 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         return save;
     }
 
+    //电影更改类型
+    @Override
+    public boolean updateFilmType(Integer filmId, List<Integer> types) {
+        return getBaseMapper().addFilmType(filmId, types) != 0;
+    }
+
 
     public List<Actor> findAllActorByFilmId(int id){
         return getBaseMapper().findAllActorByFilmId(id);

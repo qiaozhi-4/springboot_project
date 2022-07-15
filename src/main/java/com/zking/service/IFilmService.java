@@ -18,4 +18,7 @@ public interface IFilmService extends IService<Film>{
     //电影添加
     boolean addFilms(Film film,List<Integer> actors, List<Integer> types);
 
+    //电影更改类型
+    boolean updateFilmType(Integer filmId, List<Integer> types);
+
 }
