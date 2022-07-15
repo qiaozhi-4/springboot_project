@@ -26,4 +26,7 @@ public interface IFilmMapper extends BaseMapper<Film> {
 
     //模糊查询根据电影名查电影
     List<Film> selectFilm(String selectInput);
+
+    //查询电影前五的热度
+    List<Film> selectHeat();
 }

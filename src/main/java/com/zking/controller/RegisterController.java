@@ -2,8 +2,11 @@ package com.zking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import com.zking.entity.Film;
 import com.zking.entity.User;
+import com.zking.service.IFilmService;
 import com.zking.service.IUserService;
+import com.zking.service.impl.FilmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +21,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @PermitAll
@@ -30,6 +34,7 @@ public class RegisterController {
 
     private final IUserService userService;
     private final PasswordEncoder encoder;
+    private final IFilmService filmService;
 
 
     //注册页面
@@ -59,7 +64,7 @@ public class RegisterController {
         System.out.println("path => " + path);
 
 
-        User user = new User(0,username,pass,"/img"+path,name,sex,0,null,null,null,parse,null,null);
+        User user = new User(0, username, pass, "/img" + path, name, sex, 0, null, null, null, parse, null, null);
         boolean save = userService.save(user);
         if (!save) {
             model.addAttribute("info", "注册失败请重试");
@@ -79,5 +84,12 @@ public class RegisterController {
         return user == null;
     }
 
+
+    //查询电影前五热度
+    @ResponseBody
+    @GetMapping("/selectHeat")
+    public List<Film> selectHeat() {
+        return filmService.selectHeat();
+    }
 
 }
