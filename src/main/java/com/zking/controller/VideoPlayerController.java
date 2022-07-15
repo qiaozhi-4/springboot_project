@@ -97,7 +97,7 @@ public class VideoPlayerController
 
         // 组装请求体
         HttpEntity<MultiValueMap<String, String>> request =
-                new HttpEntity<MultiValueMap<String, String>>(paramMap, headers);
+                new HttpEntity<>(paramMap, headers);
         // 1、使用postForObject请求接口
         String r = restTemplate.postForObject("http://localhost:8081/login", request, String.class);
 
