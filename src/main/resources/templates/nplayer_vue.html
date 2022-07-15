@@ -173,15 +173,24 @@
             },
             //发送登录请求
             loginNow: function () {
-                let params = new URLSearchParams();
-                params.append('username', this.loginForm.username);       //你要传给后台的参数值 key/value
-                params.append('password', this.loginForm.password);
-                params.append('_csrf', this.loginForm._csrf);
-                axios.post(`/video/login`, params)
-                    .then(resp => {
-                        console.log(resp)
-                    })
-                    .catch(err => this.$message.error('登录请求失败！' + err))
+                let data = new FormData()
+                data.append('username',  this.loginForm.username)
+                data.append('password', this.loginForm.password)
+                data.append('remember-me', 'true')
+                data.append(document.querySelector('#csrf').name, document.querySelector('#csrf').value) // 不能少
+                axios({
+                    method: 'post',
+                    url: '/login',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest', // 这个用作标记，后台判断是否为AJAX还是表单提交
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    data: data,
+                })
+                    .then(resp => console.log('登录结果：', resp))
+                    .catch(err => console.log('登录失败：', err))
+
+
             },
             loginClick: function (i) {
                 this.loginVisible =true;

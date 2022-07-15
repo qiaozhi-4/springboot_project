@@ -99,8 +99,8 @@ public class VideoPlayerController
         HttpEntity<MultiValueMap<String, String>> request =
                 new HttpEntity<>(paramMap, headers);
         // 1、使用postForObject请求接口
-        String r = restTemplate.postForObject("http://localhost:8081/login", request, String.class);
 
+    String r = restTemplate.postForObject("http://localhost:8081/login", request, String.class);
 
         // 模拟登录
         int id = ATOMIC_INTEGER.getAndIncrement();
