@@ -7,12 +7,16 @@ import com.zking.service.ICommentService;
 import com.zking.service.impl.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import com.zking.entity.User;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -43,12 +47,23 @@ public class VideoPlayerController
     public String index(@PathVariable Integer id, HttpSession session, Model model)
     {
         id = id == null ? 0 : id;
-        Object sid = session.getAttribute("userId");
-        int userId = sid == null ? 0 : (int) sid;
-        model.addAttribute("movieId", id);
-        model.addAttribute("userId", userId);
-        model.addAttribute("login", sid != null);
-        return "test";
+        SecurityContext context = SecurityContextHolder.getContext(); // 上下文
+        Authentication authentication = context.getAuthentication(); // 认证信息
+        if (!"anonymousUser".equals(authentication.getPrincipal())){
+
+            User user = (User) authentication.getPrincipal(); // 唯一用户对象，一般是UserDetails
+            Object sid = user.getId();
+            int userId = sid == null ? 0 : (int) sid;
+            model.addAttribute("movieId", id);
+            model.addAttribute("userId", userId);
+            model.addAttribute("login", true);
+        }else {
+            model.addAttribute("movieId", id);
+            model.addAttribute("userId", 0);
+            model.addAttribute("login", false);
+        }
+
+        return "nplayer_vue";
     }
 
     // TODO 登录模拟，自己定义API，一般是前后端分离，

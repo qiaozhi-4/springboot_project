@@ -55,7 +55,7 @@
 
                     <el-col :offset="1" :span="3" v-for="(film,index) in element.films">
                         <el-tooltip :content="film.name" placement="top" :visible-arrow="false">
-                            <el-link :href="'play?movie=' + film.mp4Src" :underline="false">
+                            <el-link :href="'/video/' + film.id" :underline="false">
                                 <el-card class="box-card movie">
                                     <img height="120px" width="100%" :src="film.imgSrc"><br>
                                     <b><span>{{film.name}}</span></b><br><br>
