@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--必须填写namespace属性，是接口路径-->
+<mapper namespace="com.zking.repository.IAddressMapper">
+
+    <select id="findByDeep" resultType="com.zking.entity.Address">
+        SELECT * from country_state_city WHERE deep=#{deep}
+    </select>
+
+    <select id="findByParentId" resultType="com.zking.entity.Address">
+        SELECT * FROM country_state_city  WHERE pid=#{pid}
+    </select>
+
+
+</mapper>

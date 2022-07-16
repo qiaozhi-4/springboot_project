@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import com.zking.service.IUserService;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -36,8 +36,6 @@ public class UserController {
     @Value("${upload.locationImg}")
     private String location;
     private final PasswordEncoder encoder;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
 
     //测试页面
     @GetMapping("/test")
@@ -74,34 +72,33 @@ public class UserController {
         return p;
     }
 
-    @GetMapping("/update")
+    @RequestMapping("/address")
     public String updateUse(){
-        return "updateUser";
+        return "countryStateCity";
     }
     //修改用户信息
     @PostMapping("/updateUsers")
-    public String updateUser(Model model, MultipartFile file, String name, String address, String email , String password)throws IOException {
+    public String updateUser(HttpServletRequest request, MultipartFile file, String name, String address, String email , String password) throws IOException, ServletException {
+
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         User principal =(User) authentication.getPrincipal();
-        if (file == null) {
-            model.addAttribute("info","头像不为空");
-            return "updateUser";
+        if (!Objects.equals(file.getOriginalFilename(), "")) {
+            String imgname = UUID.randomUUID() + file.getOriginalFilename();
+            String path = "/" + imgname;
+            File dest = new File(location, path);
+            file.transferTo(dest);
+            principal.setHeadImg(path);
         }
-        String imgname = UUID.randomUUID() + file.getOriginalFilename();
-        String path = "/" + imgname;
-        File dest = new File(location, path);
-        file.transferTo(dest);
         //密码加密
         String pass = encoder.encode(password);
         principal.setPassword(pass);
-        principal.setHeadImg(path);
         principal.setName(name);
         principal.setAddress(address);
         principal.setEmail(email);
         //修改
         userSevice.saveOrUpdate(principal);
-        model.addAttribute("info","修改成功");
-        return "redirect:update";
+        request.logout(); // 强制登出
+        return "redirect:index";
     }
 }
