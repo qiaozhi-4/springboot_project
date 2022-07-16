@@ -6,6 +6,39 @@
 </head>
 <body>
 
+
+<el-row th:fragment="nplayer_vue"  type="flex" align="middle" >
+    <el-col :span="2">
+        <i class="el-icon-back">返回</i>
+    </el-col>
+    <el-col :span="20">
+    </el-col>
+    <el-col :span="2" >
+        <el-link v-if="user==null" href="loginUser" :underline="false">
+            <el-avatar size="small" src="img/head.jpg"></el-avatar>
+            <span class="qita">点击登录</span>
+        </el-link>
+        <el-dropdown>
+            <el-link v-if="user!=null"  :underline="false">
+                <el-avatar size="small" :src="user.headImg"></el-avatar>
+                <span class="qita" :text="user.username"></span>
+            </el-link>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>
+                    <form action="/logout" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
+                        <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出</el-button>
+                    </form>
+                </el-dropdown-item>
+                <el-dropdown-item>狮子头</el-dropdown-item>
+                <el-dropdown-item>螺蛳粉</el-dropdown-item>
+            </el-dropdown-menu>
+        </el-dropdown>
+    </el-col>
+</el-row>
+
+
+
 <div th:fragment="header">
     <!-- 导航栏 -->
     <el-header>
@@ -85,7 +118,8 @@
                         <el-dropdown-item>
                             <form action="/logout" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
-                                <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出</el-button>
+                                <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出
+                                </el-button>
                             </form>
                         </el-dropdown-item>
                         <el-dropdown-item>狮子头</el-dropdown-item>
@@ -141,7 +175,8 @@
                         <el-dropdown-item>
                             <form action="/logout" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
-                                <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出</el-button>
+                                <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出
+                                </el-button>
                             </form>
                         </el-dropdown-item>
                         <el-dropdown-item>狮子头</el-dropdown-item>
