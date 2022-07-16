@@ -154,7 +154,7 @@
                     text: msg.text.trim(),
                     color: msg.color,
                     time: msg.time.toFixed(2),
-                    type: 'top', // msg.type, +++
+                    type: msg.type, // msg.type, +++
                     isMe: msg.isMe,
                     force: msg.force,
                     userId: userId,
@@ -163,7 +163,7 @@
                     bgColor: '#ffffff', // 这个插件没法调整背景色
                 }
                 this.messageList.push(data)
-                axios.post(`${host}/video/${movieId}/message`, data)
+                axios.post(`../video/${movieId}/message`, data)
                     .then(resp => console.log('发送弹幕成功！', resp.data) || this.$message.success('发送后台成功！'))
                     .catch(err => console.log('获取视频的弹幕失败！', err) || this.$message.error('发送后台失败，忽略！'))
             },
@@ -204,9 +204,12 @@
                     data: data,
                 })
                     .then(resp => {
-                        console.log('登录结果：', resp.data)
-                        this.$message.success('登录成功！')
-                        this.user = resp.data;
+                        if (resp.data){
+                            console.log('登录结果：', resp.data)
+                            this.$message.success('登录成功！')
+                            this.user = resp.data
+                            login = true
+                        }
                     })
                     .catch(err => {
                         console.log('登录失败：', err)

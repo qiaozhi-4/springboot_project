@@ -28,7 +28,7 @@
                 <el-col :span="22">
                     <div>
                         <el-carousel height="400px" direction="vertical">
-                            <el-carousel-item class="mohu" v-for="film in frontList" :key="film.name">
+                            <el-carousel-item class="mohu" v-for="film in frontList" :key="film.id">
                                 <el-link  :href="'/video/' + film.id"  :underline="false">
                                     <!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
                                     <!--                                         :name="item.title" /></i>-->

@@ -7,19 +7,21 @@
 <body>
 
 
-<el-row th:fragment="nplayer_vue"  type="flex" align="middle" >
+<el-row th:fragment="nplayer_vue" type="flex" align="middle">
     <el-col :span="2">
-        <i class="el-icon-back">返回</i>
+        <el-link :href="../" :underline="false">
+            <i class="el-icon-back">返回</i>
+        </el-link>
     </el-col>
     <el-col :span="20">
     </el-col>
-    <el-col :span="2" >
+    <el-col :span="2">
         <el-link v-if="user==null" @click="loginClick" :underline="false">
             <el-avatar size="small" src="../img/head.jpg"></el-avatar>
             <span class="qita">点击登录</span>
         </el-link>
         <el-dropdown>
-            <el-link v-if="user!=null"  :underline="false">
+            <el-link v-if="user!=null" :underline="false">
                 <el-avatar size="small" :src="'../' + user.headImg"></el-avatar>
                 <span class="qita" :text="user.username"></span>
             </el-link>
@@ -36,7 +38,6 @@
         </el-dropdown>
     </el-col>
 </el-row>
-
 
 
 <div th:fragment="header">
