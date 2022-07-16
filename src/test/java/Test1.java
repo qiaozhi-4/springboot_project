@@ -1,6 +1,8 @@
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.App;
+import com.zking.entity.Film;
 import com.zking.entity.User;
+import com.zking.repository.IFilmMapper;
 import com.zking.service.impl.FilmService;
 import com.zking.service.impl.UserService;
 import org.junit.Test;
@@ -11,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
@@ -20,7 +24,7 @@ public class Test1 {
     @Autowired
     private UserService userService;
     @Autowired
-    private FilmService filmService;
+    private IFilmMapper filmMapper;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -59,5 +63,19 @@ public class Test1 {
 //        calendar.add(Calendar.YEAR, -1);//当前时间减去一年
         String format = simpleDateFormat.format(calendar.getTime());
         System.out.println(format);
+    }
+    @Test
+    public void test5(){
+//        List<Integer> actors = new ArrayList<>();
+//        actors.add(1);
+//        actors.add(2);
+//        actors.add(3);
+//        Integer i = actors.get(1);
+//        Film film = filmMapper.selectById(26);
+//        Integer filmId = film.getId();
+//        filmMapper.insert1(12,12);
+        filmMapper.insert2(12,12);
+
+
     }
 }
