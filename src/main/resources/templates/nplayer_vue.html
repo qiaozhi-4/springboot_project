@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
+    <style>
+        .el-header {
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -13,7 +20,9 @@
 
     <el-container>
         <!--头部-->
-        <el-header>Header</el-header>
+        <el-header>
+            <div th:replace="~{fragments/header::nplayer_vue}"></div>
+        </el-header>
 
         <!--主体-->
         <el-main>
@@ -61,6 +70,7 @@
     let movieId = [[${movieId}]] // thymeleaf模板model参数
     let film = [[${film}]] // 电影对象
     let login = [[${login}]] // 是否登录
+    let user = [[${authentication?.principal}]]
 
 
 
@@ -77,6 +87,7 @@
                 password: 'admin',
                 _csrf:csrf,
             },
+            user: user,
 
             player: null,
             danmaku: null,
@@ -103,6 +114,11 @@
             },
         },
         methods: {
+            //头部
+            goBack() {
+                console.log('go back');
+            },
+
             setPlayer(player) {
                 this.player = player;
                 this.player.on('DanmakuSend', msg => {
@@ -187,8 +203,15 @@
                     },
                     data: data,
                 })
-                    .then(resp => console.log('登录结果：', resp.data))
-                    .catch(err => console.log('登录失败：', err))
+                    .then(resp => {
+                        console.log('登录结果：', resp.data)
+                        this.$message.success('登录成功！')
+                        this.user = resp.data;
+                    })
+                    .catch(err => {
+                        console.log('登录失败：', err)
+                        this.$message.error('登录失败！')
+                    })
 
 
             },
