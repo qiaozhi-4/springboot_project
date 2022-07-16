@@ -107,7 +107,7 @@
 
     </el-container>
 
-    <el-dialog title="修改订单" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改订单" :visible.sync="dialogFormVisible" :before-close="cancel">
         <el-form :model="form">
             <el-form-item label="电影名字" :label-width="formLabelWidth">
                 <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -142,7 +142,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="cancel">取 消</el-button>
             <el-button type="primary" @click="modificationFilm">确 定</el-button>
         </div>
     </el-dialog>
@@ -157,7 +157,7 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="添加订单" :visible.sync="dialogFormVisible3" :before-close="cancel">
+    <el-dialog title="添加订单" :visible.sync="dialogFormVisible3" :before-close="cancel2">
         <el-form :model="form2">
             <el-form-item label="电影封面" :label-width="formLabelWidth">
                 <el-upload
@@ -284,7 +284,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="cancel">取 消</el-button>
+            <el-button @click="cancel2">取 消</el-button>
             <el-button type="primary" @click="addFilm">确 定</el-button>
         </div>
     </el-dialog>
@@ -323,14 +323,12 @@
             dialogFormVisible: false,
             dialogFormVisible2: false,
             dialogFormVisible3: false,
-            form: {
-                filmImg: '',
+            form: {},
+            beforeModificationForm: {
                 name: '',
-                score: 5.0,
+                score: '',
                 director: '',
-                time: '',
-                filmRegion: '',
-                filmType: [],
+                region: '',
             },
             types: [],
             form2: {
@@ -342,6 +340,7 @@
                 actors: [],
                 actor: [],
                 info: '',
+                score: 5.1
             },
             search: '',
             imgList: [],
@@ -372,6 +371,10 @@
             },
             dj(row) {
                 this.form = row;
+                this.beforeModificationForm.name = row.name
+                this.beforeModificationForm.score = row.score
+                this.beforeModificationForm.director = row.director
+                this.beforeModificationForm.region = row.region
             },
             modificationFilm() {
                 params = new URLSearchParams()
@@ -381,16 +384,19 @@
                 params.append('score', this.form.score);
                 params.append('director', this.form.director);
                 params.append('region', this.form.region);
-                params.append('types', this.types);
+                params.append('types', this.types)
                 axios.post('/updateFilm', params)
                     .then(response => {
                         if (response.data) {
+                            console.log(response.data)
+                            this.form.types = response.data
+                            console.log(this.form)
                             this.$message({
                                 message: '用户信息已更新',
                                 type: 'success'
                             });
+                            this.dialogFormVisible = false;
                         }
-                        this.dialogFormVisible = false;
                     })
                     .catch(data => {
                         this.$message('修改失败');
@@ -417,8 +423,7 @@
                 this.dialogFormVisible2 = false;
             },
             addFilm() {
-                console.log(this.form2);
-                let actorS = this.form2.actor[0]+'/'+this.form2.actor[1]
+                let actorS = this.form2.actor.join(",")
                 // 前端POST异步发送文件：
                 params = new FormData()
                 params.append('img', this.imgList[0].raw) // 图片 ===============
@@ -427,6 +432,7 @@
                 params.append('name', this.form2.name);
                 params.append('region', this.form2.region);
                 params.append('director', this.form2.director);
+                params.append('score', this.form2.score);
                 params.append('actor', actorS);
                 params.append('actors', this.form2.actors);
                 params.append('info', this.form2.info);
@@ -438,16 +444,17 @@
                 }
                 axios.post('/addFilm', params, res)
                     .then(response => {
-                        if (response.data) {
-                            this.tableData.push(this.form2);
+                        if (response.data.id) {
+                            console.log(response.data)
+                            this.tableData.push(response.data);
                             this.$message({
                                 message: '电影添加成功',
                                 type: 'success'
                             });
+                            this.imgList = []
+                            this.fileList = []
+                            this.dialogFormVisible3 = false;
                         }
-                        this.imgList = []
-                        this.fileList = []
-                        this.dialogFormVisible3 = false;
                     })
                     .catch(data => {
                         this.$message('电影添加失败');
@@ -539,6 +546,17 @@
                 console.log(this.fileList)
             },
             cancel(){
+                this.form.name = this.beforeModificationForm.name
+                this.form.score = this.beforeModificationForm.score
+                this.form.director = this.beforeModificationForm.director
+                this.form.region = this.beforeModificationForm.region
+                this.dialogFormVisible = false
+            },
+            cancel2(){
+                this.form.name = this.beforeModificationForm.name
+                this.form.score = this.beforeModificationForm.score
+                this.form.director = this.beforeModificationForm.director
+                this.form.region = this.beforeModificationForm.region
                 this.imgList = []
                 this.fileList = []
                 this.dialogFormVisible3 = false

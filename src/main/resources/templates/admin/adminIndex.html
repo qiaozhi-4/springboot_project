@@ -213,7 +213,8 @@
             myChart1: null,
             changed: false,
             dialogFormVisible: false,
-            form: {
+            form: {},
+            beforeModificationForm: {
                 userImg: '',
                 name: '',
             },
@@ -243,6 +244,8 @@
                 this.form = row;
                 this.imgList.push(
                     {url: row.headImg})
+                this.beforeModificationForm.headImg = row.headImg
+                this.beforeModificationForm.name = row.name
                 console.log(row)
             },
             modificationUser() {
@@ -265,9 +268,9 @@
                                 message: '用户信息已更新',
                                 type: 'success'
                             });
+                            this.imgList = []
+                            this.dialogFormVisible = false;
                         }
-                        this.imgList = []
-                        this.dialogFormVisible = false;
                     })
                     .catch(data => {
                         this.$message('修改失败');
@@ -352,6 +355,8 @@
                 console.log(this.imgList)
             },
             cancel() {
+                this.form.headImg = this.beforeModificationForm.headImg
+                this.form.name = this.beforeModificationForm.name
                 this.imgList = []
                 this.dialogFormVisible = false
             },

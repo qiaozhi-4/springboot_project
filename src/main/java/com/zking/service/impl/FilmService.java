@@ -55,13 +55,21 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     }
 
     @Override
+    public FilmDTO findAllTypeByFilmId(Film film){
+        StringBuilder stringBuilder = new StringBuilder();
+        //查询电影所有类型
+        getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
+        return FilmDTO.getFilmDTO(film,stringBuilder.toString());
+    }
+
+    @Override
     public List<Film> selectHeat() {
         return getBaseMapper().selectHeat();
     }
 
     //电影添加
     @Override
-    public boolean addFilms(Film film, List<Integer> actors, List<Integer> types) {
+    public boolean addFilms(Film film, Integer[] actors, Integer[] types) {
         boolean save = save(film);
         Integer filmId = film.getId();
         getBaseMapper().addFilmType(filmId,types);
@@ -71,14 +79,14 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
 
     //电影更改类型
     @Override
-    public boolean updateFilmType(Integer filmId, List<Integer> types) {
+    public boolean updateFilmType(Integer filmId, Integer[] types) {
         getBaseMapper().deleteFilmType(filmId);
         return getBaseMapper().addFilmType(filmId, types) != 0;
     }
 
     //电影演员更改
     @Override
-    public boolean updateFilmActor(Integer filmId, List<Integer> actors) {
+    public boolean updateFilmActor(Integer filmId, Integer[] actors) {
         getBaseMapper().deleteFilmActor(filmId);
         return getBaseMapper().addFilmActor(filmId,actors) != 0;
     }
