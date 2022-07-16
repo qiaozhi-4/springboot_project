@@ -28,12 +28,7 @@ public class TestFilmServiceS {
 
     @Test
     public void test3(){
-        ArrayList<Integer> integers = new ArrayList<>();
-        integers.add(55);
-        integers.add(66);
-        integers.add(77);
-        integers.add(88);
-        integers.add(99);
+        Integer[] integers = {1,7,6,12,17};
         filmService.updateFilmType(1,integers);
 
         filmService.updateFilmActor(1,integers);

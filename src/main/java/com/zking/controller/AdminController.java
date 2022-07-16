@@ -118,8 +118,21 @@ public class AdminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/updateFilm")
     @ResponseBody
-    public boolean updateFilm(Film film) {
-        return filmService.updateById(film);
+    public String updateFilm(Film film, Integer[] types) {
+        if (types.length >0 && filmService.updateFilmType(film.getId(), types)) {
+            filmService.updateById(film);
+            StringBuilder type = new StringBuilder();
+            int count = 1;
+            for (int i: types) {
+                if (count++ < types.length) {
+                    type.append(typeService.getById(i).getName()).append(",");
+                }else {
+                    type.append(typeService.getById(i).getName());
+                }
+            }
+            return type.toString();
+        }
+        return null;
     }
 
     //电影下架
@@ -135,7 +148,7 @@ public class AdminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/addFilm")
     @ResponseBody
-    public boolean addFilm(Film film, MultipartFile img, MultipartFile file, List<Integer> actors, List<Integer> types) throws IOException {
+    public boolean addFilm(Film film, MultipartFile img, MultipartFile file, Integer[] actors, Integer[] types) throws IOException {
         if (file != null && img != null) {
             //把封面传入本地
             String imgPath = "/videolook/videolookimg/" + UUID.randomUUID() + img.getOriginalFilename();
@@ -163,7 +176,7 @@ public class AdminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/updateFilmType")
     @ResponseBody
-    public boolean updateFilmType(Integer filmId, List<Integer> types) throws IOException {
+    public boolean updateFilmType(Integer filmId, Integer[] types) throws IOException {
         filmService.updateFilmType(filmId,types);
         return false;
     }
