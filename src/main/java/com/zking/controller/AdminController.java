@@ -169,6 +169,7 @@ public class AdminController {
             //插入数据库
             film.setCoverSrc(cope);
         }
+        film.setTime(new Date());
         filmService.addFilms(film, actors, types);
         return filmService.findAllTypeByFilmId(film);
     }
