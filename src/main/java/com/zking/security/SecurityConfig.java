@@ -110,7 +110,6 @@ public class SecurityConfig {
                         out.write(e.getMessage());
                         out.flush();
                         out.close();
-                        response.sendRedirect("/loginUser?error");
                         return;
                     }
                     response.sendRedirect("/loginUser?error");

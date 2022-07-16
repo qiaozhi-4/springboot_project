@@ -14,13 +14,13 @@
     <el-col :span="20">
     </el-col>
     <el-col :span="2" >
-        <el-link v-if="user==null" href="loginUser" :underline="false">
-            <el-avatar size="small" src="img/head.jpg"></el-avatar>
+        <el-link v-if="user==null" @click="loginClick" :underline="false">
+            <el-avatar size="small" src="../img/head.jpg"></el-avatar>
             <span class="qita">点击登录</span>
         </el-link>
         <el-dropdown>
             <el-link v-if="user!=null"  :underline="false">
-                <el-avatar size="small" :src="user.headImg"></el-avatar>
+                <el-avatar size="small" :src="'../' + user.headImg"></el-avatar>
                 <span class="qita" :text="user.username"></span>
             </el-link>
             <el-dropdown-menu slot="dropdown">

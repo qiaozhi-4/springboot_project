@@ -49,34 +49,8 @@
                 changed: false,
                 //头部模糊搜索框内容
                 inputHead: '',
-                //轮播图片数组
-                imgList: [
-                    {
-                        name: "109951167468487275",
-                        src: "img/109951167468487275.jpg",
-
-                    },
-                    {
-                        name: "109951167468514107",
-                        src: "img/109951167468514107.jpg",
-
-                    },
-                    {
-                        name: "109951167468538175",
-                        src: "img/109951167468538175.jpg",
-
-                    },
-                    {
-                        name: "109951167468551304",
-                        src: "img/109951167468551304.jpg",
-
-                    },
-                    {
-                        name: "109951167468567569",
-                        src: "img/109951167468567569.jpg",
-
-                    },
-                ],
+                //前5的电影
+                frontList: [],
 
 
                 //vip购买弹出框
@@ -101,21 +75,18 @@
                 //获取电影分类及其数据
                 axios.get('/getTypeAndFilm')
                     .then(resp => {
-                        console.log('请求发送成功', resp)
+                        console.log('请求发送成功', resp.data)
                         this.typeAndFilm = resp.data
                     })
                     .catch(err => this.$message.error('请求发送失败') )
-                // const options = {}
-                // let player = videojs('video1', options, function () {
-                //     videojs.log('start playing...')
-                //     // 手动控制播放
-                //     this.play()
-                //     this.on('ended', function () {
-                //         // 停止播放
-                //         videojs.log('stopped!')
-                //     })
-                // })
-                // console.log(player)
+                //获取前5
+                axios.get('/selectHeat')
+                    .then(resp => {
+                        console.log('请求发送成功', resp.data)
+                        this.frontList = resp.data
+                    })
+                    .catch(err => this.$message.error('请求发送失败') )
+
 
 
             }

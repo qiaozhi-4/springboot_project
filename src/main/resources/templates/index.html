@@ -28,13 +28,13 @@
                 <el-col :span="22">
                     <div>
                         <el-carousel height="400px" direction="vertical">
-                            <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
-                                <el-link href="img/ikun.png" :underline="false">
+                            <el-carousel-item class="mohu" v-for="film in frontList" :key="film.name">
+                                <el-link  :href="'/video/' + film.id"  :underline="false">
                                     <!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
                                     <!--                                         :name="item.title" /></i>-->
 
                                     <video width="1000px" height="600px" controls autoplay
-                                           src="videolook/1176840-1-hd.mp4"></video>
+                                           :src="film.coverSrc"></video>
 
                                 </el-link>
                                 <!-- <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title" /> -->
