@@ -84,8 +84,8 @@
         </foreach>
     </insert>
 
-    <!--删除电影类型-->
-    <delete id="deleteFilmType" parameterType="int">
+    <!--删除电影演员-->
+    <delete id="deleteFilmActor" parameterType="int">
         delete
         from film_actor
         where film_id = #{id};

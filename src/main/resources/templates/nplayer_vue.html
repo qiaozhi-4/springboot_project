@@ -177,7 +177,7 @@
                 data.append('username',  this.loginForm.username)
                 data.append('password', this.loginForm.password)
                 data.append('remember-me', 'true')
-                data.append(document.querySelector('#csrf').name, document.querySelector('#csrf').value) // 不能少
+                data.append('_csrf', this.loginForm._csrf) // 不能少
                 axios({
                     method: 'post',
                     url: '/login',
@@ -187,7 +187,7 @@
                     },
                     data: data,
                 })
-                    .then(resp => console.log('登录结果：', resp))
+                    .then(resp => console.log('登录结果：', resp.data))
                     .catch(err => console.log('登录失败：', err))
 
 

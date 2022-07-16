@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -44,74 +45,76 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        //第三方登录配置
         http.oauth2Login()
                 .redirectionEndpoint()
                 .baseUri("/login/gitee") // 和配置相 匹配
                 .and()
                 .userInfoEndpoint(u -> u.userService(oauth2UserService()));
 
-        //登录配置
-        http.formLogin()
-                .loginPage("/loginUser")
-                .loginProcessingUrl("/login")
-                .failureUrl("/loginUser?error")
-                .defaultSuccessUrl("/");
 
-        //登出配置
+        //http.formLogin()
+        //        .loginPage("/loginUser")
+        //        .loginProcessingUrl("/login")
+        //        .failureUrl("/loginUser?error")
+        //        .defaultSuccessUrl("/");
         http.logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginUser?logout");
+        http.exceptionHandling().accessDeniedPage("/403");
+
 
         //异常处理配置
-        http.exceptionHandling().accessDeniedPage("/403")
-                .and()
-
+        http.exceptionHandling()
                 //异常处理
-                .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
                     // 和上面一致，用来处理ajax请求哪些没有权限的资源时：
                     String header = request.getHeader("X-Requested-With");
-                    if (header != null) {
+                    //判断是否是axios异步请求
+                    if ("XMLHttpRequest".equals(header)) {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
                     } else {
-                        response.sendRedirect("/login.html");
+                        response.sendRedirect("/");
                     }
                 });
 
-        //表单登录配置
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/aaa.html")
+        //登录配置
+        http.formLogin()
+                //.loginPage("/loginUser")
                 .loginProcessingUrl("/login")
-                .usernameParameter("name")
-                .passwordParameter("passwd")
+                //.failureUrl("/loginUser?error")
+                //.defaultSuccessUrl("/")
 
-                //登录成功
+                //替换登录成功的页面
                 .successHandler((request, response, authentication) -> {
                     // 和上面配置一致，处理成功后返回结果
                     String header = request.getHeader("x-requested-with");
-                    if (header != null) {
+                    //判断是否是axios异步请求
+                    if ("XMLHttpRequest".equals(header)) {
+                        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                         response.setContentType("application/json;charset=utf-8");
-                        response.getWriter().write(new ObjectMapper().writeValueAsString(new User()));
+                        response.getWriter().write(new ObjectMapper().writeValueAsString(user));
                         return;
                     }
+
                     response.sendRedirect("/");
                 })
 
-                //密码错误
-                .failureHandler((req, res, e) -> {
-                    res.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = res.getWriter();
-                    out.write(e.getMessage());
-                    out.flush();
-                    out.close();
-                })
-                .permitAll()
-                .and()
-                .csrf().disable() ;
+                //密码错误替换登录失败
+                .failureHandler((request, response, e) -> {
+                    // 和上面配置一致，处理成功后返回结果
+                    String header = request.getHeader("x-requested-with");
+                    //判断是否是axios异步请求
+                    if ("XMLHttpRequest".equals(header)) {
+                        response.setContentType("application/json;charset=utf-8");
+                        PrintWriter out = response.getWriter();
+                        out.write(e.getMessage());
+                        out.flush();
+                        out.close();
+                        response.sendRedirect("/loginUser?error");
+                        return;
+                    }
+                    response.sendRedirect("/loginUser?error");
+                });
 
         return http.build();
     }
