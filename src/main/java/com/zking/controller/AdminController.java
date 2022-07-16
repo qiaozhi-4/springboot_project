@@ -148,7 +148,7 @@ public class AdminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/addFilm")
     @ResponseBody
-    public boolean addFilm(Film film, MultipartFile img, MultipartFile file, Integer[] actors, Integer[] types) throws IOException {
+    public FilmDTO addFilm(Film film, MultipartFile img, MultipartFile file, Integer[] actors, Integer[] types) throws IOException {
         if (file != null && img != null) {
             //把封面传入本地
             String imgPath = "/videolook/videolookimg/" + UUID.randomUUID() + img.getOriginalFilename();
@@ -161,7 +161,7 @@ public class AdminController {
             String filePath = "/videolook/" + filmName;
             File filmFile = new File("D:\\springboot", filePath);
             file.transferTo(filmFile);
-            film.setImgSrc(filePath);//存入数据库的路径
+            film.setMp4Src(filePath);//存入数据库的路径
 
             //剪切视频工具
             String cope = Ffmpeg.cope(filmName);
@@ -169,7 +169,8 @@ public class AdminController {
             //插入数据库
             film.setCoverSrc(cope);
         }
-        return filmService.addFilms(film, actors, types);
+        filmService.addFilms(film, actors, types);
+        return filmService.findAllTypeByFilmId(film);
     }
 
     //电影更改类型

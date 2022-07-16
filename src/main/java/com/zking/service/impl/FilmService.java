@@ -55,6 +55,14 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     }
 
     @Override
+    public FilmDTO findAllTypeByFilmId(Film film){
+        StringBuilder stringBuilder = new StringBuilder();
+        //查询电影所有类型
+        getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
+        return FilmDTO.getFilmDTO(film,stringBuilder.toString());
+    }
+
+    @Override
     public List<Film> selectHeat() {
         return getBaseMapper().selectHeat();
     }
