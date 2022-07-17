@@ -119,7 +119,16 @@ public class VideoPlayerController
     @ResponseBody
     public Map<String, Object> send(@RequestBody CommentDTO message, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
     {
-        Integer userId = (Integer) session.getAttribute("userId");
+        Integer userId = 0;
+        //获取用户认证信息
+        SecurityContext context = SecurityContextHolder.getContext(); // 上下文
+        Authentication authentication = context.getAuthentication(); // 认证信息
+        if (!"anonymousUser".equals(authentication.getPrincipal())){
+
+            User user = (User) authentication.getPrincipal(); // 唯一用户对象，一般是UserDetails
+            userId = user.getId();
+        }
+
         Map<String, Object> result = new HashMap<>();
         if (userId == null || userId == 0)
         {
