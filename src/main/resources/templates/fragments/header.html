@@ -9,7 +9,7 @@
 
 <el-row th:fragment="nplayer_vue" type="flex" align="middle">
     <el-col :span="2">
-        <el-link :href="../" :underline="false">
+        <el-link href="../" :underline="false">
             <i class="el-icon-back">返回</i>
         </el-link>
     </el-col>
@@ -20,8 +20,8 @@
             <el-avatar size="small" src="../img/head.jpg"></el-avatar>
             <span class="qita">点击登录</span>
         </el-link>
-        <el-dropdown>
-            <el-link v-if="user!=null" :underline="false">
+        <el-dropdown v-if="user!=null">
+            <el-link  :underline="false">
                 <el-avatar size="small" :src="'../' + user.headImg"></el-avatar>
                 <span class="qita" :text="user.username"></span>
             </el-link>
@@ -110,21 +110,19 @@
                     <el-avatar size="small" src="img/head.jpg"></el-avatar>
                     <span class="qita">点击登录</span>
                 </el-link>
-                <el-dropdown>
-                    <el-link th:if="${#authentication?.name != 'anonymousUser'}" :underline="false">
+                <el-dropdown th:if="${#authentication?.name != 'anonymousUser'}">
+                    <el-link  :underline="false">
                         <el-avatar size="small" th:src="${#authentication.principal.headImg}"></el-avatar>
                         <span class="qita" th:text="${#authentication.name}"></span>
                     </el-link>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>
                             <form action="/logout" method="post">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
+                                <input type="hidden" th:id="${_csrf.parameterName}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
                                 <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出
                                 </el-button>
                             </form>
                         </el-dropdown-item>
-                        <el-dropdown-item>狮子头</el-dropdown-item>
-                        <el-dropdown-item>螺蛳粉</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>

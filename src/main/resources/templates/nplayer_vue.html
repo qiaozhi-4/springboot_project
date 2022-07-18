@@ -11,13 +11,13 @@
             line-height: 60px;
         }
     </style>
+
 </head>
 <body>
-<div>hhhh</div>
 <div id="app">
 
     <!--登录表单-->
-    <div th:replace="~{fragments/loginFrom::login}"></div>
+    <div th:replace="~{fragments/loginFrom::loginFrom}"></div>
 
     <el-container>
         <!--头部-->
@@ -136,7 +136,7 @@
                 this.danmaku.appendItems(this.messageList) // +++
             },
             sendMessage(msg) {
-                if (!this.isLogin) {
+                if (!login) {
                     this.$alert('登录后其他人也能看到你发送的弹幕！')
                     return
                 }
