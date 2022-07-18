@@ -160,8 +160,9 @@ public class VideoPlayerController
     public List<CommentDTO> messages(@PathVariable Integer id)
     {
         ArrayList<CommentDTO> commentDTOS = new ArrayList<>();
+        List<Comment> comments = commentService.findAllCommentByFilmId(id);
         // 获取当前视频所有评论
-        for (Comment comment : commentService.findAllCommentByFilmId(id)) {
+        for (Comment comment : comments) {
             commentDTOS.add(Comment.to(comment));
         }
         return commentDTOS;

@@ -137,7 +137,7 @@
             },
             sendMessage(msg) {
                 if (!login) {
-                    this.$alert('登录后其他人也能看到你发送的弹幕！')
+                    this.$alert('登录后其他人也能看到你发送的弹幕！',"信息","确定",()=>this.loginVisible = true)
                     return
                 }
                 // +++
@@ -236,13 +236,14 @@
         },
         mounted() {
             // 测试
-            if (location.protocol !== 'http') {
-                return
-            }
-            this.setupWebSocket()
+            // if (location.protocol !== 'http') {
+            //     return
+            // }
+            // this.setupWebSocket()
             axios.defaults.withCredentials = true
             axios.get(`../video/${movieId}/barrages`)
                 .then(res => {
+                    console.log('获取到的数据', res.data)
                     this.messageList = (console.log(res) || res.data)
                     this.setDanmaku()
                 })
