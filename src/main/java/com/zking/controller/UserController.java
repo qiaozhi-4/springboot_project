@@ -1,12 +1,18 @@
 package com.zking.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zking.dto.FilmDTO;
 import com.zking.entity.Comment;
 import com.zking.entity.Film;
+import com.zking.entity.Type;
 import com.zking.entity.User;
 import com.zking.repository.ICommentMapper;
 import com.zking.repository.IFilmMapper;
 import com.zking.repository.IUserMapper;
+import com.zking.service.IFilmService;
+import com.zking.service.ITypeService;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,7 +34,8 @@ public class UserController {
 
     private final IUserService userSevice;
     private final IUserMapper userMapper;
-    private final IFilmMapper filmMapper;
+    private final IFilmService filmService;
+    private final ITypeService typeService;
     private final ICommentMapper commentMapper;
     @Value("${upload.locationImg}")
     private String location;
@@ -54,13 +61,17 @@ public class UserController {
     // 模糊查询视频
     @ResponseBody
     @GetMapping ("findVideo")
-    public Map<String,Object> findVideos(@RequestParam String selectInput) {
-        List<Film> data = filmMapper.selectFilm(selectInput);
-        System.out.println(data);
-        Map<String,Object> res = new HashMap<>();
-        res.put("data",data);
-        return res;
+    public List<FilmDTO> findVideos(String selectName, String selectType) {
+        if (selectType.equals("type")) {
+            List<Type> types = typeService.list(new QueryWrapper<Type>().like("name", selectName));
+            if (types.size() > 0) {
+                return typeService.findAllFilmByTypeId(types);
+            }
+            return null;
+        }
+        return filmService.selectFilm(selectName, selectType);
     }
+
     //查评论
     @ResponseBody
     @GetMapping("findC")

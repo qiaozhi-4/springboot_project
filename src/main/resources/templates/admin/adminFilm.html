@@ -43,7 +43,7 @@
                         </el-row>
                         <template>
                             <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                                      height="500px"
+                                      height="503px"
                                       border
                                       stripe
                                       @row-click="dj"
@@ -68,14 +68,30 @@
                                 </el-table-column>
                                 <el-table-column prop="region" label="上映国家" width="120">
                                 </el-table-column>
-                                <el-table-column prop="types" label="类型" width="200">
+                                <el-table-column prop="types" label="类型" width="150">
                                 </el-table-column>
                                 <el-table-column
                                         align="left">
                                     <template slot="header" slot-scope="scope">
-                                        <el-input @keyup.enter="fuzzyQueryFilm"
+                                        <input @keyup.enter="fuzzyQueryFilm"
                                                   v-model="search"
-                                                  placeholder="输入关键字搜索"></el-input>
+                                                  placeholder="输入关键字搜索">
+                                        <el-select
+                                                v-model="selectType"
+                                                size="mini"
+                                                filterable
+                                                allow-create
+                                                default-first-option
+                                                multiple-limit="3"
+                                                placeholder="选择"
+                                                style="width: 80px;">
+                                            <el-option
+                                                    v-for="city in selectTypes"
+                                                    :key="city.field"
+                                                    :label="city.name"
+                                                    :value="city.field">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                     <template slot-scope="scope">
                                         <el-button type="text" @click="dialogFormVisible = true">修改
@@ -260,6 +276,7 @@
                 <template>
                     <el-select
                             v-model="form2.types"
+                            size="mini"
                             multiple
                             filterable
                             allow-create
@@ -351,6 +368,11 @@
             disabled: false,
             cities: [],
             actors: [],
+            selectTypes: [
+                {field:  'name', name: '名字'},
+                {field:  'region', name: '国家'},
+                {field:  'type', name: '类型'}],
+            selectType: '',
         },
         methods: {
             toggleSelection(rows) {
@@ -571,6 +593,21 @@
             },
             fuzzyQueryFilm() {
                 console.log(this.search)
+                params = new URLSearchParams()
+                params.append('selectName', this.search);
+                params.append('selectType', this.selectType);
+                axios.get('/findVideo', {params})
+                    .then(response => {
+                        if (response.data.length > 0) {
+                            this.tableData = response.data
+                        }else {
+                            this.$message('没有搜索到你想要的电影');
+                        }
+                    })
+                    .catch(data => {
+                        this.$message('没有搜索到你想要的电影');
+                        console.log(response);
+                    })
             }
         },
         mounted: function () {
