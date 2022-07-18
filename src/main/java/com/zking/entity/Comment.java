@@ -28,7 +28,7 @@ public class Comment {
     private String color; // 字体前景色
     private String bgColor; // 字体背景色
     private String type; // 弹幕类型，默认滚动
-    private Boolean force; // 是否强制展示该弹幕
+    private Boolean forced; // 是否强制展示该弹幕
 
     public static Comment from(CommentDTO dto)
     {
@@ -40,8 +40,8 @@ public class Comment {
         msg.setFilmTime(dto.getTime());
         msg.setColor(dto.getColor());
         msg.setBgColor(dto.getBgColor());
-        msg.setType(dto.getType().getType());
-        msg.setForce(dto.getForce());
+        msg.setType(dto.getType());
+        msg.setForced(dto.getForce());
         return msg;
     }
 
@@ -55,9 +55,9 @@ public class Comment {
         dto.setText(msg.getConten());
         dto.setColor(msg.getColor());
         dto.setTime(msg.getFilmTime());
-        dto.setType(CommentDTO.Type.valueOf(msg.getType().toUpperCase()));
+        dto.setType(msg.getType());
         dto.setIsMe(false);
-        dto.setForce(msg.getForce());
+        dto.setForce(msg.getForced());
         return dto;
     }
 

@@ -28,7 +28,7 @@ public class Configurations {
     private String threadNamePrefix = "async_thread";
 
     // WebSocket唯一配置
-    @Bean
+    //@Bean
     public ServerEndpointExporter exporter() {
         return new ServerEndpointExporter();
     }

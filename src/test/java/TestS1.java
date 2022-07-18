@@ -1,4 +1,5 @@
 import com.zking.App;
+import com.zking.entity.Comment;
 import com.zking.entity.Film;
 import com.zking.entity.User;
 import com.zking.service.IActorService;
@@ -110,5 +111,20 @@ public class TestS1 {
             }
 
         }
+    }
+
+    @Test
+    public void test8(){
+        Comment comment = new Comment();
+        comment.setUserId(1);
+        comment.setFilmId(5);
+        comment.setConten("555");
+        comment.setTime(new Date());
+        comment.setFilmTime(1.2);
+        comment.setColor("#fff");
+        comment.setBgColor("#fff");
+        comment.setType("top");
+        comment.setForced(true);
+        System.out.println(commentService.save(comment));
     }
 }
