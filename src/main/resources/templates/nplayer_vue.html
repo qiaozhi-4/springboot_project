@@ -137,7 +137,14 @@
             },
             sendMessage(msg) {
                 if (!login) {
-                    this.$alert('登录后其他人也能看到你发送的弹幕！',"信息","确定",()=>this.loginVisible = true)
+                    this.$confirm('登录后其他人也能看到你发送的弹幕！',"信息","确定")
+                        .then(_ => {
+                            console.log('===============123')
+                            this.loginVisible = true
+                        })
+                        .catch(_ => {
+                            console.log('取消了')
+                        })
                     return
                 }
                 // +++
