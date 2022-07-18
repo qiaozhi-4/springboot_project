@@ -14,6 +14,9 @@ public interface IFilmService extends IService<Film>{
 
     FilmDTO findAllTypeByFilmId(Film film);
 
+    //模糊查询根据电影名查电影
+    List<FilmDTO> selectFilm(String selectInput, String selectType);
+
     //查询前五热度电影
     List<Film> selectHeat();
 
