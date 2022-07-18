@@ -43,7 +43,7 @@
                         </el-row>
                         <template>
                             <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                                      height="495px"
+                                      height="500px"
                                       border
                                       stripe
                                       @row-click="dj"
@@ -73,10 +73,9 @@
                                 <el-table-column
                                         align="left">
                                     <template slot="header" slot-scope="scope">
-                                        <el-input
-                                                v-model="search"
-                                                size="mini"
-                                                placeholder="输入关键字搜索"/>
+                                        <el-input @keyup.enter="fuzzyQueryFilm"
+                                                  v-model="search"
+                                                  placeholder="输入关键字搜索"></el-input>
                                     </template>
                                     <template slot-scope="scope">
                                         <el-button type="text" @click="dialogFormVisible = true">修改
@@ -161,12 +160,12 @@
         <el-form :model="form2">
             <el-form-item label="电影封面" :label-width="formLabelWidth">
                 <el-upload
-                           action="#"
-                           list-type="picture-card"
-                           :file-list="imgList"
-                           :auto-upload="false"
-                           limit="1"
-                           :on-change="fn">
+                        action="#"
+                        list-type="picture-card"
+                        :file-list="imgList"
+                        :auto-upload="false"
+                        limit="1"
+                        :on-change="fn">
                     <i slot="default" class="el-icon-plus"></i>
                     <div slot="file" slot-scope="{file}">
                         <img
@@ -403,7 +402,7 @@
                         console.log(response);
                     })
             },
-            soldOutFilm(){
+            soldOutFilm() {
                 params = new URLSearchParams()
                 params.append('_csrf', csrf);
                 params.append('id', this.form.id);
@@ -534,25 +533,25 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             },
-            fn(file){
+            fn(file) {
                 this.imgList.push(file)
                 console.log(this.imgList)
             },
-            beforeRemove(){
+            beforeRemove() {
                 this.fileList = []
             },
-            fn2(file){
+            fn2(file) {
                 this.fileList.push(file)
                 console.log(this.fileList)
             },
-            cancel(){
+            cancel() {
                 this.form.name = this.beforeModificationForm.name
                 this.form.score = this.beforeModificationForm.score
                 this.form.director = this.beforeModificationForm.director
                 this.form.region = this.beforeModificationForm.region
                 this.dialogFormVisible = false
             },
-            cancel2(){
+            cancel2() {
                 this.form.name = this.beforeModificationForm.name
                 this.form.score = this.beforeModificationForm.score
                 this.form.director = this.beforeModificationForm.director
@@ -570,24 +569,27 @@
                 console.log(`当前页: ${val}`);
                 this.currentPage = val;    //动态改变
             },
+            fuzzyQueryFilm() {
+                console.log(this.search)
+            }
         },
         mounted: function () {
             axios.get('/findAllFilm', params)
                 .then(response => {
                     this.tableData = response.data;
-                    console.log("电影",response);
+                    console.log("电影", response);
                 })
                 .catch(data => console.log(response))
             axios.get('/findAllType', params)
                 .then(response => {
                     this.cities = response.data;
-                    console.log("类型",response);
+                    console.log("类型", response);
                 })
                 .catch(data => console.log(response))
             axios.get('/findAllActor', params)
                 .then(response => {
                     this.actors = response.data;
-                    console.log("演员",response);
+                    console.log("演员", response);
                 })
                 .catch(data => console.log(response))
         },
