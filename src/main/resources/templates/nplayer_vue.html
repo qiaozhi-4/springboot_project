@@ -74,7 +74,6 @@
     let userInfo = [[${authentication?.principal}]]
 
 
-
     var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
 
     Vue.use(NPlayerVue)
@@ -86,7 +85,7 @@
             loginForm: {
                 username: 'admin',
                 password: 'admin',
-                _csrf:csrf,
+                _csrf: csrf,
             },
             user: userInfo,
 
@@ -137,7 +136,7 @@
             },
             sendMessage(msg) {
                 if (!login) {
-                    this.$confirm('登录后其他人也能看到你发送的弹幕！',"信息","确定")
+                    this.$confirm('登录后其他人也能看到你发送的弹幕！', "信息", "确定")
                         .then(_ => {
                             console.log('===============123')
                             this.loginVisible = true
@@ -171,7 +170,19 @@
                     bgColor: '#ffffff', // 这个插件没法调整背景色
                 }
                 this.messageList.push(data)
-                axios.post(`../video/${movieId}/message`, data)
+                let pram = new FormData()
+                pram.append('text', msg.text.trim())
+                pram.append('color', msg.color)
+                pram.append('time', msg.time.toFixed(2))
+                pram.append('type', msg.type)
+                pram.append('isMe', msg.isMe)
+                pram.append('force', msg.force)
+                pram.append('userId', userId)
+                pram.append('movieId', movieId)
+                pram.append('sendTime', new Date().getTime())
+                pram.append('bgColor', '#ffffff')
+                pram.append('_csrf', csrf)
+                axios.post(`../video/${movieId}/message`, pram)
                     .then(resp => console.log('发送弹幕成功！', resp.data) || this.$message.success('发送后台成功！'))
                     .catch(err => console.log('获取视频的弹幕失败！', err) || this.$message.error('发送后台失败，忽略！'))
             },
@@ -198,7 +209,7 @@
             //发送登录请求
             loginNow: function () {
                 let data = new FormData()
-                data.append('username',  this.loginForm.username)
+                data.append('username', this.loginForm.username)
                 data.append('password', this.loginForm.password)
                 data.append('remember-me', 'true')
                 data.append('_csrf', this.loginForm._csrf) // 不能少
@@ -212,13 +223,15 @@
                     data: data,
                 })
                     .then(resp => {
-                        if (resp.data){
+                        if (resp.data) {
                             console.log('登录结果：', resp.data)
                             this.$message.success('登录成功！')
                             this.user = resp.data
+                            userId = this.user.id
+                            userInfo = this.user
                             login = true
                             this.loginVisible = false;
-                        }else {
+                        } else {
                             this.$message.warning('登录失败！账号或者密码错误！')
                         }
                     })
@@ -230,7 +243,7 @@
 
             },
             loginClick: function (i) {
-                this.loginVisible =true;
+                this.loginVisible = true;
             },
             send() {
                 this.$alert('请在视频下方发送弹幕！')

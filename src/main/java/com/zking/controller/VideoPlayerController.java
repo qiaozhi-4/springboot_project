@@ -117,7 +117,7 @@ public class VideoPlayerController
     //  另外，你也可以判断是否为VIP付费会员，不是的话就不能有文字颜色，非VIP将颜色设置为默认色
     @PostMapping("{id}/message")
     @ResponseBody
-    public Map<String, Object> send(@RequestBody CommentDTO message, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
+    public Map<String, Object> send(@RequestBody CommentDTO message,@RequestBody String _csrf, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
     {
         Integer userId = 0;
         //获取用户认证信息
