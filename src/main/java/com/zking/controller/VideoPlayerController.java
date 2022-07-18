@@ -117,9 +117,18 @@ public class VideoPlayerController
     //  另外，你也可以判断是否为VIP付费会员，不是的话就不能有文字颜色，非VIP将颜色设置为默认色
     @PostMapping("{id}/message")
     @ResponseBody
-    public Map<String, Object> send(@RequestBody CommentDTO message, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
+    public Map<String, Object> send(@RequestBody CommentDTO message,@RequestBody String _csrf, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
     {
-        Integer userId = (Integer) session.getAttribute("userId");
+        Integer userId = 0;
+        //获取用户认证信息
+        SecurityContext context = SecurityContextHolder.getContext(); // 上下文
+        Authentication authentication = context.getAuthentication(); // 认证信息
+        if (!"anonymousUser".equals(authentication.getPrincipal())){
+
+            User user = (User) authentication.getPrincipal(); // 唯一用户对象，一般是UserDetails
+            userId = user.getId();
+        }
+
         Map<String, Object> result = new HashMap<>();
         if (userId == null || userId == 0)
         {
@@ -151,8 +160,9 @@ public class VideoPlayerController
     public List<CommentDTO> messages(@PathVariable Integer id)
     {
         ArrayList<CommentDTO> commentDTOS = new ArrayList<>();
+        List<Comment> comments = commentService.findAllCommentByFilmId(id);
         // 获取当前视频所有评论
-        for (Comment comment : commentService.findAllCommentByFilmId(id)) {
+        for (Comment comment : comments) {
             commentDTOS.add(Comment.to(comment));
         }
         return commentDTOS;
