@@ -6,7 +6,6 @@ import com.zking.entity.User;
 import com.zking.repository.ICommentMapper;
 import com.zking.repository.IFilmMapper;
 import com.zking.repository.IUserMapper;
-import com.zking.service.IFilmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -18,10 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.zking.service.IUserService;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -31,18 +27,21 @@ import java.util.*;
 public class UserController {
 
     private final IUserService userSevice;
+    private final IUserMapper userMapper;
     private final IFilmMapper filmMapper;
     private final ICommentMapper commentMapper;
     @Value("${upload.locationImg}")
     private String location;
     private final PasswordEncoder encoder;
+//    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
     //测试页面
     @GetMapping("/test")
     public String updateUser(){
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        System.out.println(authentication.getPrincipal());
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        Authentication authentication = context.getAuthentication();
+//        System.out.println(authentication.getPrincipal());
         return "test";
     }
 
@@ -62,6 +61,7 @@ public class UserController {
         res.put("data",data);
         return res;
     }
+    //查评论
     @ResponseBody
     @GetMapping("findC")
     public Map<String,Object> find(HttpServletRequest request){
@@ -72,33 +72,47 @@ public class UserController {
         return p;
     }
 
-    @RequestMapping("/address")
+    @GetMapping("/update")
     public String updateUse(){
-        return "countryStateCity";
+        return "updateUser";
     }
     //修改用户信息
     @PostMapping("/updateUsers")
-    public String updateUser(HttpServletRequest request, MultipartFile file, String name, String address, String email , String password) throws IOException, ServletException {
-
+    public String updateUser(Model model, MultipartFile file, String name, String address, String email , String password)throws IOException {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         User principal =(User) authentication.getPrincipal();
-        if (!Objects.equals(file.getOriginalFilename(), "")) {
-            String imgname = UUID.randomUUID() + file.getOriginalFilename();
-            String path = "/" + imgname;
-            File dest = new File(location, path);
-            file.transferTo(dest);
-            principal.setHeadImg(path);
+        if (file == null) {
+            model.addAttribute("info","头像不为空");
+            return "updateUser";
         }
+        String imgname = UUID.randomUUID() + file.getOriginalFilename();
+        String path = "/" + imgname;
+        File dest = new File(location, path);
+        file.transferTo(dest);
         //密码加密
         String pass = encoder.encode(password);
         principal.setPassword(pass);
+        principal.setHeadImg(path);
         principal.setName(name);
         principal.setAddress(address);
         principal.setEmail(email);
         //修改
         userSevice.saveOrUpdate(principal);
-        request.logout(); // 强制登出
-        return "redirect:index";
+        model.addAttribute("info","修改成功");
+        return "redirect:update";
     }
+
+    //用户的封号
+    @GetMapping("deleteUser")
+    public String delete(){
+        //当前登录的用户
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        User principal =(User) authentication.getPrincipal();
+        principal.setVip(-1);
+        userMapper.updateById(principal);
+        return "redirect:test";
+    }
+
 }

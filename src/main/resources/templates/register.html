@@ -50,7 +50,7 @@
         </el-form-item>
 
         <el-form-item label="" >
-            <el-input type="submit" autocomplete="off">点击登录</el-input>
+            <el-input type="submit" autocomplete="off" @click="login(form)">点击登录</el-input>
         </el-form-item>
     </el-form>
 
@@ -60,14 +60,16 @@
 
 </div>
 </body>
-
+<script th:src="@{/js/jquery-3.6.0.js}" src="../static/jquery-3.6.0.js"></script>
 <script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
 <script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
 <script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
 <script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
+<script src="https://static.geetest.com/v4/gt4.js"></script>
 <script th:inline="javascript">
+
     // <!--    <div th:if="${param.error}">登录失败！</div>-->
     // <!--    <div th:if="${param.logou}">你已登出！</div>-->
     var error = [[${param.error}]]; // 字符串会自动添加""，数字直接显示
@@ -114,7 +116,29 @@
             }
         },
         mounted: function () {
-
+            initGeetest4({
+                captchaId: 'bb962a9d4859644b981346830e3f2172',
+                product: 'float'
+            }, function (gt) {
+                gt.appendTo("#captcha"); //将验证按钮插入到宿主页面中captchaBox元素内
+                gt.onReady(function () {
+                    //your code
+                }).onSuccess(function () {
+                    // 用户点击检测图返回的结果
+                    let result =
+                        gt.getValidate()
+                    $.get('/validate', result)
+                        .done(r => {
+                            console.log("验证成功")
+                            boo = true
+                        }) // 成功，继续下一步
+                        .fail(e => {
+                            console.log("验证失败")
+                        }) // 失败了！
+                }).onError(function () {
+                    //your code
+                })
+            })
         }
 
     })

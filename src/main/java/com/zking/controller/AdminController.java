@@ -11,6 +11,7 @@ import com.zking.service.IActorService;
 import com.zking.service.IFilmService;
 import com.zking.service.ITypeService;
 import com.zking.service.IUserService;
+import com.zking.util.Ffmpeg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ import java.util.*;
 @DenyAll
 @Controller
 @RequiredArgsConstructor
-public class adminController {
+public class AdminController {
     private final IUserService userService;
     private final IFilmService filmService;
     private final IActorService actorService;
@@ -96,7 +97,7 @@ public class adminController {
     public boolean updateUser(User user, MultipartFile file) throws IOException {
         if (file != null) {
             //把文件传入本地
-            String path = "/" + UUID.randomUUID() + file.getOriginalFilename();
+            String path = "/img/" + UUID.randomUUID() + file.getOriginalFilename();
             File dest = new File("D:\\springboot", path);
             file.transferTo(dest);
             user.setHeadImg(path);
@@ -117,8 +118,21 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/updateFilm")
     @ResponseBody
-    public boolean updateFilm(Film film) {
-        return filmService.updateById(film);
+    public String updateFilm(Film film, Integer[] types) {
+        if (types.length >0 && filmService.updateFilmType(film.getId(), types)) {
+            filmService.updateById(film);
+            StringBuilder type = new StringBuilder();
+            int count = 1;
+            for (int i: types) {
+                if (count++ < types.length) {
+                    type.append(typeService.getById(i).getName()).append(",");
+                }else {
+                    type.append(typeService.getById(i).getName());
+                }
+            }
+            return type.toString();
+        }
+        return null;
     }
 
     //电影下架
@@ -134,8 +148,39 @@ public class adminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/addFilm")
     @ResponseBody
-    public boolean addFilm(Film film,MultipartFile img,MultipartFile file,List<Integer> actors,List<Integer> types) {
-        return filmService.updateById(film);
+    public FilmDTO addFilm(Film film, MultipartFile img, MultipartFile file, Integer[] actors, Integer[] types) throws IOException {
+        if (file != null && img != null) {
+            //把封面传入本地
+            String imgPath = "/videolook/videolookimg/" + UUID.randomUUID() + img.getOriginalFilename();
+            File imgFile = new File("D:\\springboot", imgPath);
+            img.transferTo(imgFile);
+            film.setImgSrc(imgPath);//存入数据库的路径
+
+            //把电影传入本地
+            String filmName = UUID.randomUUID() + file.getOriginalFilename();
+            String filePath = "/videolook/" + filmName;
+            File filmFile = new File("D:\\springboot", filePath);
+            file.transferTo(filmFile);
+            film.setMp4Src(filePath);//存入数据库的路径
+
+            //剪切视频工具
+            String cope = Ffmpeg.cope(filmName);
+
+            //插入数据库
+            film.setCoverSrc(cope);
+        }
+        film.setTime(new Date());
+        filmService.addFilms(film, actors, types);
+        return filmService.findAllTypeByFilmId(film);
+    }
+
+    //电影更改类型
+    @RolesAllowed("admin") // 必须admin角色才能访问
+    @PostMapping("/updateFilmType")
+    @ResponseBody
+    public boolean updateFilmType(Integer filmId, Integer[] types) throws IOException {
+        filmService.updateFilmType(filmId,types);
+        return false;
     }
 
 

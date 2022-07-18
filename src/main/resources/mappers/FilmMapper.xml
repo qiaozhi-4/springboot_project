@@ -7,33 +7,88 @@
 
     <!--查询所有电影类型-->
     <select id="findAllType" resultType="Type">
-        SELECT * FROM type;
+        SELECT *
+        FROM type;
     </select>
     <!--根据类型查询电影-->
     <select id="findFilmsByTypeId" resultType="Film">
-        SELECT * FROM film WHERE id IN (SELECT film_id  FROM film_type WHERE type_id = #{id});
+        SELECT *
+        FROM film
+        WHERE id IN (SELECT film_id FROM film_type WHERE type_id = #{id});
     </select>
-
 
 
     <!--根据电影id查询电影的类型-->
     <select id="findAllTypeByFilmId" resultType="String">
-        SELECT name FROM type t INNER JOIN film_type ft ON t.id=ft.type_id
-        WHERE ft.film_id=#{fid};
+        SELECT name
+        FROM type t
+                 INNER JOIN film_type ft ON t.id = ft.type_id
+        WHERE ft.film_id = #{fid};
     </select>
     <!--根据电影id查询电影的演员-->
     <select id="findAllActorByFilmId" resultType="Actor">
-        SELECT * FROM actor a INNER JOIN film_actor fa ON a.id=fa.actor_id
-        WHERE fa.film_id=#{fid};
+        SELECT *
+        FROM actor a
+                 INNER JOIN film_actor fa ON a.id = fa.actor_id
+        WHERE fa.film_id = #{fid};
     </select>
-<!--    模糊查询根据电影名查电影-->
+    <!--    模糊查询根据电影名查电影-->
     <select id="selectFilm" resultType="Film">
-        SELECT * from Film where name like CONCAT('%',#{name},'%')
+        SELECT *
+        from Film
+        where name like CONCAT('%', #{name}, '%')
     </select>
 
 
-<!--    查询电影前五-->
+    <!--    查询电影前五-->
     <select id="selectHeat" resultType="Film">
-        SELECT * from Film ORDER BY heat DESC LIMIT 5
+        SELECT *
+        from Film
+        ORDER BY heat DESC
+        LIMIT 5
     </select>
+
+    <!--    将电影ID与类型ID插入数据库-->
+    <insert id="insert1" parameterType="com.zking.entity.FilmType">
+        insert into film_type (film_id, type_id)
+        values (#{film}, #{type})
+    </insert>
+
+    <!--    将电影ID与演员ID插入数据库-->
+    <insert id="insert2" parameterType="com.zking.entity.FilmActor">
+        insert into film_actor (film_id, actor)
+        values (#{film}, #{actor})
+    </insert>
+
+    <!--设置电影类型-->
+    <insert id="addFilmType" parameterType="int">
+        insert into film_type (film_id, type_id) values
+        <foreach collection="types"  item="typeId" separator=",">
+            (#{filmId}, #{typeId})
+        </foreach>
+    </insert>
+
+    <!--删除电影类型-->
+    <delete id="deleteFilmType" parameterType="int">
+        delete
+        from film_type
+        where film_id = #{id};
+    </delete>
+
+
+    <!--设置电影演员-->
+    <insert id="addFilmActor" parameterType="int">
+        insert into film_actor (film_id, actor) values
+        <foreach collection="actors"  item="actorId" separator=",">
+            (#{filmId}, #{actorId})
+        </foreach>
+    </insert>
+
+    <!--删除电影演员-->
+    <delete id="deleteFilmActor" parameterType="int">
+        delete
+        from film_actor
+        where film_id = #{id};
+    </delete>
+
 </mapper>

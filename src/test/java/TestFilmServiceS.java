@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
 public class TestFilmServiceS {
@@ -22,5 +24,13 @@ public class TestFilmServiceS {
     @Test
     public void test2(){
         System.out.println();
+    }
+
+    @Test
+    public void test3(){
+        Integer[] integers = {1,7,6,12,17};
+        filmService.updateFilmType(1,integers);
+
+        filmService.updateFilmActor(1,integers);
     }
 }

@@ -28,13 +28,13 @@
                 <el-col :span="22">
                     <div>
                         <el-carousel height="400px" direction="vertical">
-                            <el-carousel-item class="mohu" v-for="item in imgList" :key="item.name">
-                                <el-link href="img/ikun.png" :underline="false">
+                            <el-carousel-item class="mohu" v-for="film in frontList" :key="film.id">
+                                <el-link  :href="'/video/' + film.id"  :underline="false">
                                     <!--                                    <img class="mohuImg" width="100%" :src="item.src" alt="图片丢失了"-->
                                     <!--                                         :name="item.title" /></i>-->
 
                                     <video width="1000px" height="600px" controls autoplay
-                                           src="videolook/1176840-1-hd.mp4"></video>
+                                           :src="film.coverSrc"></video>
 
                                 </el-link>
                                 <!-- <img width="100%" :src="item.src" alt="图片丢失了" :name="item.title" /> -->
@@ -47,7 +47,7 @@
             <!-- 电影分类 -->
             <div v-for="(element,index) in typeAndFilm">
                 <el-row>
-                    <el-col :id="element.type.id" class="className" :push="1" :span="1">
+                    <el-col :id="element.type.id" class="className" :push="11" :span="3">
                         <h2>{{element.type.name}}</h2>
                     </el-col>
                 </el-row>

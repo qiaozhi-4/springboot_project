@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zking.dto.CommentDTO;
 import com.zking.entity.Comment;
 import com.zking.entity.Film;
+import com.zking.entity.User;
 import com.zking.service.ICommentService;
 import com.zking.service.IFilmService;
 import com.zking.service.impl.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +22,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import com.zking.entity.User;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -79,16 +82,25 @@ public class VideoPlayerController
     //  如果是登录后转发到视频页面，需要记录用户当前视频的播放时间
     @PostMapping("login")
     @ResponseBody
-    public Map<String, Object> login(String username,String password,Model model, HttpSession session)
+    public Map<String, Object> login(String username,String password,Model model, String _csrf , HttpSession session)
     {
         //后端发送登录请求
-        // 封装参数，千万不要替换为Map与HashMap，否则参数无法传递
-        MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<String, Object>();
+        // 请求头设置,x-www-form-urlencoded格式的数据
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        //提交参数设置
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("username", username);
         paramMap.add("password", password);
-        // 1、使用postForObject请求接口
-        String r = restTemplate.postForObject("http://localhost:8081/login", paramMap, String.class);
+        paramMap.add("_csrf", _csrf);
 
+        // 组装请求体
+        HttpEntity<MultiValueMap<String, String>> request =
+                new HttpEntity<>(paramMap, headers);
+        // 1、使用postForObject请求接口
+
+    String r = restTemplate.postForObject("http://localhost:8081/login", request, String.class);
 
         // 模拟登录
         int id = ATOMIC_INTEGER.getAndIncrement();
@@ -107,7 +119,16 @@ public class VideoPlayerController
     @ResponseBody
     public Map<String, Object> send(@RequestBody CommentDTO message, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
     {
-        Integer userId = (Integer) session.getAttribute("userId");
+        Integer userId = 0;
+        //获取用户认证信息
+        SecurityContext context = SecurityContextHolder.getContext(); // 上下文
+        Authentication authentication = context.getAuthentication(); // 认证信息
+        if (!"anonymousUser".equals(authentication.getPrincipal())){
+
+            User user = (User) authentication.getPrincipal(); // 唯一用户对象，一般是UserDetails
+            userId = user.getId();
+        }
+
         Map<String, Object> result = new HashMap<>();
         if (userId == null || userId == 0)
         {
@@ -139,8 +160,9 @@ public class VideoPlayerController
     public List<CommentDTO> messages(@PathVariable Integer id)
     {
         ArrayList<CommentDTO> commentDTOS = new ArrayList<>();
+        List<Comment> comments = commentService.findAllCommentByFilmId(id);
         // 获取当前视频所有评论
-        for (Comment comment : commentService.findAllCommentByFilmId(id)) {
+        for (Comment comment : comments) {
             commentDTOS.add(Comment.to(comment));
         }
         return commentDTOS;
