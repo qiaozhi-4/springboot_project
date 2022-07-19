@@ -50,6 +50,11 @@ public class UserController {
         return "test";
     }
 
+    @GetMapping("/userInfo")
+    public String userInfo(){
+        return "userInfo";
+    }
+
     //视频页面
     @GetMapping("/find")
     public String findVideo(){
