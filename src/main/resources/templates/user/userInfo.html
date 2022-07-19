@@ -81,6 +81,31 @@
                         <el-form-item label="邮箱">
                             <el-input v-model="sizeForm.email" placeholder="你还未绑定邮箱"></el-input>
                         </el-form-item>
+                        <el-form-item label="省份">
+                            <el-select @change="change0" v-model="address.value0" clearable placeholder="请选择省份">
+                                <el-option v-for="item in address.options0" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="城市">
+                            <el-select @change="change1" v-model="address.value1" clearable placeholder="请选择城市">
+                                <el-option v-for="item in address.options1" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="区县">
+                            <el-select @change="change2" v-model="address.value2" clearable placeholder="请选择区/县">
+                                <el-option v-for="item in address.options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="街道">
+                            <el-select v-model="address.value3" clearable placeholder="请选择区/县">
+                                <el-option v-for="item in address.options3" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="详细地址">
+                            <el-input style="width: 400px;" placeholder="详细地址" v-model="address.value4" clearable></el-input>
+                        </el-form-item>
+
+                        <el-button type="primary" @click="showAddress(1)">查看地址</el-button>
                         <el-form-item size="large">
                             <el-button type="primary" @click="onSubmit">修改</el-button>
                         </el-form-item>
@@ -104,7 +129,38 @@
 <script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
+<script th:src="@{/js/video-vue.js}" src="../../static/js/video-vue.js"></script>
+<script th:src="@{/js/video.min.js}" src="../../static/js/video.min.js"></script>
 <script th:inline="javascript">
+
+    // 配置Axios，设置baseURL会自动拼接
+    const axiosInstance = axios.create({
+        baseURL: 'http://localhost:8081/api/', // http://localhost:8081/api/address/parent/0
+        timeout: 3000,
+        headers: {'X-Custom-Header': 'your-project'}
+    })
+
+    // 从缓存或者网络中获取全国地址的数据
+    const getAddressFromCacheOrNetwork = pid => new Promise((resolve, reject) => {
+        globalThis.cache = globalThis.cache || {}
+        if (globalThis.cache[`${pid}`]) {
+            resolve(globalThis.cache[`${pid}`])
+            return
+        }
+        axiosInstance.get(`address/parent/${pid}`)
+            .then(resp => {
+                const data = resp.data
+                globalThis.cache[`${pid}`] = data
+                resolve(data)
+            })
+            .catch(err => reject(err))
+    })
+
+    // 第一种方式需要用到：
+    const mapDataToAddress = data => data.map(v => ({
+        label: v.name, // 用名字或者全名做标签都可以
+        value: v.id,   // 这里使用id作为值，所以拿到的最终地址需要手动转换
+    }))
 
     // var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
     let params;
@@ -121,6 +177,35 @@
                 birthday: '2022-07-07',
                 email: '',
             },
+            address: {
+                options0: [],
+                options1: [],
+                options2: [],
+                options3: [],
+                value0: '',
+                value1: '',
+                value2: '',
+                value3: '',
+                value4: '',
+            },
+        },
+        computed: {
+            addressText: function () {
+                let result = ''
+                if (this.address.value0) {
+                    result += this.address.options0.find(v => v.value === this.address.value0).label
+                    if (this.address.value1) {
+                        result += this.address.options1.find(v => v.value === this.address.value1).label
+                        if (this.address.value2) {
+                            result += this.address.options2.find(v => v.value === this.address.value2).label
+                            if (this.address.value3) {
+                                result += this.address.options3.find(v => v.value === this.address.value3).label
+                            }
+                        }
+                    }
+                }
+                return result + this.address.value4
+            },
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -129,24 +214,74 @@
             onSubmit() {
                 console.log('submit!');
             },
+            change0: function (value) {
+                console.log(`change: ${value} -> ${this.address.value0}`)
+                this.clear(0)
+                if (!value) {
+                    return
+                }
+                let selected = this.address.options0.find((v, i, o) => v.value === value)
+                getAddressFromCacheOrNetwork(selected.value)
+                    .then(data => this.address.options1 = mapDataToAddress(data))
+                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
+            },
+            change1: function (value) {
+                console.log(`change: ${value} -> ${this.address.value0}`)
+                this.clear(1)
+                if (!value) {
+                    return
+                }
+                let selected = this.address.options1.find((v, i, o) => v.value === value)
+                getAddressFromCacheOrNetwork(selected.value)
+                    .then(data => this.address.options2 = mapDataToAddress(data))
+                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
+            },
+            change2: function (value) {
+                console.log(`change: ${value} -> ${this.address.value0}`)
+                this.clear(2)
+                if (!value) {
+                    return
+                }
+                let selected = this.address.options2.find((v, i, o) => v.value === value)
+                getAddressFromCacheOrNetwork(selected.value)
+                    .then(data => this.address.options3 = mapDataToAddress(data))
+                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
+            },
+            clear: function (level) {
+                switch (level) {
+                    case 0:
+                        this.address.options1 = []
+                        this.address.value1 = ''
+                        this.address.options2 = []
+                        this.address.value2 = ''
+                        this.address.options3 = []
+                        this.address.value3 = ''
+                        break
+                    case 1:
+                        this.address.options2 = []
+                        this.address.value2 = ''
+                        this.address.options3 = []
+                        this.address.value3 = ''
+                        break
+                    case 2:
+                        this.address.options3 = []
+                        this.address.value3 = ''
+                        break
+                    case 3:
+                        break
+                }
+            },
+            showAddress: function (i) {
+                if (i === 1){
+                    this.$confirm(this.addressText, '确认信息').then().catch(e => {})
+                    console.log(this.addressText)
+                }
+            },
         },
         mounted: function () {
-            // params = new URLSearchParams();
-            // params.append('_csrf', csrf);
-            // this.myChart1 = echarts.init(document.getElementById('chart1'))
-            // axios.post('/userCount', params)
-            //     .then(response => {
-            //         option1.series[0].data = response.data;
-            //         this.myChart1.setOption(option1)
-            //         console.log(option1);
-            //     })
-            //     .catch(data => console.log(response))
-            // axios.post('/recentLoginUser', params)
-            //     .then(response => {
-            //         this.tableData = response.data;
-            //         console.log(response);
-            //     })
-            //     .catch(data => console.log(response))
+            getAddressFromCacheOrNetwork(0)
+                .then(data => this.address.options0 = mapDataToAddress(data))
+                .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
         },
     });
 

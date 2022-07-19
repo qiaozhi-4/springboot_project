@@ -130,6 +130,12 @@ public class SecurityConfig {
                             if (("/login").equals(request.getRequestURI())){
                                 HttpSession session = request.getSession();
                                 System.out.println(session.getAttribute("validate"));
+                                //判断第三方登录
+                                if(request.getParameter("manner") == null){
+                                    filterChain.doFilter(servletRequest, servletResponse);
+                                    return;
+                                }
+
                                 if(session.getAttribute("validate") == null ||session.getAttribute("validate").equals("false")){
                                     System.out.println("没有验证");
                                     response.sendRedirect("/loginUser?error");
