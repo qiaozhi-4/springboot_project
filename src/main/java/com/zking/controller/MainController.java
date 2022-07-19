@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpSession;
@@ -74,5 +75,50 @@ public class MainController {
     @GetMapping("/403")
     public String error() {
         return "/403";
+    }
+
+    /**
+     * 沙箱支付
+     *
+     * @param subject 游戏名称
+     * @param userBuy 订单表
+     * @param model
+     * @param uInfo   用户
+     * @return
+     */
+    @RequestMapping(path = "film/buyGame")
+    public String buyGame(String subject, UserBuy userBuy, Model model, @SessionAttribute("uInfo") User uInfo) {
+
+        String id = alipayUtil.orderId();
+        /*String form = alipayUtil.pay(id, price, subject, String.valueOf(gid));*/
+        // 操作 把订单信息放入redis缓存
+        userBuy.setUId(uInfo.getUserId());
+        userBuy.setBOrder(id);
+
+        userBuyService.cached(userBuy);
+
+        return "alipayTest";
+    }
+
+
+    // 购买游戏同步url返回路径
+    // 同步地址
+    @RequestMapping(path = "film/alipayReturn")
+    public String returnUrl(String out_trade_no, Model model, @SessionAttribute("uInfo") User uInfo) {
+
+
+        Integer userId = uInfo.getUserId();
+
+        // 支付成功 支付成功就去redis缓存获取订单并插入数据库
+        UserBuy userBuy = userBuyService.getUserBuy(userId);
+        System.out.println(userBuy);
+
+
+        return "alipayTest";
+
+
+        // 支付失败 清除redis缓存
+        // userBuyService.cachedInvalidation(userId);
+        //return "alipayTest";
     }
 }
