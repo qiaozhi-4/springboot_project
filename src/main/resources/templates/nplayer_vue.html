@@ -252,6 +252,7 @@
             },
             updateDanmakuMessages(message) {
                 const oldItems = this.danmaku.getItems()
+                console.log('获取到的数据', this.danmaku)
                 const sortedItems = oldItems.concat(message).sort((a, b) => a.time - b.time)
                 this.danmaku.resetItems(sortedItems)
             },
