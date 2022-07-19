@@ -20,9 +20,14 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
@@ -84,6 +89,7 @@ public class SecurityConfig {
                 //.failureUrl("/loginUser?error")
                 //.defaultSuccessUrl("/")
 
+
                 //替换登录成功的页面
                 .successHandler((request, response, authentication) -> {
                     // 和上面配置一致，处理成功后返回结果
@@ -113,7 +119,29 @@ public class SecurityConfig {
                         return;
                     }
                     response.sendRedirect("/loginUser?error");
-                });
+                })
+                .and()
+                .addFilterAt(new GenericFilter() {
+                    //判断极验是否登录处理拦截器
+                    @Override
+                    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+                            HttpServletRequest request = (HttpServletRequest) servletRequest;
+                            HttpServletResponse response = (HttpServletResponse) servletResponse;
+                            if (("/login").equals(request.getRequestURI())){
+                                HttpSession session = request.getSession();
+                                System.out.println(session.getAttribute("validate"));
+                                if(session.getAttribute("validate") == null ||session.getAttribute("validate").equals("false")){
+                                    System.out.println("没有验证");
+                                    response.sendRedirect("/loginUser?error");
+                                    return;
+                                }
+                                session.removeAttribute("validate");
+                                filterChain.doFilter(servletRequest, servletResponse);
+                                return;
+                            }
+                            filterChain.doFilter(servletRequest, servletResponse);
+                        }
+                }, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
