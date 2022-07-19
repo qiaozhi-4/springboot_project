@@ -153,7 +153,7 @@ public class MainController {
         userService.updateById(user);
 
 
-        redirect.addFlashAttribute("vipInfo", Result.fail("vip购买成功"));
+        redirect.addFlashAttribute("vipInfo", Result.success("vip购买成功"));
 
 
         return "redirect:/";
