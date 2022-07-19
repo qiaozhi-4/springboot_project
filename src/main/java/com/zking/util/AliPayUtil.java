@@ -33,7 +33,7 @@ public class AliPayUtil {
     private String notify_url;
     private String return_url;
 
-    public  String pay(String id,String price, String title, String gid)  {
+    public  String pay(String id,String price,String subject)  {
 
         AlipayClient alipayClient = new DefaultAlipayClient(url, appid, private_key, "json", "UTF-8", public_key, "RSA2");
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
@@ -42,11 +42,11 @@ public class AliPayUtil {
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", id);
         bizContent.put("total_amount", price);
-        bizContent.put("subject", title);
-        bizContent.put("body",gid);
+        bizContent.put("subject", subject);
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
 
         request.setBizContent(bizContent.toString());
+        System.out.println(bizContent.toString());
         AlipayTradePagePayResponse response = null;
         String form = null;
         try {

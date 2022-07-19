@@ -54,7 +54,7 @@
                     </el-menu>
                 </el-col>
             </el-row>
-            <el-row type="flex" justify="space-around">
+            <el-row  type="flex" justify="space-around">
                 <el-col :span="20">
                     <el-col :span="4" v-for="(o, index) in 5" :key="o" :offset="index > 0 ? 1 : 0">
                         <el-card :body-style="{ padding: '0px' }">
@@ -92,7 +92,7 @@
     new Vue({
         el: '#app',
         data: {
-            activeIndex: '2',
+            activeIndex: '3',
             tableData: [],
         },
         methods: {
