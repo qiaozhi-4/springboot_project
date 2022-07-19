@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,7 @@
 
 
 <div id="app">
-
-    <el-form action="/login" method="post" :model="loginForm" ref="loginForm" label-width="160px">
+    <el-form action="/login" method="post" :model="loginForm" ref="loginForm" :label-width="formLabelWidth" >
 
         <el-form-item label="用户名" label-width="60px">
             <el-input name="username" v-model="loginForm.username" autocomplete="off"></el-input>
@@ -35,9 +34,10 @@
         </el-form-item>
 
         <el-form-item label="" label-width="60px">
-            <el-input type="submit" autocomplete="off">点击登录</el-input>
+            <div id="captcha">
+                <el-input type="submit" autocomplete="off" @click="validate1()">点击登录</el-input>
+            </div>
         </el-form-item>
-
 
         <el-form-item>
             <el-row>
@@ -52,17 +52,22 @@
 
 </div>
 </body>
-
+<script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
+<script src="https://static.geetest.com/v4/gt4.js"></script>
 <script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
 <script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
 <script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
 <script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
+
+
 <script th:inline="javascript">
     // 退出登录以及登录失败的提示
     var error = [[${param.error}]]; // 字符串会自动添加""，数字直接显示
     var logout = [[${param.logout}]]; // 字符串会自动添加""，数字直接显示
+    let boo = false
+    let validate = false
 
     new Vue({
         el: '#app',
@@ -71,6 +76,16 @@
                 username: 'admin',
                 password: 'admin',
             },
+            formLabelWidth: '120px',
+        },
+        methods: {
+            // validate1:function (){
+            //     if(validate){
+            //         console.log(validate);
+            //         console.log("xxx-xxx");
+            //         return false;
+            //     }
+            // }
         },
         mounted: function () {
             if (error != null) {
@@ -79,6 +94,28 @@
             if (logout != null) {
                 this.$message.warning('你已登出');
             }
+            initGeetest4({
+                captchaId: 'bb962a9d4859644b981346830e3f2172',
+                product: 'float'
+            }, function (gt) {
+                gt.appendTo("#captcha"); //将验证按钮插入到宿主页面中captchaBox元素内
+                gt.onReady(function () {
+                    //your code
+                }).onSuccess(function () {
+                    // 用户点击检测图返回的结果
+                    let result = gt.getValidate()
+                    $.get('/validate', result)
+                        .done(r => {
+                            console.log("验证成功")
+                            boo = true
+                        }) // 成功，继续下一步
+                        .fail(e => {
+                            console.log("验证失败")
+                        }) // 失败了！
+                }).onError(function () {
+                    //your code
+                })
+            })
         }
     })
 </script>

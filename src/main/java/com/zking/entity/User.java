@@ -32,6 +32,7 @@ public class User  implements UserDetails {
     private String name;
     private Character sex;
     private Integer vip;
+    private String vipTime;
     private String birthday;
     private String address;
     private String email;
