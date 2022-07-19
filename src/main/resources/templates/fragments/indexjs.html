@@ -37,6 +37,7 @@
         const movieId = [[${movieId}]]
         let userId = [[${userId}]]
         const session = [[${login}]]
+        let vipInfo = [[${vipInfo}]]
 
 
         new Vue({
@@ -70,6 +71,11 @@
             },
 
             mounted: function () {
+                if (vipInfo.boo){
+                    this.$message.success(vipInfo.info)
+                }else {
+                    this.$message.error(vipInfo.info)
+                }
                 console.log('开始发送请求')
                 //获取电影分类及其数据
                 axios.get('/getTypeAndFilm')
