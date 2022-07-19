@@ -6,7 +6,7 @@
 <mapper namespace="com.zking.repository.ICommentMapper">
 <!--   根据电影id查询所有评论-->
     <select id="findAllCommentByFilmId" resultType="Comment">
-        SELECT * FROM comment c INNER JOIN film fi ON c.id= fi.id
-        WHERE fi.id=#{fid};
+        SELECT * FROM comment
+        WHERE film_id=#{fid};
     </select>
 </mapper>

@@ -38,7 +38,7 @@ public class CommentDTO
     private String text; // 弹幕文字
     private String color; // 弹幕颜色
     private Double time; // 弹幕出现时间
-    private Type type; // 弹幕类型，默认滚动
+    private String  type; // 弹幕类型，默认滚动
     private Boolean isMe; // 是否是当前用户发送的
     private Boolean force; // 是否强制展示该弹幕
 

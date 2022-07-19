@@ -117,7 +117,7 @@ public class VideoPlayerController
     //  另外，你也可以判断是否为VIP付费会员，不是的话就不能有文字颜色，非VIP将颜色设置为默认色
     @PostMapping("{id}/message")
     @ResponseBody
-    public Map<String, Object> send(@RequestBody CommentDTO message,@RequestBody String _csrf, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
+    public Map<String, Object> send( CommentDTO message, String _csrf, @PathVariable Integer id, HttpSession session) throws JsonProcessingException
     {
         Integer userId = 0;
         //获取用户认证信息
@@ -145,8 +145,9 @@ public class VideoPlayerController
         // 发送前也需要做一些校验：
         // 比如:时间是未来的事件,超过现在了,恶意调用API导致,电影ID不存在也可能...
         socketService.sendMessage(message);
+        Comment comment = Comment.from(message);
         // 保存到数据库
-        commentService.save(Comment.from(message));
+        commentService.save(comment);
         // ..................SQL
         result.put("success", true);
         result.put("op", "消息发送成功");
