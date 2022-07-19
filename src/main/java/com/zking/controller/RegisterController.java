@@ -2,16 +2,15 @@ package com.zking.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.commons.codec.digest.HmacAlgorithms;
-import org.apache.commons.codec.digest.HmacUtils;
-import org.json.JSONObject;
-import com.zking.entity.Result;
 import com.zking.entity.Film;
+import com.zking.entity.Result;
 import com.zking.entity.User;
 import com.zking.service.IFilmService;
 import com.zking.service.IUserService;
-import com.zking.service.impl.FilmService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.digest.HmacAlgorithms;
+import org.apache.commons.codec.digest.HmacUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -81,7 +80,7 @@ public class RegisterController {
         System.out.println("path => " + path);
 
 
-        User user = new User(0, username, pass, "/img" + path, name, sex, 0, null, null, null, parse, null, null);
+        User user = new User(0, username, pass, "/img" + path, name, sex, 0, null, null, null, parse, null,null, null);
         boolean save = userService.save(user);
         if (!save) {
             model.addAttribute("info", "注册失败请重试");

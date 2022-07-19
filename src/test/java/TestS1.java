@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -126,5 +127,22 @@ public class TestS1 {
         comment.setType("top");
         comment.setForced(true);
         System.out.println(commentService.save(comment));
+    }
+
+
+
+    @Test
+    public void test9(){
+        System.out.println(getAfterMonth(new Date(), 6));
+    }
+
+    public static String  getAfterMonth(Date inputDate,int number) {
+        Calendar c = Calendar.getInstance();//获得一个日历的实例
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = inputDate;
+        c.setTime(date);//设置日历时间
+        c.add(Calendar.MONTH,number);//在日历的月份上增加6个月
+        String strDate = sdf.format(c.getTime());//的到你想要得6个月后的日期
+        return strDate;
     }
 }
