@@ -26,14 +26,12 @@
 
 .admin-main-row1-col1{
     height: 300px;
-    border: solid 1px #1E1F22;
     text-align: left;
     padding: 10px 20px;
     margin-top: 30px;
 }
 
 .admin-main-row1-col2{
-    border: solid 1px #1E1F22;
     text-align: left;
     padding: 10px 20px;
     margin-top: 30px;
@@ -56,7 +54,6 @@ button {
 }
 
 .adminFilm-main-row1-col2{
-    border: solid 1px #1E1F22;
     text-align: left;
     padding: 10px 20px;
     margin-top: 30px;

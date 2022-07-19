@@ -59,18 +59,6 @@ public class UserController {
     }
 
     // 模糊查询视频
-    @ResponseBody
-    @GetMapping ("findVideo")
-    public List<FilmDTO> findVideos(String selectName, String selectType) {
-        if (selectType.equals("type")) {
-            List<Type> types = typeService.list(new QueryWrapper<Type>().like("name", selectName));
-            if (types.size() > 0) {
-                return typeService.findAllFilmByTypeId(types);
-            }
-            return null;
-        }
-        return filmService.selectFilm(selectName, selectType);
-    }
 
     //查评论
     @ResponseBody
