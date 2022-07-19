@@ -1,6 +1,8 @@
 package com.zking.controller;
 
+import com.zking.entity.Film;
 import com.zking.entity.GitOAuth2User;
+import com.zking.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -83,16 +85,16 @@ public class MainController {
      * @param subject 游戏名称
      * @param userBuy 订单表
      * @param model
-     * @param uInfo   用户
+     * @param user   用户
      * @return
      */
-    @RequestMapping(path = "film/buyGame")
-    public String buyGame(String subject, UserBuy userBuy, Model model, @SessionAttribute("uInfo") User uInfo) {
+    @RequestMapping(path = "vip/buyVip")
+    public String buyGame(String subject, Film userBuy, Model model, @SessionAttribute("user") User user) {
 
         String id = alipayUtil.orderId();
         /*String form = alipayUtil.pay(id, price, subject, String.valueOf(gid));*/
         // 操作 把订单信息放入redis缓存
-        userBuy.setUId(uInfo.getUserId());
+        userBuy.setUId(user.getUserId());
         userBuy.setBOrder(id);
 
         userBuyService.cached(userBuy);
@@ -103,7 +105,7 @@ public class MainController {
 
     // 购买游戏同步url返回路径
     // 同步地址
-    @RequestMapping(path = "film/alipayReturn")
+    @RequestMapping(path = "vip/alipayReturn")
     public String returnUrl(String out_trade_no, Model model, @SessionAttribute("uInfo") User uInfo) {
 
 
