@@ -19,6 +19,8 @@
 <div id="app">
     <el-form action="/login" method="post" :model="loginForm" ref="loginForm" :label-width="formLabelWidth" >
 
+        <input name="manner" value="0" type="hidden"/>
+
         <el-form-item label="用户名" label-width="60px">
             <el-input name="username" v-model="loginForm.username" autocomplete="off"></el-input>
         </el-form-item>
