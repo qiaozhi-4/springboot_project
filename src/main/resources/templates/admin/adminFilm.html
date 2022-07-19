@@ -22,80 +22,99 @@
     <el-container>
 
         <!-- 头部 -->
-        <div th:replace="~{fragments/header::header2}"></div>
+        <div th:replace="~{fragments/header::adminHeader}"></div>
 
         <!-- 主体部分 -->
         <el-main width="1500px" style="background-color: white">
             <el-row type="flex" justify="space-around">
                 <el-col :span="20">
-                    <div class="adminFilm-main-row1-col2">
-                        <el-row class="p-0" style="height: 10px">
-                            <el-col :span="12">
-                                <div style="margin-bottom: 20px">
-                                    <span>所有电影</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="12">
-                                <div style="float: right;">
-                                    <el-button type="primary" @click="dialogFormVisible3 = true">添加电影</el-button>
-                                </div>
-                            </el-col>
-                        </el-row>
-                        <template>
-                            <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                                      height="495px"
-                                      border
-                                      stripe
-                                      @row-click="dj"
-                                      @selection-change="handleSelectionChange"
-                            >
-                                <el-table-column prop="imgSrc" label="电影" width="120">
-                                    <template slot-scope="scope">
-                                        <div class="demo-type">
-                                            <div>
-                                                <el-image :src="scope.row.imgSrc"></el-image>
+                    <el-card class="box-card adminFilm-main-row1-col2">
+                        <div class="">
+                            <el-row class="p-0" style="height: 10px">
+                                <el-col :span="12">
+                                    <div style="margin-bottom: 20px">
+                                        <span>所有电影</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="12">
+                                    <div style="float: right;">
+                                        <el-button type="primary" @click="dialogFormVisible3 = true">添加电影</el-button>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <template>
+                                <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                                          height="503px"
+                                          border
+                                          stripe
+                                          @row-click="dj"
+                                          @selection-change="handleSelectionChange"
+                                >
+                                    <el-table-column label="电影" width="120">
+                                        <template slot-scope="scope">
+                                            <div class="demo-type">
+                                                <div>
+                                                    <el-link :href="'/video/' + scope.row.id"  :underline="false">
+                                                        <el-image :src="scope.row.imgSrc"></el-image>
+                                                    </el-link>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="name" label="电影名" width="120">
-                                </el-table-column>
-                                <el-table-column prop="score" label="评分" width="120">
-                                </el-table-column>
-                                <el-table-column prop="director" label="导演" width="120">
-                                </el-table-column>
-                                <el-table-column prop="time" label="上映时间" width="150">
-                                </el-table-column>
-                                <el-table-column prop="region" label="上映国家" width="120">
-                                </el-table-column>
-                                <el-table-column prop="types" label="类型" width="200">
-                                </el-table-column>
-                                <el-table-column
-                                        align="left">
-                                    <template slot="header" slot-scope="scope">
-                                        <el-input
-                                                v-model="search"
-                                                size="mini"
-                                                placeholder="输入关键字搜索"/>
-                                    </template>
-                                    <template slot-scope="scope">
-                                        <el-button type="text" @click="dialogFormVisible = true">修改
-                                        </el-button>
-                                        <el-button type="text" @click="dialogFormVisible2 = true">下架
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </template>
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="currentPage"
-                                :page-size="pageSize"
-                                layout="total, prev, pager, next, jumper"
-                                :total="tableData.length">
-                        </el-pagination>
-                    </div>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="name" label="电影名" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="score" label="评分" width="100">
+                                    </el-table-column>
+                                    <el-table-column prop="director" label="导演" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="time" label="上映时间" width="150">
+                                    </el-table-column>
+                                    <el-table-column prop="region" label="上映国家" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="types" label="类型" width="150">
+                                    </el-table-column>
+                                    <el-table-column
+                                            align="left">
+                                        <template slot="header" slot-scope="scope">
+                                            <input @keyup.enter="fuzzyQueryFilm"
+                                                   v-model="search"
+                                                   placeholder="输入关键字搜索">
+                                            <el-select
+                                                    v-model="selectType"
+                                                    size="mini"
+                                                    filterable
+                                                    allow-create
+                                                    default-first-option
+                                                    multiple-limit="3"
+                                                    placeholder="选择"
+                                                    style="width: 80px;">
+                                                <el-option
+                                                        v-for="city in selectTypes"
+                                                        :key="city.field"
+                                                        :label="city.name"
+                                                        :value="city.field">
+                                                </el-option>
+                                            </el-select>
+                                        </template>
+                                        <template slot-scope="scope">
+                                            <el-button type="text" @click="dialogFormVisible = true">修改
+                                            </el-button>
+                                            <el-button type="text" @click="dialogFormVisible2 = true">下架
+                                            </el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </template>
+                            <el-pagination
+                                    @size-change="handleSizeChange"
+                                    @current-change="handleCurrentChange"
+                                    :current-page="currentPage"
+                                    :page-size="pageSize"
+                                    layout="total, prev, pager, next, jumper"
+                                    :total="tableData.length">
+                            </el-pagination>
+                        </div>
+                    </el-card>
                 </el-col>
             </el-row>
         </el-main>
@@ -161,12 +180,12 @@
         <el-form :model="form2">
             <el-form-item label="电影封面" :label-width="formLabelWidth">
                 <el-upload
-                           action="#"
-                           list-type="picture-card"
-                           :file-list="imgList"
-                           :auto-upload="false"
-                           limit="1"
-                           :on-change="fn">
+                        action="#"
+                        list-type="picture-card"
+                        :file-list="imgList"
+                        :auto-upload="false"
+                        limit="1"
+                        :on-change="fn">
                     <i slot="default" class="el-icon-plus"></i>
                     <div slot="file" slot-scope="{file}">
                         <img
@@ -261,6 +280,7 @@
                 <template>
                     <el-select
                             v-model="form2.types"
+                            size="mini"
                             multiple
                             filterable
                             allow-create
@@ -352,6 +372,11 @@
             disabled: false,
             cities: [],
             actors: [],
+            selectTypes: [
+                {field: 'name', name: '名字'},
+                {field: 'region', name: '国家'},
+                {field: 'type', name: '类型'}],
+            selectType: '',
         },
         methods: {
             toggleSelection(rows) {
@@ -403,7 +428,7 @@
                         console.log(response);
                     })
             },
-            soldOutFilm(){
+            soldOutFilm() {
                 params = new URLSearchParams()
                 params.append('_csrf', csrf);
                 params.append('id', this.form.id);
@@ -534,25 +559,25 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             },
-            fn(file){
+            fn(file) {
                 this.imgList.push(file)
                 console.log(this.imgList)
             },
-            beforeRemove(){
+            beforeRemove() {
                 this.fileList = []
             },
-            fn2(file){
+            fn2(file) {
                 this.fileList.push(file)
                 console.log(this.fileList)
             },
-            cancel(){
+            cancel() {
                 this.form.name = this.beforeModificationForm.name
                 this.form.score = this.beforeModificationForm.score
                 this.form.director = this.beforeModificationForm.director
                 this.form.region = this.beforeModificationForm.region
                 this.dialogFormVisible = false
             },
-            cancel2(){
+            cancel2() {
                 this.form.name = this.beforeModificationForm.name
                 this.form.score = this.beforeModificationForm.score
                 this.form.director = this.beforeModificationForm.director
@@ -570,24 +595,43 @@
                 console.log(`当前页: ${val}`);
                 this.currentPage = val;    //动态改变
             },
+            // 模糊查询
+            fuzzyQueryFilm() {
+                console.log(this.search)
+                params = new URLSearchParams()
+                params.append('selectName', this.search);
+                params.append('selectType', this.selectType);
+                axios.get('/fuzzyQueryFilm', {params})
+                    .then(response => {
+                        if (response.data.length > 0) {
+                            this.tableData = response.data
+                        } else {
+                            this.$message('没有搜索到你想要的用户');
+                        }
+                    })
+                    .catch(data => {
+                        this.$message('没有搜索到你想要的用户');
+                        console.log(response);
+                    })
+            }
         },
         mounted: function () {
             axios.get('/findAllFilm', params)
                 .then(response => {
                     this.tableData = response.data;
-                    console.log("电影",response);
+                    console.log("电影", response);
                 })
                 .catch(data => console.log(response))
             axios.get('/findAllType', params)
                 .then(response => {
                     this.cities = response.data;
-                    console.log("类型",response);
+                    console.log("类型", response);
                 })
                 .catch(data => console.log(response))
             axios.get('/findAllActor', params)
                 .then(response => {
                     this.actors = response.data;
-                    console.log("演员",response);
+                    console.log("演员", response);
                 })
                 .catch(data => console.log(response))
         },

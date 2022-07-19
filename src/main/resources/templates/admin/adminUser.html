@@ -22,76 +22,84 @@
     <el-container>
 
         <!-- 头部 -->
-        <div th:replace="~{fragments/header::header2}"></div>
+        <div th:replace="~{fragments/header::adminHeader}"></div>
 
         <!-- 主体部分 -->
         <el-main width="1500px" style="background-color: white">
             <el-row type="flex" justify="space-around">
                 <el-col :span="20">
-                    <div class="adminFilm-main-row1-col2">
-                        <el-row type="flex" justify="space-around">
-                            <el-col :span="12">
-                                <div style="margin-bottom: 20px">
-                                    <a class="btn text-decoration-none" style="color: #409EFF;"
-                                       th:href="@{/adminIndex}"
-                                       href="adminUser.html"><span>返回</span></a>
-                                </div>
-                            </el-col>
-                            <el-col :span="12">
-                                <div>
-                                    <span>查看所有用户</span></a>
-                                </div>
-                            </el-col>
-                        </el-row>
-                        <template>
-                            <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-                                      height="335px"
-                                      border
-                                      stripe
-                                      @row-click="dj"
-                                      @selection-change="handleSelectionChange"
-                                      style="width: 100%"
-                            >
-                                <el-table-column prop="headImg" label="头像" width="120">
-                                    <template slot-scope="scope">
-                                        <div class="demo-type">
-                                            <div>
-                                                <el-avatar :src="scope.row.headImg"></el-avatar>
+                    <el-card class="box-card adminFilm-main-row1-col2">
+                        <div class="">
+                            <el-row type="flex" justify="space-around">
+                                <el-col :span="12">
+                                    <div style="margin-bottom: 20px">
+                                        <a class="btn text-decoration-none" style="color: #409EFF;"
+                                           th:href="@{/adminIndex}"
+                                           href="adminUser.html"><span>返回</span></a>
+                                    </div>
+                                </el-col>
+                                <el-col :span="12">
+                                    <div>
+                                        <span>查看所有用户</span></a>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <template>
+                                <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                                          height="335px"
+                                          border
+                                          stripe
+                                          @row-click="dj"
+                                          @selection-change="handleSelectionChange"
+                                          style="width: 100%"
+                                >
+                                    <el-table-column prop="headImg" label="头像" width="120">
+                                        <template slot-scope="scope">
+                                            <div class="demo-type">
+                                                <div>
+                                                    <el-avatar :src="scope.row.headImg"></el-avatar>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="username" label="账号" width="120">
-                                </el-table-column>
-                                <el-table-column prop="name" label="昵称" width="120">
-                                </el-table-column>
-                                <el-table-column prop="sex" label="性别" width="120">
-                                </el-table-column>
-                                <el-table-column prop="vip" label="类型" width="120">
-                                </el-table-column>
-                                <el-table-column prop="email" label="邮箱" width="120">
-                                </el-table-column>
-                                <el-table-column prop="time" label="注册时间" width="120">
-                                </el-table-column>
-                                <el-table-column prop="lastLoginTime" label="最近访问时间">
-                                </el-table-column>
-                                <el-table-column label="操作">
-                                    <el-button type="text" @click="dialogFormVisible = true">修改
-                                    </el-button>
-                                    <el-button type="text" @click="dialogFormVisible2 = true">封禁
-                                    </el-button>
-                                </el-table-column>
-                            </el-table>
-                        </template>
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="currentPage"
-                                :page-size="pageSize"
-                                layout="total, prev, pager, next, jumper"
-                                :total="tableData.length">
-                        </el-pagination>
-                    </div>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="username" label="账号" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="name" label="昵称" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="sex" label="性别" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="vip" label="类型" width="80">
+                                    </el-table-column>
+                                    <el-table-column prop="email" label="邮箱" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="time" label="注册时间" width="120">
+                                    </el-table-column>
+                                    <el-table-column prop="lastLoginTime" label="最近访问时间">
+                                    </el-table-column>
+                                    <el-table-column align="left">
+                                        <template slot="header" slot-scope="scope">
+                                            <input @keyup.enter="fuzzyQueryUser"
+                                                   v-model="search"
+                                                   size="mini"
+                                                   placeholder="输入关键字搜索">
+                                        </template>
+                                        <el-button type="text" @click="dialogFormVisible = true">修改
+                                        </el-button>
+                                        <el-button type="text" @click="dialogFormVisible2 = true">封禁
+                                        </el-button>
+                                    </el-table-column>
+                                </el-table>
+                            </template>
+                            <el-pagination
+                                    @size-change="handleSizeChange"
+                                    @current-change="handleCurrentChange"
+                                    :current-page="currentPage"
+                                    :page-size="pageSize"
+                                    layout="total, prev, pager, next, jumper"
+                                    :total="tableData.length">
+                            </el-pagination>
+                        </div>
+                    </el-card>
                 </el-col>
             </el-row>
         </el-main>
@@ -206,6 +214,7 @@
             disabled: false,
             cities: [],
             actors: [],
+            search: '',
         },
         methods: {
             toggleSelection(rows) {
@@ -364,6 +373,24 @@
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
                 this.currentPage = val;    //动态改变
+            },
+            // 模糊查询
+            fuzzyQueryUser() {
+                console.log(this.search)
+                params = new URLSearchParams()
+                params.append('selectName', this.search);
+                axios.get('/fuzzyQueryUser', {params})
+                    .then(response => {
+                        if (response.data.length > 0) {
+                            this.tableData = response.data
+                        } else {
+                            this.$message('没有搜索到你想要的电影');
+                        }
+                    })
+                    .catch(data => {
+                        this.$message('没有搜索到你想要的电影');
+                        console.log(response);
+                    })
             }
         },
         mounted: function () {

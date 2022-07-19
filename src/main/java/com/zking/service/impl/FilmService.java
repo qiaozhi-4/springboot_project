@@ -1,5 +1,6 @@
 package com.zking.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zking.dto.FilmDTO;
 import com.zking.entity.Actor;
@@ -60,6 +61,26 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         //查询电影所有类型
         getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
         return FilmDTO.getFilmDTO(film,stringBuilder.toString());
+    }
+
+    //模糊查询根据电影名查电影
+    @Override
+    public List<FilmDTO> selectFilm(String selectInput, String selectType) {
+        List<FilmDTO> filmDTOS = new ArrayList<>();
+        //模糊查询电影
+        List<Film> films;
+        if (selectType.equals("")) {
+            films = list(new QueryWrapper<Film>().like("name", selectInput).or().like("region", selectInput));
+        }else {
+            films = list(new QueryWrapper<Film>().like(selectType,selectInput));
+        }
+        for (Film film : films) {
+            StringBuilder stringBuilder = new StringBuilder();
+            //查询电影所有类型
+            getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
+            filmDTOS.add( FilmDTO.getFilmDTO(film,stringBuilder.toString()));
+        }
+        return filmDTOS;
     }
 
     @Override

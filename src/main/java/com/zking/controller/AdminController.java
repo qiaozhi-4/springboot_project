@@ -114,6 +114,27 @@ public class AdminController {
         return userService.updateById(user);
     }
 
+    // 模糊查询用户
+    @ResponseBody
+    @GetMapping ("fuzzyQueryUser")
+    public List<User> fuzzyQueryUser(String selectName) {
+        return userService.list(new QueryWrapper<User>().like("name", selectName));
+    }
+
+    // 模糊查询视频
+    @ResponseBody
+    @GetMapping ("fuzzyQueryFilm")
+    public List<FilmDTO> fuzzyQueryFilm(String selectName, String selectType) {
+        if (selectType.equals("type")) {
+            List<Type> types = typeService.list(new QueryWrapper<Type>().like("name", selectName));
+            if (types.size() > 0) {
+                return typeService.findAllFilmByTypeId(types);
+            }
+            return null;
+        }
+        return filmService.selectFilm(selectName, selectType);
+    }
+
     //电影修改
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/updateFilm")

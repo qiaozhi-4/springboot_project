@@ -25,7 +25,7 @@ public interface IFilmMapper extends BaseMapper<Film> {
     List<Actor> findAllActorByFilmId(@Param("fid") int id);
 
     //模糊查询根据电影名查电影
-    List<Film> selectFilm(String selectInput);
+    List<Film> selectFilm(@Param("name") String selectInput);
 
     //查询电影前五的热度
     List<Film> selectHeat();

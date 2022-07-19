@@ -168,29 +168,31 @@
                     movieId: movieId,
                     sendTime: new Date().getTime(),
                     bgColor: '#ffffff', // 这个插件没法调整背景色
+                    _csrf:csrf,
                 }
                 this.messageList.push(data)
-                let pram = new FormData()
-                pram.append('text', msg.text.trim())
-                pram.append('color', msg.color)
-                pram.append('time', msg.time.toFixed(2))
-                pram.append('type', msg.type)
-                pram.append('isMe', msg.isMe)
-                pram.append('force', msg.force)
-                pram.append('userId', userId)
-                pram.append('movieId', movieId)
-                pram.append('sendTime', new Date().getTime())
-                pram.append('bgColor', '#ffffff')
-                pram.append('_csrf', csrf)
-                axios.post(`../video/${movieId}/message`, pram)
+                const params = new FormData();
+                params.append('text', msg.text.trim())
+                params.append('color', msg.color)
+                params.append('time', msg.time.toFixed(2))
+                params.append('type', msg.type)
+                params.append('isMe', msg.isMe)
+                params.append('force', msg.force)
+                params.append('userId', userId)
+                params.append('movieId', movieId)
+                params.append('sendTime', new Date().getTime())
+                params.append('bgColor', '#ffffff')
+                params.append('_csrf', csrf)
+
+                axios.post(`/video/${movieId}/message`, params)
                     .then(resp => console.log('发送弹幕成功！', resp.data) || this.$message.success('发送后台成功！'))
-                    .catch(err => console.log('获取视频的弹幕失败！', err) || this.$message.error('发送后台失败，忽略！'))
+                    .catch(err => console.log('发送弹幕失败！', err) || this.$message.error('发送后台失败，忽略！'))
             },
             setupWebSocket() {
                 if (this.socket) {
                     this.socket.close()
                 }
-                this.socket = new WebSocket(`http://localhost:8081//ws/${movieId}/${userId}`)
+                this.socket = new WebSocket(`/ws/${movieId}/${userId}`)
                 this.socket.onerror = err => console.log('WebSocket Error', err)
                 this.socket.onopen = () => console.log('WebSocket Connected!')
                 this.socket.onmessage = event => {
@@ -250,6 +252,7 @@
             },
             updateDanmakuMessages(message) {
                 const oldItems = this.danmaku.getItems()
+                console.log('获取到的数据', this.danmaku)
                 const sortedItems = oldItems.concat(message).sort((a, b) => a.time - b.time)
                 this.danmaku.resetItems(sortedItems)
             },
