@@ -55,16 +55,36 @@
                 </el-col>
             </el-row>
             <el-row type="flex" justify="space-around">
-                <el-col :span="20">
-                    <el-col :span="4" v-for="(o, index) in 5" :key="o" :offset="index > 0 ? 1 : 0">
-                        <el-card :body-style="{ padding: '0px' }">
-                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                                 class="image">
-                            <div style="padding: 20px;">
-                                <span>好吃的汉堡</span>
+                <el-col :span="8">
+                    <el-form ref="form" :model="sizeForm" label-width="80px" size="mini">
+                        <el-form-item label="账号">
+                            <el-input v-model="sizeForm.username" disabled>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="昵称">
+                            <el-input v-model="sizeForm.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="性别">
+                            <div style="text-align: left;">
+                                <template>
+                                    <el-radio v-model="sizeForm.sex" label="男">男</el-radio>
+                                    <el-radio v-model="sizeForm.sex" label="女">女</el-radio>
+                                </template>
                             </div>
-                        </el-card>
-                    </el-col>
+                        </el-form-item>
+                        <el-form-item label="生日">
+                            <el-col :span="11">
+                                <el-date-picker type="date" placeholder="选择日期" v-model="sizeForm.birthday"
+                                                style="width: 100%;"></el-date-picker>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item label="邮箱">
+                            <el-input v-model="sizeForm.email" placeholder="你还未绑定邮箱"></el-input>
+                        </el-form-item>
+                        <el-form-item size="large">
+                            <el-button type="primary" @click="onSubmit">修改</el-button>
+                        </el-form-item>
+                    </el-form>
                 </el-col>
             </el-row>
         </el-main>
@@ -92,14 +112,23 @@
     new Vue({
         el: '#app',
         data: {
-            activeIndex: '2',
+            activeIndex: '1',
             tableData: [],
+            sizeForm: {
+                username: 'admin',
+                name: '小雪人',
+                sex: '男',
+                birthday: '2022-07-07',
+                email: '',
+            },
         },
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
-
+            onSubmit() {
+                console.log('submit!');
+            },
         },
         mounted: function () {
             // params = new URLSearchParams();
