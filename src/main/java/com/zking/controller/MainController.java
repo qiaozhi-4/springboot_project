@@ -106,7 +106,6 @@ public class MainController {
     public String buyGame(RedirectAttributes redirect,@PathVariable Integer month, @PathVariable Integer price, Model model, @ModelAttribute("user") User user) throws ParseException {
 
         if (user == null){
-            model.addAttribute("vipInfo", Result.fail("你还未登录"));
             redirect.addFlashAttribute("vipInfo", Result.fail("你还未登录"));
             return "redirect:/";
         }
@@ -137,7 +136,6 @@ public class MainController {
         //设置进redis
         Integer month = (Integer) ops.get();
         if (month==null || month ==0){
-            model.addAttribute("vipInfo",Result.fail("vip购买失败"));
 
             redirect.addFlashAttribute("vipInfo", Result.fail("vip购买失败"));
             return "redirect:/";
@@ -155,7 +153,6 @@ public class MainController {
         userService.updateById(user);
 
 
-        model.addAttribute("vipInfo",Result.success("vip购买成功"));
         redirect.addFlashAttribute("vipInfo", Result.fail("vip购买成功"));
 
 
