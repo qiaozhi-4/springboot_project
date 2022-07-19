@@ -53,6 +53,7 @@ public class MainController {
                        @RegisteredOAuth2AuthorizedClient("gitee") OAuth2AuthorizedClient client,
                        @AuthenticationPrincipal OAuth2User user) {
         System.out.println("我来了");
+        System.out.println(user);
 // 第三方的配置信息
         ClientRegistration reg = client.getClientRegistration();
         model.addAttribute("client", reg.getClientName());
