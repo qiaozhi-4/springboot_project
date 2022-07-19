@@ -45,7 +45,6 @@
             data: {
 
 
-
                 changed: false,
                 //头部模糊搜索框内容
                 inputHead: '',
@@ -57,7 +56,7 @@
                 vipVisible: false,
 
                 //电影分类以及当前分类的电影
-                typeAndFilm:[],
+                typeAndFilm: [],
             },
             methods: {
                 //vip购买弹框
@@ -67,14 +66,16 @@
                 },
 
 
-
             },
 
             mounted: function () {
-                if (vipInfo.boo){
-                    this.$message.success(vipInfo.info)
-                }else {
-                    this.$message.error(vipInfo.info)
+                if (vipInfo != null) {
+
+                    if (vipInfo.boo) {
+                        this.$message.success(vipInfo.info)
+                    } else {
+                        this.$message.error(vipInfo.info)
+                    }
                 }
                 console.log('开始发送请求')
                 //获取电影分类及其数据
@@ -83,15 +84,14 @@
                         console.log('请求发送成功', resp.data)
                         this.typeAndFilm = resp.data
                     })
-                    .catch(err => this.$message.error('请求发送失败') )
+                    .catch(err => this.$message.error('请求发送失败'))
                 //获取前5
                 axios.get('/selectHeat')
                     .then(resp => {
                         console.log('请求发送成功', resp.data)
                         this.frontList = resp.data
                     })
-                    .catch(err => this.$message.error('请求发送失败') )
-
+                    .catch(err => this.$message.error('请求发送失败'))
 
 
             }
