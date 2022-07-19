@@ -1,0 +1,11 @@
+#admin-el-header{
+    position: relative;
+    left: 0;
+}
+
+.admin-main-row1-col1{
+    height: 300px;
+    text-align: left;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
