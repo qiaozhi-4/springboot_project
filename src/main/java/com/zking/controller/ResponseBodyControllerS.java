@@ -41,7 +41,7 @@ public class ResponseBodyControllerS {
         return false;
     }
 
-    //用户修改头像
+    //用户信息修改
     @PostMapping("/userUpdateInfo")
     public Boolean userUpdateInfo(User user){
             return userService.updateById(user);
