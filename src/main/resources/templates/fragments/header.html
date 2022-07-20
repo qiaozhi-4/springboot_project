@@ -28,7 +28,7 @@
             <el-dropdown-menu slot="dropdown">
 
 
-                <el-link th:href="'/userIndex?userId=' + ${#authentication.principal.id}">
+                <el-link :href="'/userIndex?userId=' + user.id">
                     <el-dropdown-item>
                         我的主页
                     </el-dropdown-item>
@@ -83,7 +83,7 @@
             </el-col>
             <el-col :span="5" :offset="1">
                 <el-input class="sousuo qita" placeholder="熊出没" v-model="inputHead">
-                    <el-button class="shouye" slot="append" icon="el-icon-search">搜索</el-button>
+                    <el-button class="shouye" slot="append" icon="el-icon-search"><el-link :underline="false" :href="'fuzzyQuery?str=' + inputHead">搜索</el-link></el-button>
                 </el-input>
             </el-col>
             <el-col :span="1">

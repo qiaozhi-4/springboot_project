@@ -41,6 +41,12 @@ public class ResponseBodyControllerS {
         return false;
     }
 
+    //用户修改头像
+    @PostMapping("/userUpdateInfo")
+    public Boolean userUpdateInfo(User user){
+            return userService.updateById(user);
+    }
+
     //获取电影和类型
     @GetMapping("/getTypeAndFilm")
     public List<Object> index() {
