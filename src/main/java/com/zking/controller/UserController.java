@@ -1,27 +1,25 @@
 package com.zking.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.zking.dto.FilmDTO;
 import com.zking.entity.Comment;
-import com.zking.entity.Film;
-import com.zking.entity.Type;
 import com.zking.entity.User;
 import com.zking.repository.ICommentMapper;
-import com.zking.repository.IFilmMapper;
 import com.zking.repository.IUserMapper;
 import com.zking.service.IFilmService;
 import com.zking.service.ITypeService;
+import com.zking.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import com.zking.service.IUserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
@@ -50,8 +48,11 @@ public class UserController {
         return "test";
     }
 
+    @PreAuthorize("hasRole('user')")
     @GetMapping("/userIndex")
-    public String userInfo(){
+    public String userInfo(Integer userId, Model model){
+        User user = userSevice.getById(userId);
+        model.addAttribute("adminGetUser",user);
         return "user/userIndex";
     }
 
