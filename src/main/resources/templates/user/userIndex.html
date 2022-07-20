@@ -9,7 +9,7 @@
     <link th:href="@{/css/bootstrap.css}" href="../../static/css/bootstrap.css" rel="stylesheet"/>
     <!-- 布局容器 -->
     <link th:href="@{/css/container.css}" href="../../static/css/container.css" rel="stylesheet"/>
-    <link th:href="@{/css/admin.css}" href="../../static/css/user.css" rel="stylesheet"/>
+    <link th:href="@{/css/user.css}" href="../../static/css/user.css" rel="stylesheet"/>
     <!-- 布局 -->
     <link th:href="@{/css/layout.css}" href="../../static/css/layout.css" rel="stylesheet"/>
     <!-- 下拉菜单按钮样式 -->
@@ -38,35 +38,75 @@
 
         <!-- 主体部分 -->
         <el-main width="1500px" style="background-color: white">
+
             <el-row type="flex" justify="space-around">
                 <el-col :span="5" class="main-navigation-bar">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
                              @select="handleSelect">
-                        <el-menu-item index="1">
-                            <el-link :href="'userInfo.html'" :underline="false">用户信息</el-link>
-                        </el-menu-item>
-                        <el-menu-item index="2">
-                            <el-link :href="'userIndex.html'" :underline="false">历史记录</el-link>
-                        </el-menu-item>
-                        <el-menu-item index="3">
-                            <el-link :href="'userCollect.html'" :underline="false">我的收藏</el-link>
-                        </el-menu-item>
+                        <el-menu-item index="1" @click="navigation(1)">用户信息</el-menu-item>
+                        <el-menu-item index="2" @click="navigation(2)">历史记录</el-menu-item>
+                        <el-menu-item index="3" @click="navigation(3)">我的收藏</el-menu-item>
                     </el-menu>
                 </el-col>
             </el-row>
-            <el-row type="flex" justify="space-around">
-                <el-col :span="20">
-                    <el-col :span="4" v-for="(o, index) in 5" :key="o" :offset="index > 0 ? 1 : 0">
-                        <el-card :body-style="{ padding: '0px' }">
-                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                                 class="image">
-                            <div style="padding: 20px;">
-                                <span>好吃的汉堡</span>
-                            </div>
-                        </el-card>
+
+            <div v-if="activeIndex == '1'">
+                <el-row type="flex" justify="space-around">
+                    <el-col :span="8">
+                        <el-form ref="form" :model="sizeForm" label-width="80px" size="mini">
+                            <el-form-item label="账号">
+                                <el-input v-model="sizeForm.username" disabled>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="昵称">
+                                <el-input v-model="sizeForm.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="性别">
+                                <div style="text-align: left;">
+                                    <template>
+                                        <el-radio v-model="sizeForm.sex" label="男">男</el-radio>
+                                        <el-radio v-model="sizeForm.sex" label="女">女</el-radio>
+                                    </template>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="生日">
+                                <el-col :span="11">
+                                    <el-date-picker type="date" placeholder="选择日期" v-model="sizeForm.birthday"
+                                                    style="width: 100%;"></el-date-picker>
+                                </el-col>
+                            </el-form-item>
+                            <el-form-item label="邮箱">
+                                <el-input v-model="sizeForm.email" placeholder="你还未绑定邮箱"></el-input>
+                            </el-form-item>
+                            <el-form-item label="选择区域">
+                                <div style="text-align: left;">
+                                    <el-cascader :props="props" :options="options" clearable
+                                                 v-model="addresses"></el-cascader>
+                                </div>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit">修改</el-button>
+                            </el-form-item>
+                        </el-form>
                     </el-col>
-                </el-col>
-            </el-row>
+                </el-row>
+            </div>
+
+            <div v-else>
+                <el-row type="flex" justify="space-around">
+                    <el-col :span="20">
+                        <el-col :span="4" v-for="(film, index) in 10" :key="film" :offset="index % 5 != 0 ? 1 : 0">
+                            <el-card :body-style="{ padding: '0px' }">
+                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                     class="image">
+                                <div style="padding: 20px;">
+                                    <span>好吃的汉堡</span>
+                                </div>
+                            </el-card>
+                        </el-col>
+                    </el-col>
+                </el-row>
+            </div>
         </el-main>
 
         <!-- 底部部分 -->
@@ -84,7 +124,32 @@
 <script th:src="@{/js/axios-0.26.js}" src="../../static/js/axios-0.26.js"></script>
 <script th:src="@{/js/element-ui-2.15.7.js}" src="../../static/js/element-ui-2.15.7.js"></script>
 <script th:src="@{/js/echarts.min.js}" src="../../static/js/echarts.min.js"></script>
+<script th:src="@{/js/video-vue.js}" src="../../static/js/video-vue.js"></script>
+<script th:src="@{/js/video.min.js}" src="../../static/js/video.min.js"></script>
 <script th:inline="javascript">
+
+    // 配置Axios，设置baseURL会自动拼接
+    const axiosInstance = axios.create({
+        baseURL: 'http://localhost:8081/api/', // http://localhost:8081/api/address/parent/0
+        timeout: 3000,
+        headers: {'X-Custom-Header': 'your-project'}
+    })
+
+    // 从缓存或者网络中获取全国地址的数据
+    const getAddressFromCacheOrNetwork = pid => new Promise((resolve, reject) => {
+        globalThis.cache = globalThis.cache || {}
+        if (globalThis.cache[`${pid}`]) {
+            resolve(globalThis.cache[`${pid}`])
+            return
+        }
+        axiosInstance.get(`address/parent/${pid}`)
+            .then(resp => {
+                const data = resp.data
+                globalThis.cache[`${pid}`] = data
+                resolve(data)
+            })
+            .catch(err => reject(err))
+    })
 
     // var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
     let params;
@@ -92,32 +157,61 @@
     new Vue({
         el: '#app',
         data: {
-            activeIndex: '2',
+            activeIndex: '1',
             tableData: [],
+            sizeForm: {
+                username: 'admin',
+                name: '小雪人',
+                sex: '男',
+                birthday: '2022-07-07',
+                email: '',
+            },
+            text: '', // 最后的地址
+            addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址
+            options: [], // 选项，不需要配置
+            props: {
+                lazy: true,
+                lazyLoad: function (node, resolve) {
+                    console.log(node)
+                    getAddressFromCacheOrNetwork(node.level === 0 ? 0 : node.data.id)
+                        .then(data => resolve(data.map(v => ({
+                            label: v.name, // 用名字或者全名做标签都可以
+                            value: v.name, // 选中后返回值就用名字
+                            id: v.id,      // 记录id，根据id查询子区域
+                            leaf: node.level > 2, // 最后一级为3即叶子节点
+                        }))))
+                        .catch(err => resolve([]))
+                },
+            },
+        },
+        computed: {
+            addressText: function () {
+                return this.address.join('') + this.text
+            },
         },
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
-
+            onSubmit() {
+                console.log('submit!');
+            },
+            // 选择的地址
+            showAddress: function (i) {
+                this.$confirm(this.addresses.join('') + this.text, '确认信息').then().catch(e => {
+                })
+            },
+            navigation(i) {
+                if (i === 1) {
+                    this.activeIndex = '1'
+                } else if (i === 2) {
+                    this.activeIndex = '2'
+                } else {
+                    this.activeIndex = '3'
+                }
+            }
         },
         mounted: function () {
-            // params = new URLSearchParams();
-            // params.append('_csrf', csrf);
-            // this.myChart1 = echarts.init(document.getElementById('chart1'))
-            // axios.post('/userCount', params)
-            //     .then(response => {
-            //         option1.series[0].data = response.data;
-            //         this.myChart1.setOption(option1)
-            //         console.log(option1);
-            //     })
-            //     .catch(data => console.log(response))
-            // axios.post('/recentLoginUser', params)
-            //     .then(response => {
-            //         this.tableData = response.data;
-            //         console.log(response);
-            //     })
-            //     .catch(data => console.log(response))
         },
     });
 

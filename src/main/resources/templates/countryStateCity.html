@@ -1,271 +1,271 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
-    <style>
-        input[type='submit'] {
-            display: block;
-            width: 100%;
-            padding: 0.5rem 0;
-            border-radius: 4px;
-            border: 1px solid blue;
-            background-color: #86b7fe;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-<div id="app">
-<h2>修改页面</h2>
-    <h2>[[${info}]]</h2>
-    <el-form th:action="@{/updateUsers}" enctype="multipart/form-data" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <el-form-item label="密码" label-width="40px">
-             <el-input placeholder="请输入密码"  v-model="password"  name="password"  show-password></el-input>
-        </el-form-item>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--    <link href="/css/theme-chalk-2.15.7.css" rel="stylesheet"/>-->
+<!--    <style>-->
+<!--        input[type='submit'] {-->
+<!--            display: block;-->
+<!--            width: 100%;-->
+<!--            padding: 0.5rem 0;-->
+<!--            border-radius: 4px;-->
+<!--            border: 1px solid blue;-->
+<!--            background-color: #86b7fe;-->
+<!--            color: white;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="app">-->
+<!--<h2>修改页面</h2>-->
+<!--    <h2>[[${info}]]</h2>-->
+<!--    <el-form th:action="@{/updateUsers}" enctype="multipart/form-data" method="post">-->
+<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+<!--        <el-form-item label="密码" label-width="40px">-->
+<!--             <el-input placeholder="请输入密码"  v-model="password"  name="password"  show-password></el-input>-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="头像" label-width="40px">
-            <el-input type="file" name="file"></el-input><br/>
-        </el-form-item>
+<!--        <el-form-item label="头像" label-width="40px">-->
+<!--            <el-input type="file" name="file"></el-input><br/>-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="昵称" label-width="40px">
+<!--        <el-form-item label="昵称" label-width="40px">-->
 
-        <el-input
-                type="text"
-                placeholder="请输入内容"
-                name="name"
-                maxlength="10"
-                show-word-limit
-                v-model="name"
-        >
-        </el-input>
-        </el-form-item>
+<!--        <el-input-->
+<!--                type="text"-->
+<!--                placeholder="请输入内容"-->
+<!--                name="name"-->
+<!--                maxlength="10"-->
+<!--                show-word-limit-->
+<!--                v-model="name"-->
+<!--        >-->
+<!--        </el-input>-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="地址" label-width="40px">
-            <el-input type="text" name="address" :value="addressText"></el-input><br/>
-        </el-form-item>
-
-
-
-    <h5>地址选址</h5>
-    <div>
-        <el-form :inline="true" :model="address">
-            <el-form-item label="省份：">
-                <el-select @change="change0" v-model="address.value0" clearable placeholder="请选择省份">
-                    <el-option v-for="item in address.options0" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="城市：">
-                <el-select @change="change1" v-model="address.value1" clearable placeholder="请选择城市">
-                    <el-option v-for="item in address.options1" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="区县：">
-                <el-select @change="change2" v-model="address.value2" clearable placeholder="请选择区/县">
-                    <el-option v-for="item in address.options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="街道：">
-                <el-select v-model="address.value3" clearable placeholder="请选择区/县">
-                    <el-option v-for="item in address.options3" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="详细地址：">
-                <el-input style="width: 400px;" placeholder="详细地址" v-model="address.value4" clearable></el-input>
-            </el-form-item>
-
-            <el-button type="primary" @click="showAddress(1)">查看地址</el-button>
-        </el-form>
-
-    </div>
+<!--        <el-form-item label="地址" label-width="40px">-->
+<!--            <el-input type="text" name="address" :value="addressText"></el-input><br/>-->
+<!--        </el-form-item>-->
 
 
 
+<!--    <h5>地址选址</h5>-->
+<!--    <div>-->
+<!--        <el-form :inline="true" :model="address">-->
+<!--            <el-form-item label="省份：">-->
+<!--                <el-select @change="change0" v-model="address.value0" clearable placeholder="请选择省份">-->
+<!--                    <el-option v-for="item in address.options0" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="城市：">-->
+<!--                <el-select @change="change1" v-model="address.value1" clearable placeholder="请选择城市">-->
+<!--                    <el-option v-for="item in address.options1" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="区县：">-->
+<!--                <el-select @change="change2" v-model="address.value2" clearable placeholder="请选择区/县">-->
+<!--                    <el-option v-for="item in address.options2" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="街道：">-->
+<!--                <el-select v-model="address.value3" clearable placeholder="请选择区/县">-->
+<!--                    <el-option v-for="item in address.options3" :key="item.value" :label="item.label" :value="item.value"></el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="详细地址：">-->
+<!--                <el-input style="width: 400px;" placeholder="详细地址" v-model="address.value4" clearable></el-input>-->
+<!--            </el-form-item>-->
 
-        <el-form-item label="邮箱" label-width="40px">
-            <el-input placeholder="请输入邮箱"  type="text" v-model="email" name="email" ></el-input><br/>
-        </el-form-item>
+<!--            <el-button type="primary" @click="showAddress(1)">查看地址</el-button>-->
+<!--        </el-form>-->
+
+<!--    </div>-->
 
 
-        <el-form-item label="" >
-            <el-input type="submit" autocomplete="off">点击修改</el-input>
-        </el-form-item>
 
-    </el-form>
 
-</div>
+<!--        <el-form-item label="邮箱" label-width="40px">-->
+<!--            <el-input placeholder="请输入邮箱"  type="text" v-model="email" name="email" ></el-input><br/>-->
+<!--        </el-form-item>-->
 
-<!--js脚本-->
 
-<script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>
-<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>
-<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
-<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
-<script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>
-<script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>
+<!--        <el-form-item label="" >-->
+<!--            <el-input type="submit" autocomplete="off">点击修改</el-input>-->
+<!--        </el-form-item>-->
 
-<script>
-    // 配置Axios，设置baseURL会自动拼接
-    const axiosInstance = axios.create({
-        baseURL: 'http://localhost:8081/api/', // http://localhost:8081/api/address/parent/0
-        timeout: 3000,
-        headers: {'X-Custom-Header': 'your-project'}
-    })
+<!--    </el-form>-->
 
-    // 从缓存或者网络中获取全国地址的数据
-    const getAddressFromCacheOrNetwork = pid => new Promise((resolve, reject) => {
-        globalThis.cache = globalThis.cache || {}
-        if (globalThis.cache[`${pid}`]) {
-            resolve(globalThis.cache[`${pid}`])
-            return
-        }
-        axiosInstance.get(`address/parent/${pid}`)
-            .then(resp => {
-                const data = resp.data
-                globalThis.cache[`${pid}`] = data
-                resolve(data)
-            })
-            .catch(err => reject(err))
-    })
+<!--</div>-->
 
-    // 第一种方式需要用到：
-    const mapDataToAddress = data => data.map(v => ({
-        label: v.name, // 用名字或者全名做标签都可以
-        value: v.id,   // 这里使用id作为值，所以拿到的最终地址需要手动转换
-    }))
+<!--&lt;!&ndash;js脚本&ndash;&gt;-->
 
-    new Vue({
-        el: '#app',
-        data: {
-            password:'',
-            name:'',
-            email:'',
-            address: {
-                options0: [],
-                options1: [],
-                options2: [],
-                options3: [],
-                value0: '',
-                value1: '',
-                value2: '',
-                value3: '',
-                value4: '',
-            },
+<!--<script th:src="@{/js/vue-2.6.14.js}" src="../static/js/vue-2.6.14.js"></script>-->
+<!--<script th:src="@{/js/vue-router.js}" src="../static/js/vue-router.js"></script>-->
+<!--<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>-->
+<!--<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>-->
+<!--<script th:src="@{/js/video-vue.js}" src="../static/js/video-vue.js"></script>-->
+<!--<script th:src="@{/js/video.min.js}" src="../static/js/video.min.js"></script>-->
 
-            // 第二种方式代码：
-            // text: '', // 最后的地址
-            // addresses: [], // 选中的地址
-            // options: [], // 选项，不需要配置
-            // props: {
-            //     lazy: true,
-            //     lazyLoad: function (node, resolve) {
-            //         getAddressFromCacheOrNetwork(node.level === 0 ? 0 : node.data.id)
-            //             .then(data => resolve(data.map(v => ({
-            //                 label: v.name, // 用名字或者全名做标签都可以
-            //                 value: v.name, // 选中后返回值就用名字
-            //                 id: v.id,      // 记录id，根据id查询子区域
-            //                 leaf: node.level > 2, // 最后一级为3即叶子节点
-            //             }))))
-            //             .catch(err => resolve([]))
-            //     },
-            // },
-        },
-        computed: {
-            addressText: function () {
-                let result = ''
-                if (this.address.value0) {
-                    result += this.address.options0.find(v => v.value === this.address.value0).label
-                    if (this.address.value1) {
-                        result += this.address.options1.find(v => v.value === this.address.value1).label
-                        if (this.address.value2) {
-                            result += this.address.options2.find(v => v.value === this.address.value2).label
-                            if (this.address.value3) {
-                                result += this.address.options3.find(v => v.value === this.address.value3).label
-                            }
-                        }
-                    }
-                }
-                return result + this.address.value4
-            },
-        },
-        methods: {
-            change0: function (value) {
-                console.log(`change: ${value} -> ${this.address.value0}`)
-                this.clear(0)
-                if (!value) {
-                    return
-                }
-                let selected = this.address.options0.find((v, i, o) => v.value === value)
-                getAddressFromCacheOrNetwork(selected.value)
-                    .then(data => this.address.options1 = mapDataToAddress(data))
-                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
-            },
-            change1: function (value) {
-                console.log(`change: ${value} -> ${this.address.value0}`)
-                this.clear(1)
-                if (!value) {
-                    return
-                }
-                let selected = this.address.options1.find((v, i, o) => v.value === value)
-                getAddressFromCacheOrNetwork(selected.value)
-                    .then(data => this.address.options2 = mapDataToAddress(data))
-                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
-            },
-            change2: function (value) {
-                console.log(`change: ${value} -> ${this.address.value0}`)
-                this.clear(2)
-                if (!value) {
-                    return
-                }
-                let selected = this.address.options2.find((v, i, o) => v.value === value)
-                getAddressFromCacheOrNetwork(selected.value)
-                    .then(data => this.address.options3 = mapDataToAddress(data))
-                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
-            },
-            clear: function (level) {
-                switch (level) {
-                    case 0:
-                        this.address.options1 = []
-                        this.address.value1 = ''
-                        this.address.options2 = []
-                        this.address.value2 = ''
-                        this.address.options3 = []
-                        this.address.value3 = ''
-                        break
-                    case 1:
-                        this.address.options2 = []
-                        this.address.value2 = ''
-                        this.address.options3 = []
-                        this.address.value3 = ''
-                        break
-                    case 2:
-                        this.address.options3 = []
-                        this.address.value3 = ''
-                        break
-                    case 3:
-                        break
-                }
-            },
-            showAddress: function (i) {
-                if (i === 1){
-                    this.$confirm(this.addressText, '确认信息').then().catch(e => {})
-                    console.log(this.addressText)
+<!--<script>-->
+<!--    // 配置Axios，设置baseURL会自动拼接-->
+<!--    const axiosInstance = axios.create({-->
+<!--        baseURL: 'http://localhost:8081/api/', // http://localhost:8081/api/address/parent/0-->
+<!--        timeout: 3000,-->
+<!--        headers: {'X-Custom-Header': 'your-project'}-->
+<!--    })-->
 
-                }
-                    // else if (i === 2) {
-                //     this.$confirm(this.addresses.join('') + this.text, '确认信息').then().catch(e => {})
-                //     console.log(this.addresses.join('') + this.text)
-                // }
-            },
-        },
-        mounted: function () {
-            getAddressFromCacheOrNetwork(0)
-                .then(data => this.address.options0 = mapDataToAddress(data))
-                .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))
-        },
-    });
-</script>
-</body>
-</html>
+<!--    // 从缓存或者网络中获取全国地址的数据-->
+<!--    const getAddressFromCacheOrNetwork = pid => new Promise((resolve, reject) => {-->
+<!--        globalThis.cache = globalThis.cache || {}-->
+<!--        if (globalThis.cache[`${pid}`]) {-->
+<!--            resolve(globalThis.cache[`${pid}`])-->
+<!--            return-->
+<!--        }-->
+<!--        axiosInstance.get(`address/parent/${pid}`)-->
+<!--            .then(resp => {-->
+<!--                const data = resp.data-->
+<!--                globalThis.cache[`${pid}`] = data-->
+<!--                resolve(data)-->
+<!--            })-->
+<!--            .catch(err => reject(err))-->
+<!--    })-->
+
+<!--    // 第一种方式需要用到：-->
+<!--    const mapDataToAddress = data => data.map(v => ({-->
+<!--        label: v.name, // 用名字或者全名做标签都可以-->
+<!--        value: v.id,   // 这里使用id作为值，所以拿到的最终地址需要手动转换-->
+<!--    }))-->
+
+<!--    new Vue({-->
+<!--        el: '#app',-->
+<!--        data: {-->
+<!--            password:'',-->
+<!--            name:'',-->
+<!--            email:'',-->
+<!--            address: {-->
+<!--                options0: [],-->
+<!--                options1: [],-->
+<!--                options2: [],-->
+<!--                options3: [],-->
+<!--                value0: '',-->
+<!--                value1: '',-->
+<!--                value2: '',-->
+<!--                value3: '',-->
+<!--                value4: '',-->
+<!--            },-->
+
+<!--            // 第二种方式代码：-->
+<!--            // text: '', // 最后的地址-->
+<!--            // addresses: [], // 选中的地址-->
+<!--            // options: [], // 选项，不需要配置-->
+<!--            // props: {-->
+<!--            //     lazy: true,-->
+<!--            //     lazyLoad: function (node, resolve) {-->
+<!--            //         getAddressFromCacheOrNetwork(node.level === 0 ? 0 : node.data.id)-->
+<!--            //             .then(data => resolve(data.map(v => ({-->
+<!--            //                 label: v.name, // 用名字或者全名做标签都可以-->
+<!--            //                 value: v.name, // 选中后返回值就用名字-->
+<!--            //                 id: v.id,      // 记录id，根据id查询子区域-->
+<!--            //                 leaf: node.level > 2, // 最后一级为3即叶子节点-->
+<!--            //             }))))-->
+<!--            //             .catch(err => resolve([]))-->
+<!--            //     },-->
+<!--            // },-->
+<!--        },-->
+<!--        computed: {-->
+<!--            addressText: function () {-->
+<!--                let result = ''-->
+<!--                if (this.address.value0) {-->
+<!--                    result += this.address.options0.find(v => v.value === this.address.value0).label-->
+<!--                    if (this.address.value1) {-->
+<!--                        result += this.address.options1.find(v => v.value === this.address.value1).label-->
+<!--                        if (this.address.value2) {-->
+<!--                            result += this.address.options2.find(v => v.value === this.address.value2).label-->
+<!--                            if (this.address.value3) {-->
+<!--                                result += this.address.options3.find(v => v.value === this.address.value3).label-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--                return result + this.address.value4-->
+<!--            },-->
+<!--        },-->
+<!--        methods: {-->
+<!--            change0: function (value) {-->
+<!--                console.log(`change: ${value} -> ${this.address.value0}`)-->
+<!--                this.clear(0)-->
+<!--                if (!value) {-->
+<!--                    return-->
+<!--                }-->
+<!--                let selected = this.address.options0.find((v, i, o) => v.value === value)-->
+<!--                getAddressFromCacheOrNetwork(selected.value)-->
+<!--                    .then(data => this.address.options1 = mapDataToAddress(data))-->
+<!--                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))-->
+<!--            },-->
+<!--            change1: function (value) {-->
+<!--                console.log(`change: ${value} -> ${this.address.value0}`)-->
+<!--                this.clear(1)-->
+<!--                if (!value) {-->
+<!--                    return-->
+<!--                }-->
+<!--                let selected = this.address.options1.find((v, i, o) => v.value === value)-->
+<!--                getAddressFromCacheOrNetwork(selected.value)-->
+<!--                    .then(data => this.address.options2 = mapDataToAddress(data))-->
+<!--                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))-->
+<!--            },-->
+<!--            change2: function (value) {-->
+<!--                console.log(`change: ${value} -> ${this.address.value0}`)-->
+<!--                this.clear(2)-->
+<!--                if (!value) {-->
+<!--                    return-->
+<!--                }-->
+<!--                let selected = this.address.options2.find((v, i, o) => v.value === value)-->
+<!--                getAddressFromCacheOrNetwork(selected.value)-->
+<!--                    .then(data => this.address.options3 = mapDataToAddress(data))-->
+<!--                    .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))-->
+<!--            },-->
+<!--            clear: function (level) {-->
+<!--                switch (level) {-->
+<!--                    case 0:-->
+<!--                        this.address.options1 = []-->
+<!--                        this.address.value1 = ''-->
+<!--                        this.address.options2 = []-->
+<!--                        this.address.value2 = ''-->
+<!--                        this.address.options3 = []-->
+<!--                        this.address.value3 = ''-->
+<!--                        break-->
+<!--                    case 1:-->
+<!--                        this.address.options2 = []-->
+<!--                        this.address.value2 = ''-->
+<!--                        this.address.options3 = []-->
+<!--                        this.address.value3 = ''-->
+<!--                        break-->
+<!--                    case 2:-->
+<!--                        this.address.options3 = []-->
+<!--                        this.address.value3 = ''-->
+<!--                        break-->
+<!--                    case 3:-->
+<!--                        break-->
+<!--                }-->
+<!--            },-->
+<!--            showAddress: function (i) {-->
+<!--                if (i === 1){-->
+<!--                    this.$confirm(this.addressText, '确认信息').then().catch(e => {})-->
+<!--                    console.log(this.addressText)-->
+
+<!--                }-->
+<!--                    // else if (i === 2) {-->
+<!--                //     this.$confirm(this.addresses.join('') + this.text, '确认信息').then().catch(e => {})-->
+<!--                //     console.log(this.addresses.join('') + this.text)-->
+<!--                // }-->
+<!--            },-->
+<!--        },-->
+<!--        mounted: function () {-->
+<!--            getAddressFromCacheOrNetwork(0)-->
+<!--                .then(data => this.address.options0 = mapDataToAddress(data))-->
+<!--                .catch(err => this.$message.error('加载失败，请确认网络正常并刷新重试'))-->
+<!--        },-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
