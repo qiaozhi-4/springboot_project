@@ -9,6 +9,7 @@ import com.zking.entity.Type;
 import com.zking.repository.IFilmMapper;
 import com.zking.service.IFilmService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,6 +25,7 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
 
 
     //主页需要获取分类,以及这个分类的所有电影
+    @Cacheable(cacheNames = "user::all", unless = " #result == null ")
     @Override
     public List<Object> getTypeAndFilm() {
         List<Object> list = new LinkedList<>();
