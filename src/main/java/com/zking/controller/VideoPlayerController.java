@@ -2,6 +2,7 @@ package com.zking.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zking.dto.CommentDTO;
+import com.zking.dto.FilmDTO;
 import com.zking.entity.Comment;
 import com.zking.entity.Film;
 import com.zking.entity.User;
@@ -56,8 +57,12 @@ public class VideoPlayerController
 
         //获取用户点击的电影
         Film film = filmService.getById(id);
-        model.addAttribute("film", film);
 
+        //点击电影之后，电影热度（播放量）加一
+        film.setHeat(film.getHeat()+1);
+        filmService.updateById(film);
+
+        FilmDTO filmDTO = FilmDTO.getFilmDTO(film, "");
         //获取用户认证信息
         SecurityContext context = SecurityContextHolder.getContext(); // 上下文
         Authentication authentication = context.getAuthentication(); // 认证信息
@@ -66,15 +71,27 @@ public class VideoPlayerController
             User user = (User) authentication.getPrincipal(); // 唯一用户对象，一般是UserDetails
             Object sid = user.getId();
             int userId = sid == null ? 0 : (int) sid;
+
+            //如果需要vip且用户不是vip则放5秒的视频
+            if (user.getVip() < 1 && film.getVip() >0){
+                filmDTO.setMp4Src(film.getCoverSrc());
+            }
+            model.addAttribute("film", filmDTO);
             model.addAttribute("movieId", id);
             model.addAttribute("userId", userId);
             model.addAttribute("login", true);
             model.addAttribute("isLike", filmService.isLikeFilm(userId,id));
+            //添加用户的播放历史
             filmService.addLookFilm(userId,id);
         }else {
             model.addAttribute("movieId", id);
             model.addAttribute("userId", 0);
             model.addAttribute("login", false);
+            if (film.getVip() > 0){
+
+                filmDTO.setMp4Src(film.getCoverSrc());
+            }
+            model.addAttribute("film", filmDTO);
         }
 
         return "nplayer_vue";
