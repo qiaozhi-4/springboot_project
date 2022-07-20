@@ -22,7 +22,11 @@ import java.util.*;
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
 
 
-
+    //用户模糊查询电影名
+    @Override
+    public List<Film> fuzzyQuery(String s) {
+        return list(new QueryWrapper<Film>().like("name",s));
+    }
 
     //主页需要获取分类,以及这个分类的所有电影
     @Cacheable(cacheNames = "user::all", unless = " #result == null ")

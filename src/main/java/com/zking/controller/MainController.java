@@ -1,8 +1,10 @@
 package com.zking.controller;
 
+import com.zking.entity.Film;
 import com.zking.entity.GitOAuth2User;
 import com.zking.entity.Result;
 import com.zking.entity.User;
+import com.zking.service.IFilmService;
 import com.zking.service.IUserService;
 import com.zking.util.AliPayUtil;
 import com.zking.util.DateUtil;
@@ -27,6 +29,7 @@ import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 @PermitAll
 @Controller
@@ -36,6 +39,14 @@ public class MainController {
     private final AliPayUtil aliPayUtil;
     private final IUserService userService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final IFilmService filmService;
+
+    @GetMapping("fuzzyQuery")
+    public String fuzzyQuery(String str,Model model){
+        List<Film> films = filmService.fuzzyQuery(str);
+        model.addAttribute("films",films);
+        return "fuzzyQuery";
+    }
 
     @GetMapping({"/", "/index"})
     public String index(Model model,Result vipInfo) {
