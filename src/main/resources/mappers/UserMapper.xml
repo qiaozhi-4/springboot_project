@@ -5,6 +5,11 @@
 <!--必须填写namespace属性，是接口路径-->
 <mapper namespace="com.zking.repository.IUserMapper">
 
+    <!--给用户添加权限-->
+    <insert id="addRole" parameterType="int">
+        insert into user_role values (#{id},2)
+    </insert>
+
     <!--根据用户id查询用户有哪些角色-->
     <select id="findAllRoleByUserId" resultType="String">
         SELECT name FROM role r INNER JOIN user_role ur ON r.id=ur.role_id
@@ -24,4 +29,5 @@
     <select id="findUserByUsername" resultType="User">
         SELECT * FROM user where username=#{username}
     </select>
+
 </mapper>
