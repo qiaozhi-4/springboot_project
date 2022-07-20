@@ -28,7 +28,7 @@
             <el-dropdown-menu slot="dropdown">
 
 
-                <el-link href="/userIndex">
+                <el-link th:href="'/userIndex?userId=' + ${#authentication.principal.id}">
                     <el-dropdown-item>
                         我的主页
                     </el-dropdown-item>
