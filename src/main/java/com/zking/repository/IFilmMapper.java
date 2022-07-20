@@ -12,6 +12,19 @@ import java.util.List;
 @Mapper
 public interface IFilmMapper extends BaseMapper<Film> {
 
+    //<!--用户收藏电影-->
+    Integer addLikeFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    //<!--用户观看电影-->
+    Integer addLookFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    //<!--查询用户是否收藏这个电影-->
+    Integer isLikeFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    //<!--查询用户是否看过这个电影-->
+    Integer isLookFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    //<!--查询用户的收藏电影-->
+    List<Film> userLikeFilm(int id);
+    //<!--查询用户的观看历史-->
+    List<Film> userHistory(int id);
+
     //查询所有电影类型
     List<Type> findAllType();
     //根据类型查询电影

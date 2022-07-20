@@ -22,8 +22,8 @@
         </el-link>
         <el-dropdown v-if="user!=null">
             <el-link :underline="false">
-                <el-avatar size="small" :src="'../' + user.headImg"></el-avatar>
-                <span class="qita" :text="user.username"></span>
+                <el-avatar size="small" :src="'..' + user.headImg"></el-avatar>
+                <span class="qita" v-text="user.username"></span>
             </el-link>
             <el-dropdown-menu slot="dropdown">
 

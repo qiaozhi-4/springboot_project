@@ -1,6 +1,5 @@
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zking.App;
-import com.zking.entity.Film;
 import com.zking.entity.Type;
 import com.zking.service.IFilmService;
 import com.zking.service.ITypeService;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,5 +47,23 @@ public class TestFilmServiceS {
 //        System.out.println(type);
         List<Type> types = typeService.list(new QueryWrapper<Type>().like("name", "动漫"));
         typeService.findAllFilmByTypeId(types).forEach(System.out::println);
+    }
+
+    @Test
+    public void test5(){
+        //用户喜欢的
+        //filmService.userLikeFilm(1).forEach(System.out::println);
+        //用户看过的
+        //filmService.userHistory(1).forEach(System.out::println);
+        //用户是否看过
+        //System.out.println(filmService.isLookFilm(1, 9999));
+        //用户是否收藏
+        //System.out.println(filmService.isLikeFilm(1,99));
+        //用户收藏电影
+        //System.out.println(filmService.addLikeFilm(1,7));
+        //用户观看电影
+        System.out.println(filmService.addLookFilm(1,88));
+
+
     }
 }

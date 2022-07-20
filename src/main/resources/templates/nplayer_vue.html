@@ -30,7 +30,6 @@
             <!--视频显示-->
             <div th:replace="~{fragments/nplayerMain::nplayerMain}"></div>
         </el-main>
-
     </el-container>
 </div>
 
@@ -71,7 +70,7 @@
     let movieId = [[${movieId}]] // thymeleaf模板model参数
     let film = [[${film}]] // 电影对象
     let login = [[${login}]] // 是否登录
-    let userInfo = [[${authentication?.principal}]]
+    let userInfo = [[${#authentication?.principal}]]
 
 
     var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
@@ -258,11 +257,9 @@
             },
         },
         mounted() {
-            // 测试
-            // if (location.protocol !== 'http') {
-            //     return
-            // }
-            // this.setupWebSocket()
+
+            console.log('当前登录用户', this.user)
+            console.log('当前登录用户', userInfo)
             axios.defaults.withCredentials = true
             axios.get(`../video/${movieId}/barrages`)
                 .then(res => {
