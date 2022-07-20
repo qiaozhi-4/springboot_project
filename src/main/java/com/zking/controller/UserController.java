@@ -50,9 +50,9 @@ public class UserController {
         return "test";
     }
 
-    @GetMapping("/userInfo")
+    @GetMapping("/userIndex")
     public String userInfo(){
-        return "userInfo";
+        return "user/userIndex";
     }
 
     //视频页面
