@@ -5,6 +5,7 @@ import com.zking.entity.User;
 import com.zking.service.IFilmService;
 import com.zking.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.PermitAll;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +27,8 @@ public class ResponseBodyControllerS {
 
     private final IFilmService filmService;
     private final IUserService userService;
+
+    private final PasswordEncoder encoder;
 
     //用户修改头像
     @PostMapping("/userUpdateHead")
@@ -46,6 +51,25 @@ public class ResponseBodyControllerS {
     public Boolean userUpdateInfo(User user){
             return userService.updateById(user);
     }
+
+    //用户信息修改密码
+    @PostMapping("/userUpdatePassword")
+    public Boolean userUpdateInfo(String password1, String password2,HttpServletRequest request,@ModelAttribute("user") User user) throws ServletException {
+        if (password1.isEmpty()){
+            return false;
+        }
+        if (password1.equals(password2)){
+            user.setPassword(encoder.encode(user.getPassword()));
+
+            //修改
+            userService.updateById(user);
+            request.logout(); // 强制登出
+            return true;
+        }
+            return false;
+    }
+
+
 
     //获取电影和类型
     @GetMapping("/getTypeAndFilm")
