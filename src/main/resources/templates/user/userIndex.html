@@ -26,10 +26,12 @@
             <el-row type="flex" justify="space-around">
                 <el-col :span="5" style="position: relative;">
                     <div class="grid-content admin-el-header-top">
-                        <el-avatar
-                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <el-link @click="userTop" :underline="false">
+                            <el-avatar
+                                    src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        </el-link>
                         <div class="top-name">
-                            <span>admin</span>
+                            <span>{{form.name}}</span>
                         </div>
                     </div>
                 </el-col>
@@ -40,73 +42,84 @@
         <el-main width="1500px" style="background-color: white">
 
             <el-row type="flex" justify="space-around">
-                <el-col :span="5" class="main-navigation-bar">
-                    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
-                             @select="handleSelect">
-                        <el-menu-item index="1" @click="navigation(1)">用户信息</el-menu-item>
-                        <el-menu-item index="2" @click="navigation(2)">历史记录</el-menu-item>
-                        <el-menu-item index="3" @click="navigation(3)">我的收藏</el-menu-item>
-                    </el-menu>
+                <el-col :span="20" class="main-navigation-bar">
+                    <template>
+
+                        <el-tabs v-model="activeName" @tab-click="handleClick">
+                            <el-tab-pane label="用户信息" name="first">
+                                <el-row type="flex" justify="space-around">
+                                    <el-col :span="10">
+                                        <el-form ref="form" :model="form" label-width="80px" size="mini">
+                                            <el-form-item label="账号">
+                                                <el-input v-model="form.username" disabled>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item label="昵称">
+                                                <el-input v-model="form.name"></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="性别">
+                                                <div style="text-align: left;">
+                                                    <template>
+                                                        <el-radio v-model="form.sex" label="男">男</el-radio>
+                                                        <el-radio v-model="form.sex" label="女">女</el-radio>
+                                                    </template>
+                                                </div>
+                                            </el-form-item>
+                                            <el-form-item label="生日">
+                                                <el-col :span="11">
+                                                    <el-date-picker type="date" placeholder="选择日期"
+                                                                    v-model="form.birthday"
+                                                                    style="width: 100%;"></el-date-picker>
+                                                </el-col>
+                                            </el-form-item>
+                                            <el-form-item label="邮箱">
+                                                <el-input v-model="form.email" placeholder="你还未绑定邮箱"></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="选择区域">
+                                                <div style="text-align: left;">
+                                                    <el-cascader :props="props" :options="options" clearable
+                                                                 v-model="addresses"></el-cascader>
+                                                </div>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <el-button type="primary" @click="modificationUser">修改</el-button>
+                                            </el-form-item>
+                                        </el-form>
+                                    </el-col>
+                                </el-row>
+                            </el-tab-pane>
+
+                            <el-tab-pane label="历史记录" name="second">
+                                <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
+                                        :offset="index % 5 != 0 ? 1 : 0">
+                                    <el-card :body-style="{ padding: '0px' }">
+                                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                             class="image">
+                                        <div style="padding: 20px;">
+                                            <span>好吃的汉堡</span>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-tab-pane>
+
+                            <el-tab-pane label="我的收藏" name="third">
+                                <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
+                                        :offset="index % 5 != 0 ? 1 : 0">
+                                    <el-card :body-style="{ padding: '0px' }">
+                                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                             class="image">
+                                        <div style="padding: 20px;">
+                                            <span>好吃的汉堡</span>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-tab-pane>
+                        </el-tabs>
+
+                    </template>
                 </el-col>
             </el-row>
 
-            <div v-if="activeIndex == '1'">
-                <el-row type="flex" justify="space-around">
-                    <el-col :span="8">
-                        <el-form ref="form" :model="sizeForm" label-width="80px" size="mini">
-                            <el-form-item label="账号">
-                                <el-input v-model="sizeForm.username" disabled>
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="昵称">
-                                <el-input v-model="sizeForm.name"></el-input>
-                            </el-form-item>
-                            <el-form-item label="性别">
-                                <div style="text-align: left;">
-                                    <template>
-                                        <el-radio v-model="sizeForm.sex" label="男">男</el-radio>
-                                        <el-radio v-model="sizeForm.sex" label="女">女</el-radio>
-                                    </template>
-                                </div>
-                            </el-form-item>
-                            <el-form-item label="生日">
-                                <el-col :span="11">
-                                    <el-date-picker type="date" placeholder="选择日期" v-model="sizeForm.birthday"
-                                                    style="width: 100%;"></el-date-picker>
-                                </el-col>
-                            </el-form-item>
-                            <el-form-item label="邮箱">
-                                <el-input v-model="sizeForm.email" placeholder="你还未绑定邮箱"></el-input>
-                            </el-form-item>
-                            <el-form-item label="选择区域">
-                                <div style="text-align: left;">
-                                    <el-cascader :props="props" :options="options" clearable
-                                                 v-model="addresses"></el-cascader>
-                                </div>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="onSubmit">修改</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </el-col>
-                </el-row>
-            </div>
-
-            <div v-else>
-                <el-row type="flex" justify="space-around">
-                    <el-col :span="20">
-                        <el-col :span="4" v-for="(film, index) in 10" :key="film" :offset="index % 5 != 0 ? 1 : 0">
-                            <el-card :body-style="{ padding: '0px' }">
-                                <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                                     class="image">
-                                <div style="padding: 20px;">
-                                    <span>好吃的汉堡</span>
-                                </div>
-                            </el-card>
-                        </el-col>
-                    </el-col>
-                </el-row>
-            </div>
         </el-main>
 
         <!-- 底部部分 -->
@@ -115,6 +128,50 @@
         </el-footer>
 
     </el-container>
+
+    <el-dialog title="修改头像" :visible.sync="dialogFormVisible" :before-close="cancel">
+        <el-form :model="form">
+            <el-form-item label="用户头像" :label-width="formLabelWidth">
+                <el-upload
+                        action="#"
+                        list-type="picture-card"
+                        :file-list="imgList"
+                        :auto-upload="false"
+                        limit="1"
+                        :on-change="fn">
+                    <i slot="default" class="el-icon-plus"></i>
+                    <div slot="file" slot-scope="{file}">
+                        <img
+                                class="el-upload-list__item-thumbnail"
+                                :src="file.url" alt=""
+                        >
+                        <span class="el-upload-list__item-actions">
+                        <span
+                                class="el-upload-list__item-preview"
+                                @click="handlePictureCardPreview(file)"
+                        >
+                            <i class="el-icon-zoom-in"></i>
+                        </span>
+                        <span
+                                v-if="!disabled"
+                                class="el-upload-list__item-delete"
+                                @click="handleRemove(file)"
+                        >
+                          <i class="el-icon-delete"></i>
+                        </span>
+                      </span>
+                    </div>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl">
+                </el-dialog>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="cancel">取 消</el-button>
+            <el-button type="primary" @click="modificationUserTop">确 定</el-button>
+        </div>
+    </el-dialog>
 
 </div>
 
@@ -157,17 +214,32 @@
     new Vue({
         el: '#app',
         data: {
-            activeIndex: '1',
+            activeName: 'second',
             tableData: [],
-            sizeForm: {
+            userHistoryFilm: [],
+            userLikeFilm: [],
+            /*文件上传*/
+            dialogFormVisible: false,
+            imgList: [],
+            formLabelWidth: '150px',
+            dialogImageUrl: '',
+            dialogVisible: false,
+            disabled: false,
+            form: {
+                id: 1,
                 username: 'admin',
+                headImg: '/images/log.jpg',
+                vip: 1,
+                vipTime: '',
                 name: '小雪人',
                 sex: '男',
                 birthday: '2022-07-07',
                 email: '',
+                addresses: '', // 发送到后端的地址
+                time: '',
+                lastLoginTime: '',
             },
-            text: '', // 最后的地址
-            addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址
+            addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址数组
             options: [], // 选项，不需要配置
             props: {
                 lazy: true,
@@ -184,34 +256,100 @@
                 },
             },
         },
-        computed: {
-            addressText: function () {
-                return this.address.join('') + this.text
-            },
-        },
+        computed: {},
         methods: {
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+            handleClick(tab, event) {
+                console.log(tab, event);
             },
-            onSubmit() {
-                console.log('submit!');
+            /*修改头像*/
+            userTop(){
+                this.imgList.push(
+                    {url: this.form.headImg})
+                this.dialogFormVisible = true
             },
-            // 选择的地址
-            showAddress: function (i) {
-                this.$confirm(this.addresses.join('') + this.text, '确认信息').then().catch(e => {
-                })
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
             },
-            navigation(i) {
-                if (i === 1) {
-                    this.activeIndex = '1'
-                } else if (i === 2) {
-                    this.activeIndex = '2'
-                } else {
-                    this.activeIndex = '3'
+            handleRemove(file) {
+                this.imgList = [];
+            },
+            fn(file) {
+                this.imgList.push(file)
+                console.log(this.imgList)
+            },
+            cancel() {
+                this.imgList = []
+                this.dialogFormVisible = false
+            },
+            modificationUserTop(){
+                // 前端POST异步发送文件：
+                params = new FormData()
+                params.append('file', this.imgList[0].raw) // 文件 ===============
+                params.append('_csrf', csrf);
+                params.append('id', this.form.id);
+                let res = {
+                    headers: {'Content-Type': 'multipart/form-data'}
                 }
-            }
+                axios.post('/updateUser', params, res)
+                    .then(response => {
+                        if (response.data) {
+                            this.form.headImg = this.imgList[0].url;
+                            this.$message({
+                                message: '头像修改成功',
+                                type: 'success'
+                            });
+                            this.imgList = []
+                            this.dialogFormVisible = false;
+                        }
+                    })
+                    .catch(data => {
+                        this.$message('头像修改失败');
+                        console.log(response);
+                    })
+            },
+            // 修改信息
+            modificationUser() {
+                this.form.addresses = this.addresses.join('/') // 数组转字符串
+                // 前端POST异步发送文件：
+                params = new FormData()
+                params.append('_csrf', csrf);
+                params.append('id', this.form.id);
+                params.append('name', this.form.name);
+                params.append('sex', this.form.sex);
+                params.append('birthday', this.form.birthday);
+                params.append('email', this.form.email);
+                params.append('addresses', this.form.addresses);
+                axios.post('/updateUser', params)
+                    .then(response => {
+                        if (response.data) {
+                            this.$message({
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                        }
+                    })
+                    .catch(data => {
+                        this.$message('修改失败');
+                        console.log(response);
+                    })
+                console.log(this.form)
+                this.form.addresses = this.form.addresses.split('/') // 字符串转数组
+            },
         },
         mounted: function () {
+            axios.get('/userHistory')
+                .then(response => {
+                    this.userHistoryFilm = response.data;
+                    console.log(response);
+                })
+                .catch(data => console.log(response))
+            axios.get('/userLikeFilm')
+                .then(response => {
+                    this.userLikeFilm = response.data;
+                    console.log(response);
+                })
+                .catch(data => console.log(response))
         },
     });
 

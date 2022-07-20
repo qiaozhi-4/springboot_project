@@ -352,6 +352,10 @@
                 });
             },
             /*文件上传*/
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
             handleRemove(file) {
                 this.imgList = [];
             },
