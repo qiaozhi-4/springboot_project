@@ -56,19 +56,22 @@ public class MyUserDetailsService implements UserDetailsService {
 
         //获取Vip到期时间
         String vipTime = user.getVipTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //当前时间
-        try {
-            Date vip = dateFormat.parse(vipTime);
-            Date date = new Date();
-            if (vip.compareTo(date) < 0) {
-                System.out.println("vip 时间在 date 之前");
-                user.setVip(0);
-                userService.saveOrUpdate(user);
+        if(vipTime != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //当前时间
+            try {
 
+                Date vip = dateFormat.parse(vipTime);
+                Date date = new Date();
+                if (vip.compareTo(date) < 0) {
+                    System.out.println("vip 时间在 date 之前");
+                    user.setVip(0);
+                    userService.saveOrUpdate(user);
+
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
 
         // User实现UserDetails接口
