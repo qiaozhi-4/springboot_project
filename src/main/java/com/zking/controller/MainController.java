@@ -60,7 +60,7 @@ public class MainController {
     }
 
     //第三方gitee登录
-    @RequestMapping("/login/gitee")
+    @RequestMapping("/login/oauth2/gitee")
     public String auth(Model model,
                        @RegisteredOAuth2AuthorizedClient("gitee") OAuth2AuthorizedClient client,
                        @AuthenticationPrincipal OAuth2User user) {

@@ -70,7 +70,7 @@ spring:
             client-id: 2694c10f42c9d33d9257e5693bcd5183506ee62e5b00396e13e8e5b80d882048
             client-secret: 6d046cc842f9e1924566d1c16e46350f4968354a98f339784ef6395bd6577f4d
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8081/login/gitee
+            redirect-uri: http://localhost:8081/login/oauth2/*
             client-authentication-method: POST
             scope: user_info
             client-name: Gitee
