@@ -46,6 +46,12 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping({ "/userIndex"})
+    public String userIndex() {
+
+        return "userIndex";
+    }
+
     // 自定义登入页面
     @GetMapping("/loginUser")
     public String login() {
