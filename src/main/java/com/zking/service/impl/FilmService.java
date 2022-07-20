@@ -21,15 +21,56 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
 
+    //<!--用户收藏电影-->
+    @Override
+    public boolean addLikeFilm(int userId, int filmId) {
+        if (isLikeFilm(userId, filmId)) {
+            return false;
+        }
+        return getBaseMapper().addLikeFilm(userId, filmId) != null;
+    }
+
+    //<!--用户观看电影-->
+    @Override
+    public boolean addLookFilm(int userId, int filmId) {
+        if (isLookFilm(userId, filmId)){
+            return false;
+        }
+        return getBaseMapper().addLookFilm(userId, filmId) != null;
+    }
+
+    //<!--查询用户是否收藏这个电影-->
+    @Override
+    public boolean isLikeFilm(int userId, int filmId) {
+        return getBaseMapper().isLikeFilm(userId, filmId) != null;
+    }
+
+    //<!--查询用户是否看过这个电影-->
+    @Override
+    public boolean isLookFilm(int userId, int filmId) {
+        return getBaseMapper().isLookFilm(userId, filmId) != null;
+    }
+
+    //<!--查询用户的收藏电影-->
+    @Override
+    public List<Film> userLikeFilm(int id) {
+        return getBaseMapper().userLikeFilm(id);
+    }
+
+    //<!--查询用户的观看历史-->
+    @Override
+    public List<Film> userHistory(int id) {
+        return getBaseMapper().userHistory(id);
+    }
 
     //用户模糊查询电影名
     @Override
     public List<Film> fuzzyQuery(String s) {
-        return list(new QueryWrapper<Film>().like("name",s));
+        return list(new QueryWrapper<Film>().like("name", s));
     }
 
     //主页需要获取分类,以及这个分类的所有电影
-    @Cacheable(cacheNames = "user::all", unless = " #result == null ")
+    @Cacheable(cacheNames = "film::all", unless = " #result == null ")
     @Override
     public List<Object> getTypeAndFilm() {
         List<Object> list = new LinkedList<>();
@@ -37,9 +78,9 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         List<Type> types = getBaseMapper().findAllType();
         for (Type type : types) {
             Map<String, Object> map = new HashMap<>();
-            map.put("type",type);
+            map.put("type", type);
             //查询每个分类的所有电影
-            map.put("films",getBaseMapper().findFilmsByTypeId(type.getId()));
+            map.put("films", getBaseMapper().findFilmsByTypeId(type.getId()));
             list.add(map);
         }
         return list;
@@ -56,17 +97,17 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
             StringBuilder stringBuilder = new StringBuilder();
             //查询电影所有类型
             getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
-            filmDTOS.add( FilmDTO.getFilmDTO(film,stringBuilder.toString()));
+            filmDTOS.add(FilmDTO.getFilmDTO(film, stringBuilder.toString()));
         }
         return filmDTOS;
     }
 
     @Override
-    public FilmDTO findAllTypeByFilmId(Film film){
+    public FilmDTO findAllTypeByFilmId(Film film) {
         StringBuilder stringBuilder = new StringBuilder();
         //查询电影所有类型
         getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
-        return FilmDTO.getFilmDTO(film,stringBuilder.toString());
+        return FilmDTO.getFilmDTO(film, stringBuilder.toString());
     }
 
     //模糊查询根据电影名查电影
@@ -77,18 +118,21 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
         List<Film> films;
         if (selectType.equals("")) {
             films = list(new QueryWrapper<Film>().like("name", selectInput).or().like("region", selectInput));
-        }else {
-            films = list(new QueryWrapper<Film>().like(selectType,selectInput));
+        } else {
+            films = list(new QueryWrapper<Film>().like(selectType, selectInput));
         }
         for (Film film : films) {
             StringBuilder stringBuilder = new StringBuilder();
             //查询电影所有类型
             getBaseMapper().findAllTypeByFilmId(film.getId()).forEach(type -> stringBuilder.append(type).append(","));
-            filmDTOS.add( FilmDTO.getFilmDTO(film,stringBuilder.toString()));
+            filmDTOS.add(FilmDTO.getFilmDTO(film, stringBuilder.toString()));
         }
         return filmDTOS;
     }
 
+
+    //查询前5
+    @Cacheable(cacheNames = "film::Heat", unless = " #result == null ")
     @Override
     public List<Film> selectHeat() {
         return getBaseMapper().selectHeat();
@@ -99,8 +143,8 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     public boolean addFilms(Film film, Integer[] actors, Integer[] types) {
         boolean save = save(film);
         Integer filmId = film.getId();
-        getBaseMapper().addFilmType(filmId,types);
-        getBaseMapper().addFilmActor(filmId,actors);
+        getBaseMapper().addFilmType(filmId, types);
+        getBaseMapper().addFilmActor(filmId, actors);
         return save;
     }
 
@@ -115,15 +159,11 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     @Override
     public boolean updateFilmActor(Integer filmId, Integer[] actors) {
         getBaseMapper().deleteFilmActor(filmId);
-        return getBaseMapper().addFilmActor(filmId,actors) != 0;
+        return getBaseMapper().addFilmActor(filmId, actors) != 0;
     }
 
 
-
-
-
-
-    public List<Actor> findAllActorByFilmId(int id){
+    public List<Actor> findAllActorByFilmId(int id) {
         return getBaseMapper().findAllActorByFilmId(id);
     }
 
