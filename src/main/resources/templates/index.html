@@ -46,8 +46,9 @@
 
             <!-- 电影分类 -->
             <div v-for="(element,index) in typeAndFilm">
+                <div  :id="element.type.id" style="height: 80px"></div>
                 <el-row>
-                    <el-col :id="element.type.id" class="className" :push="11" :span="3">
+                    <el-col class="className" :push="11" :span="3">
                         <h2>{{element.type.name}}</h2>
                     </el-col>
                 </el-row>

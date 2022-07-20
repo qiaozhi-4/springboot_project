@@ -9,6 +9,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
@@ -25,6 +29,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
         // 获取用户
         User user = userService.findUserByUsername(username);
+
         // 判断数据库是否有该用户
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
@@ -49,6 +54,22 @@ public class MyUserDetailsService implements UserDetailsService {
             }
         }
 
+        //获取Vip到期时间
+        String vipTime = user.getVipTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //当前时间
+        try {
+            Date vip = dateFormat.parse(vipTime);
+            Date date = new Date();
+            if (vip.compareTo(date) < 0) {
+                System.out.println("vip 时间在 date 之前");
+                user.setVip(0);
+                userService.saveOrUpdate(user);
+
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
         // User实现UserDetails接口
         user.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(authorities)));

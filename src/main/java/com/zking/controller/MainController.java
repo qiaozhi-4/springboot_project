@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpSession;
@@ -37,8 +38,18 @@ public class MainController {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @GetMapping({"/", "/index"})
-    public String index() {
+    public String index(Model model,Result vipInfo) {
+        //if (vipInfo.getBoo() != null) {
+        //
+        //    model.addAttribute("vipInfo",vipInfo);
+        //}
         return "index";
+    }
+
+    @GetMapping({ "/userIndex"})
+    public String userIndex() {
+
+        return "userIndex";
     }
 
     // 自定义登入页面
@@ -55,11 +66,12 @@ public class MainController {
     }
 
     //第三方gitee登录
-    @RequestMapping("/login/gitee")
+    @RequestMapping("/login/oauth2/gitee")
     public String auth(Model model,
                        @RegisteredOAuth2AuthorizedClient("gitee") OAuth2AuthorizedClient client,
                        @AuthenticationPrincipal OAuth2User user) {
         System.out.println("我来了");
+        System.out.println(user);
 // 第三方的配置信息
         ClientRegistration reg = client.getClientRegistration();
         model.addAttribute("client", reg.getClientName());
@@ -97,10 +109,10 @@ public class MainController {
      *               密码：111111
      */
     @RequestMapping(path = "vip/buyVip/{month}/{price}")
-    public String buyGame(@PathVariable Integer month, @PathVariable Integer price, Model model, @ModelAttribute("user") User user) throws ParseException {
+    public String buyGame(RedirectAttributes redirect,@PathVariable Integer month, @PathVariable Integer price, Model model, @ModelAttribute("user") User user) throws ParseException {
 
         if (user == null){
-            model.addAttribute("vipInfo", Result.fail("你还未登录"));
+            redirect.addFlashAttribute("vipInfo", Result.fail("你还未登录"));
             return "redirect:/";
         }
         //获取redis缓存，绑定这个key
@@ -123,14 +135,15 @@ public class MainController {
     // 购买游戏同步url返回路径
     // 同步地址
     @RequestMapping(path = "/vip/alipayReturn")
-    public String returnUrl(String out_trade_no, Model model,@ModelAttribute("user") User user) {
+    public String returnUrl(RedirectAttributes redirect,String out_trade_no, Model model,@ModelAttribute("user") User user) {
 
         //获取redis缓存，绑定这个key
         BoundValueOperations<String, Object> ops = redisTemplate.boundValueOps("user::vip");
         //设置进redis
         Integer month = (Integer) ops.get();
         if (month==null || month ==0){
-            model.addAttribute("vipInfo",Result.fail("vip购买失败"));
+
+            redirect.addFlashAttribute("vipInfo", Result.fail("vip购买失败"));
             return "redirect:/";
         }
 
@@ -146,7 +159,7 @@ public class MainController {
         userService.updateById(user);
 
 
-        model.addAttribute("vipInfo",Result.success("vip购买成功"));
+        redirect.addFlashAttribute("vipInfo", Result.success("vip购买成功"));
 
 
         return "redirect:/";

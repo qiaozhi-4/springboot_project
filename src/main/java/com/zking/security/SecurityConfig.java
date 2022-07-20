@@ -52,9 +52,15 @@ public class SecurityConfig {
 
         http.oauth2Login()
                 .redirectionEndpoint()
-                .baseUri("/login/gitee") // 和配置相 匹配
+                //.baseUri("/login/gitee") // 和配置相 匹配
+                //.and()
+                //.userInfoEndpoint(u -> u.userService(oauth2UserService()));
+                .baseUri("/login/oauth2/*") // 和配置相匹配
                 .and()
-                .userInfoEndpoint(u -> u.userService(oauth2UserService()));
+                .userInfoEndpoint()
+                // 自定义类型，获取到数据会自动转换，提供clientRegistrationId
+                .customUserType(GitOAuth2User.class,
+                        "gitee");
 
 
         //http.formLogin()
@@ -96,7 +102,7 @@ public class SecurityConfig {
                     String header = request.getHeader("x-requested-with");
                     //判断是否是axios异步请求
                     if ("XMLHttpRequest".equals(header)) {
-                        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                         response.setContentType("application/json;charset=utf-8");
                         response.getWriter().write(new ObjectMapper().writeValueAsString(user));
                         return;
@@ -125,28 +131,28 @@ public class SecurityConfig {
                     //判断极验是否登录处理拦截器
                     @Override
                     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-                            HttpServletRequest request = (HttpServletRequest) servletRequest;
-                            HttpServletResponse response = (HttpServletResponse) servletResponse;
-                            if (("/login").equals(request.getRequestURI())){
-                                HttpSession session = request.getSession();
-                                System.out.println(session.getAttribute("validate"));
-                                //判断第三方登录
-                                if(request.getParameter("manner") == null){
-                                    filterChain.doFilter(servletRequest, servletResponse);
-                                    return;
-                                }
-
-                                if(session.getAttribute("validate") == null ||session.getAttribute("validate").equals("false")){
-                                    System.out.println("没有验证");
-                                    response.sendRedirect("/loginUser?error");
-                                    return;
-                                }
-                                session.removeAttribute("validate");
+                        HttpServletRequest request = (HttpServletRequest) servletRequest;
+                        HttpServletResponse response = (HttpServletResponse) servletResponse;
+                        if (("/login").equals(request.getRequestURI())) {
+                            HttpSession session = request.getSession();
+                            System.out.println(session.getAttribute("validate"));
+                            //判断第三方登录
+                            if (request.getParameter("manner") == null) {
                                 filterChain.doFilter(servletRequest, servletResponse);
                                 return;
                             }
+
+                            if (session.getAttribute("validate") == null || session.getAttribute("validate").equals("false")) {
+                                System.out.println("没有验证");
+                                response.sendRedirect("/loginUser?error");
+                                return;
+                            }
+                            session.removeAttribute("validate");
                             filterChain.doFilter(servletRequest, servletResponse);
+                            return;
                         }
+                        filterChain.doFilter(servletRequest, servletResponse);
+                    }
                 }, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
