@@ -93,10 +93,10 @@
                                 <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
                                         :offset="index % 5 != 0 ? 1 : 0">
                                     <el-card :body-style="{ padding: '0px' }">
-                                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                        <img :src="film.imgSrc"
                                              class="image">
                                         <div style="padding: 20px;">
-                                            <span>好吃的汉堡</span>
+                                            <span>{{film.name}}</span>
                                         </div>
                                     </el-card>
                                 </el-col>
@@ -106,10 +106,10 @@
                                 <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
                                         :offset="index % 5 != 0 ? 1 : 0">
                                     <el-card :body-style="{ padding: '0px' }">
-                                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                        <img :src="film.imgSrc"
                                              class="image">
                                         <div style="padding: 20px;">
-                                            <span>好吃的汉堡</span>
+                                            <span>{{film.name}}</span>
                                         </div>
                                     </el-card>
                                 </el-col>
