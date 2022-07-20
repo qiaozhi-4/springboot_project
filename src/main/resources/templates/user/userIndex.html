@@ -28,7 +28,7 @@
                     <div class="grid-content admin-el-header-top">
                         <el-link @click="userTop" :underline="false">
                             <el-avatar
-                                    src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                                    :src="form.headImg"></el-avatar>
                         </el-link>
                         <div class="top-name">
                             <span>{{form.name}}</span>
@@ -208,14 +208,13 @@
             .catch(err => reject(err))
     })
 
-    // var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
+    var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
     let params;
 
     new Vue({
         el: '#app',
         data: {
             activeName: 'second',
-            tableData: [],
             userHistoryFilm: [],
             userLikeFilm: [],
             /*文件上传*/
@@ -225,20 +224,7 @@
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
-            form: {
-                id: 1,
-                username: 'admin',
-                headImg: '/images/log.jpg',
-                vip: 1,
-                vipTime: '',
-                name: '小雪人',
-                sex: '男',
-                birthday: '2022-07-07',
-                email: '',
-                addresses: '', // 发送到后端的地址
-                time: '',
-                lastLoginTime: '',
-            },
+            form: [[${adminGetUser.id}]],
             addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址数组
             options: [], // 选项，不需要配置
             props: {
@@ -334,10 +320,11 @@
                         console.log(response);
                     })
                 console.log(this.form)
-                this.form.addresses = this.form.addresses.split('/') // 字符串转数组
             },
         },
         mounted: function () {
+            console.log(this.form)
+            this.addresses = this.form.addresses.split('/') // 字符串转数组
             axios.get('/userHistory')
                 .then(response => {
                     this.userHistoryFilm = response.data;
