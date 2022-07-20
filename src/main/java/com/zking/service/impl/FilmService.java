@@ -21,11 +21,12 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
 
-    //<!--用户收藏电影-->
+
+    //<!--用户收藏电影,已收藏就，移除收藏-->
     @Override
     public boolean addLikeFilm(int userId, int filmId) {
         if (isLikeFilm(userId, filmId)) {
-            return false;
+            return getBaseMapper().deleteLikeFilm(userId, filmId) != null;
         }
         return getBaseMapper().addLikeFilm(userId, filmId) != null;
     }
@@ -33,7 +34,7 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     //<!--用户观看电影-->
     @Override
     public boolean addLookFilm(int userId, int filmId) {
-        if (isLookFilm(userId, filmId)){
+        if (isLookFilm(userId, filmId)) {
             return false;
         }
         return getBaseMapper().addLookFilm(userId, filmId) != null;

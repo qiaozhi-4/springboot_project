@@ -13,7 +13,28 @@
             <i class="el-icon-back">返回</i>
         </el-link>
     </el-col>
-    <el-col :span="20">
+    <el-col :span="18">
+
+        <el-divider>
+            <!--评价，打分区域-->
+            <el-card shadow="hover" :body-style="{ padding: '20px' }" style="text-align: center;">
+                <div class="block">
+                    <span>您认为它的分数如何</span>
+                    <el-rate @click=""
+                            v-model="rate"
+                            :colors="colors"
+                            show-text>
+                    </el-rate>
+                </div>
+            </el-card>
+        </el-divider>
+    </el-col>
+    <el-col :span="2">
+        <el-link @click="addLike" :underline="false">
+            <el-tooltip class="item" effect="dark" :content="likeInfo" placement="top-start">
+            <el-button type="warning" :icon="likeCss" circle></el-button>
+                </el-tooltip>
+        </el-link>
     </el-col>
     <el-col :span="2">
         <el-link v-if="user=='anonymousUser'" @click="loginClick" :underline="false">
@@ -83,7 +104,9 @@
             </el-col>
             <el-col :span="5" :offset="1">
                 <el-input class="sousuo qita" placeholder="熊出没" v-model="inputHead">
-                    <el-button class="shouye" slot="append" icon="el-icon-search"><el-link :underline="false" :href="'fuzzyQuery?str=' + inputHead">搜索</el-link></el-button>
+                    <el-button class="shouye" slot="append" icon="el-icon-search">
+                        <el-link :underline="false" :href="'fuzzyQuery?str=' + inputHead">搜索</el-link>
+                    </el-button>
                 </el-input>
             </el-col>
             <el-col :span="1">

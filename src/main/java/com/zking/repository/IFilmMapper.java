@@ -12,6 +12,8 @@ import java.util.List;
 @Mapper
 public interface IFilmMapper extends BaseMapper<Film> {
 
+    //用户取消收藏电影
+    Integer deleteLikeFilm(@Param("userId") int userId,@Param("filmId") int filmId);
     //<!--用户收藏电影-->
     Integer addLikeFilm(@Param("userId") int userId,@Param("filmId") int filmId);
     //<!--用户观看电影-->

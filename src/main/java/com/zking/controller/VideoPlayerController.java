@@ -69,6 +69,7 @@ public class VideoPlayerController
             model.addAttribute("movieId", id);
             model.addAttribute("userId", userId);
             model.addAttribute("login", true);
+            model.addAttribute("isLike", filmService.isLikeFilm(userId,id));
             filmService.addLookFilm(userId,id);
         }else {
             model.addAttribute("movieId", id);

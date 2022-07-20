@@ -5,6 +5,7 @@ import com.zking.entity.User;
 import com.zking.service.IFilmService;
 import com.zking.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -78,9 +79,16 @@ public class ResponseBodyControllerS {
     }
 
     //用户收藏电影
+    @PreAuthorize("isAuthenticated()") // 必须登录后才能访问
     @GetMapping("/addLikeFilm")
     public Boolean addLikeFilm(Integer userId,Integer filmId) {
         return filmService.addLikeFilm(userId,filmId);
+    }
+
+    //用户观看电影
+    @GetMapping("/addLookFilm")
+    public Boolean addLookFilm(Integer userId,Integer filmId) {
+        return filmService.addLookFilm(userId,filmId);
     }
 
     //查询用户喜欢的电影

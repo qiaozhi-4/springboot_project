@@ -103,6 +103,16 @@
             messageList: [], // 后端发送的数据，应该按发送时间排序！不是电影时间！
             message: '', // 单条字幕，暂时没用到
             isLogin: login, // 已经登录
+
+            isLike: [[${isLike}]],//用户是否收藏
+            likeCss: '',//是否收藏的图标样式
+            likeInfo: '',//提示信息
+
+
+            rate: null, //评分
+            //渐变色
+            colors: ['#99A9BF', '#F7BA2A', '#FF9900']  // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+
         },
         computed: {
             messages: function () {
@@ -113,6 +123,31 @@
             },
         },
         methods: {
+            //收藏电影的方法
+            addLike() {
+                console.log('获取到的数据', userId, movieId)
+                axios.get(`../addLikeFilm`, {
+                    params: {
+                        userId: userId,
+                        filmId: movieId,
+                    }
+                })
+                    .then(res => {
+                        console.log('获取到的数据', res.data)
+                        this.isLike = !this.isLike
+                        if (this.isLike) {
+                            this.likeCss = "el-icon-star-on"
+                            this.likeInfo = "以收藏，点击取消收藏"
+                            this.$message.success('收藏成功！')
+                        } else {
+                            this.likeCss = "el-icon-star-off"
+                            this.likeInfo = "点击收藏"
+                            this.$message.success('取消收藏成功！')
+                        }
+                    })
+                    .catch(err => this.$message.error('未登录！'))
+            },
+
             //头部
             goBack() {
                 console.log('go back');
@@ -167,7 +202,7 @@
                     movieId: movieId,
                     sendTime: new Date().getTime(),
                     bgColor: '#ffffff', // 这个插件没法调整背景色
-                    _csrf:csrf,
+                    _csrf: csrf,
                 }
                 this.messageList.push(data)
                 const params = new FormData();
@@ -266,6 +301,13 @@
                     console.log('获取到的数据', res.data)
                     this.messageList = (console.log(res) || res.data)
                     this.setDanmaku()
+                    if (this.isLike) {
+                        this.likeCss = "el-icon-star-on"
+                        this.likeInfo = "以收藏，点击取消收藏"
+                    } else {
+                        this.likeCss = "el-icon-star-off"
+                        this.likeInfo = "点击收藏"
+                    }
                 })
                 .catch(err => this.$message.error('获取弹幕失败！'))
         },
