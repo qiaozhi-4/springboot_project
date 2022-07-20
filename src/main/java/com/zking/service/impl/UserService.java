@@ -17,8 +17,9 @@ public class UserService extends ServiceImpl<IUserMapper, User> implements IUser
 
     //给用户添加角色
     @Override
-    public Boolean addRole() {
-        return getBaseMapper().addRole()!=null;
+    public Boolean addRole(int id) {
+//        return getBaseMapper().addRole()!=null;
+        return getBaseMapper().addRole(id) != null;
     }
 
     @Override

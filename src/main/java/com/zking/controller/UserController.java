@@ -107,16 +107,4 @@ public class UserController {
     }
 
 
-    //用户的封号
-    @GetMapping("deleteUser")
-    public String delete(){
-        //当前登录的用户
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        User principal =(User) authentication.getPrincipal();
-        principal.setVip(-1);
-        userMapper.updateById(principal);
-        return "redirect:test";
-    }
-
 }
