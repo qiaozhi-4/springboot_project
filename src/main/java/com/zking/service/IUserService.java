@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface IUserService extends IService<User> {
 
+    //给用户添加角色
+    Boolean addRole();
+
     //根据giteeid查询用户的信息
     // 根据用户id查询，用户有哪些角色
     List<String> findAllRoleByUserId(int id);

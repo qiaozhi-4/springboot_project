@@ -15,6 +15,12 @@ import java.util.List;
 @Service
 public class UserService extends ServiceImpl<IUserMapper, User> implements IUserService {
 
+    //给用户添加角色
+    @Override
+    public Boolean addRole() {
+        return getBaseMapper().addRole()!=null;
+    }
+
     @Override
     //根据用户id查询，用户有哪些角色
     public List<String> findAllRoleByUserId(int id) {
