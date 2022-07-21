@@ -3,8 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>搜索</title>
+
+    <!--添加Bootstrap和fontawesome的样式-->
+    <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.css}" href="../static/css/bootstrap.css" rel="stylesheet"/>
+    <style>
+        .isVip {
+            color: #ffc720 !important;
+        }
+
+        .indexMsg img {
+            color: #fff !important;
+            font-size: 16px !important;
+        }
+
+        .original_price {
+            text-decoration: line-through !important;
+            margin-left: 5px !important;
+        }
+
+        .discount {
+            margin-right: 25px !important;
+            border: 1px solid #fff !important;
+            padding: 5px 7px !important;
+            border-radius: 20px !important;
+        }
+
+        .price {
+            font-size: 30px !important;
+            color: #fff !important;
+            line-height: 40px !important;
+        }
+
+        .con {
+            margin: 0 auto !important;
+            overflow: hidden !important;
+            position: relative !important;
+            background-color: #dd9b80 !important;
+            text-align: center !important;
+        }
+
+        .subscript {
+            color: #ffc720 !important;
+            height: 30px !important;
+            width: 100px !important;
+            position: absolute !important;
+            right: -30px !important;
+            text-align: center !important;
+            line-height: 30px !important;
+            font-family: "黑体" !important;
+            background-color: #608f39 !important;
+            -moz-transform: rotate(45deg) !important;
+            -webkit-transform: rotate(45deg) !important;
+            -o-transform: rotate(45deg) !important;
+            -ms-transform: rotate(45deg) !important;
+            transform: rotate(45deg) !important;
+        }
+    </style>
 </head>
 <body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <div th:replace="~{fragments/fuzzyHead::fuzzy}"></div>
+        </el-header>
+        <el-main>
+            <!--    <div :text="films[1].name"></div>-->
+            <el-row :gutter="0">
+                <el-col :offset="1" :span="3" v-for="(film,index) in films">
+                    <el-tooltip :content="film.name" placement="top" :visible-arrow="false">
+                        <el-link :href="'/video/' + film.id" :underline="false">
+                            <el-card class="box-card movie">
+                                <div class="bottomBox">
+                                    <div class="indexMsg con">
+                                        <div v-if="film.vip>0" class="subscript">
+                                            vip
+                                        </div>
 
+                                        <img height="120px" width="100%" :src="film.imgSrc">
+                                    </div>
+                                </div>
+                                <br>
+                                <b><span>{{film.name}}</span></b><br><br>
+                                <span>{{film.info}}</span><br>
+                            </el-card>
+                        </el-link>
+                    </el-tooltip>
+                </el-col>
+            </el-row>
+        </el-main>
+    </el-container>
+
+
+
+
+</div>
+
+<script th:src="@{/js/vue-2.6.14.min.js}" src="../static/js/vue-2.6.14.min.js"></script>
+<script th:src="@{/js/axios-0.26.js}" src="../static/js/axios-0.26.js"></script>
+<script th:src="@{/js/element-ui-2.15.7.js}" src="../static/js/element-ui-2.15.7.js"></script>
+<script th:inline="javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            films:[[${films}]],
+            user: [[${#authentication?.principal}]],
+        },
+        mounted: function () {
+
+        },
+    })
+</script>
 </body>
 </html>
