@@ -93,13 +93,21 @@ public class ResponseBodyControllerS {
 
     //查询用户喜欢的电影
     @GetMapping("/userLikeFilm")
-    public List<Film> userLikeFilm(@ModelAttribute("user") User user) {
-        return filmService.userLikeFilm(user.getId());
+    public List<Film> userLikeFilm(@ModelAttribute("user") User user, Integer id) {
+        if (id == null) {
+            return filmService.userLikeFilm(user.getId());
+        }else {
+            return filmService.userLikeFilm(id);
+        }
     }
 
     //查询用看过的电影
     @GetMapping("/userHistory")
-    public List<Film> userHistory(@ModelAttribute("user") User user) {
-        return filmService.userHistory(user.getId());
+    public List<Film> userHistory(@ModelAttribute("user") User user, Integer id) {
+        if (id == null) {
+            return filmService.userHistory(user.getId());
+        }else {
+            return filmService.userHistory(id);
+        }
     }
 }
