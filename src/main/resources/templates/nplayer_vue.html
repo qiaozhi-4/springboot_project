@@ -175,7 +175,7 @@
             // +++
             setDanmaku() {
                 console.log(this.danmaku.el)
-                this.danmaku.appendItems(this.messageList) // +++
+                this.danmaku.appendItems(this.danmakuMessages) // +++
             },
             sendMessage(msg) {
                 if (!login) {
@@ -276,6 +276,8 @@
                             userInfo = this.user
                             login = true
                             this.loginVisible = false;
+
+                            this.setupWebSocket() // ++++
                         } else {
                             this.$message.warning('登录失败！账号或者密码错误！')
                         }
