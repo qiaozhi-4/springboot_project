@@ -83,6 +83,8 @@
                                             </el-form-item>
                                             <el-form-item>
                                                 <el-button type="primary" @click="modificationUser">修改</el-button>
+                                                <el-button type="primary" @click="dialogFormVisible2 = true">修改密码
+                                                </el-button>
                                             </el-form-item>
                                         </el-form>
                                     </el-col>
@@ -173,6 +175,24 @@
         </div>
     </el-dialog>
 
+    <el-dialog title="修改头像" :visible.sync="dialogFormVisible2">
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="原密码" prop="password">
+                <el-input v-model="ruleForm.password" show-password></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="pass">
+                <el-input v-model="ruleForm.pass" show-password></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPass">
+                <el-input v-model="ruleForm.checkPass" show-password></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+            <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </div>
+    </el-dialog>
+
 </div>
 
 <!--js脚本-->
@@ -189,8 +209,11 @@
     const axiosInstance = axios.create({
         baseURL: 'http://localhost:8081/api/', // http://localhost:8081/api/address/parent/0
         timeout: 3000,
+        // withCredentials: true, // 携带cookie（session）
         headers: {'X-Custom-Header': 'your-project'}
     })
+
+    axios.defaults.withCredentials = true
 
     // 从缓存或者网络中获取全国地址的数据
     const getAddressFromCacheOrNetwork = pid => new Promise((resolve, reject) => {
@@ -213,34 +236,90 @@
 
     new Vue({
         el: '#app',
-        data: {
-            activeName: 'second',
-            userHistoryFilm: [],
-            userLikeFilm: [],
-            /*文件上传*/
-            dialogFormVisible: false,
-            imgList: [],
-            formLabelWidth: '150px',
-            dialogImageUrl: '',
-            dialogVisible: false,
-            disabled: false,
-            form: [[${adminGetUser}]],
-            addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址数组
-            options: [], // 选项，不需要配置
-            props: {
-                lazy: true,
-                lazyLoad: function (node, resolve) {
-                    console.log(node)
-                    getAddressFromCacheOrNetwork(node.level === 0 ? 0 : node.data.id)
-                        .then(data => resolve(data.map(v => ({
-                            label: v.name, // 用名字或者全名做标签都可以
-                            value: v.name, // 选中后返回值就用名字
-                            id: v.id,      // 记录id，根据id查询子区域
-                            leaf: node.level > 2, // 最后一级为3即叶子节点
-                        }))))
-                        .catch(err => resolve([]))
+        data() {
+            var checkPassword = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('原密码不能为空'));
+                } else {
+                    let count = value.split('').length
+                    if (count < 5 || count > 17) {
+                        callback(new Error('密码长度6~16'));
+                    } else {
+                        callback();
+                    }
+                }
+            };
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    let count = value.split('').length
+                    if (count < 5 || count > 17) {
+                        callback(new Error('密码长度6~16'));
+                    } else {
+                        if (this.ruleForm.checkPass !== '') {
+                            this.$refs.ruleForm.validateField('checkPass');
+                        }
+                        callback();
+                    }
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm.pass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            return {
+                activeName: 'second',
+                userHistoryFilm: [],
+                userLikeFilm: [],
+                /*文件上传*/
+                dialogFormVisible: false,
+                imgList: [],
+                formLabelWidth: '150px',
+                dialogImageUrl: '',
+                dialogVisible: false,
+                disabled: false,
+                form: [[${adminGetUser}]],
+                addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址数组
+                options: [], // 选项，不需要配置
+                props: {
+                    lazy: true,
+                    lazyLoad: function (node, resolve) {
+                        console.log(node)
+                        getAddressFromCacheOrNetwork(node.level === 0 ? 0 : node.data.id)
+                            .then(data => resolve(data.map(v => ({
+                                label: v.name, // 用名字或者全名做标签都可以
+                                value: v.name, // 选中后返回值就用名字
+                                id: v.id,      // 记录id，根据id查询子区域
+                                leaf: node.level > 2, // 最后一级为3即叶子节点
+                            }))))
+                            .catch(err => resolve([]))
+                    },
                 },
-            },
+                // 修改密码
+                dialogFormVisible2: false,
+                ruleForm: {
+                    pass: '',
+                    checkPass: '',
+                    password: ''
+                },
+                rules: {
+                    pass: [
+                        {validator: validatePass, trigger: 'blur'}
+                    ],
+                    checkPass: [
+                        {validator: validatePass2, trigger: 'blur'}
+                    ],
+                    password: [
+                        {validator: checkPassword, trigger: 'blur'}
+                    ]
+                }
+            };
         },
         computed: {},
         methods: {
@@ -248,7 +327,7 @@
                 console.log(tab, event);
             },
             /*修改头像*/
-            userTop(){
+            userTop() {
                 this.imgList.push(
                     {url: this.form.headImg})
                 this.dialogFormVisible = true
@@ -268,7 +347,7 @@
                 this.imgList = []
                 this.dialogFormVisible = false
             },
-            modificationUserTop(){
+            modificationUserTop() {
                 // 前端POST异步发送文件：
                 params = new FormData()
                 params.append('file', this.imgList[0].raw) // 文件 ===============
@@ -277,7 +356,7 @@
                 let res = {
                     headers: {'Content-Type': 'multipart/form-data'}
                 }
-                axios.post('/updateUser', params, res)
+                axios.post('/userUpdateHead', params, res)
                     .then(response => {
                         if (response.data) {
                             this.form.headImg = this.imgList[0].url;
@@ -306,7 +385,7 @@
                 params.append('birthday', this.form.birthday);
                 params.append('email', this.form.email);
                 params.append('addresses', this.form.addresses);
-                axios.post('/updateUser', params)
+                axios.post('/userUpdateInfo', params)
                     .then(response => {
                         if (response.data) {
                             this.$message({
@@ -321,10 +400,39 @@
                     })
                 console.log(this.form)
             },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        params = new FormData()
+                        params.append('_csrf', csrf);
+                        params.append('pass', this.ruleForm.pass);
+                        params.append('checkPass', this.ruleForm.checkPass);
+                        params.append('password', this.ruleForm.password);
+                        axios.post('/userUpdatePassword', params)
+                            .then(response => {
+                                if (response.data) {
+                                    this.$message({
+                                        message: '修改成功，请重新登入',
+                                        type: 'success'
+                                    });
+                                }
+                            })
+                            .catch(data => {
+                                this.$message('修改失败');
+                                console.log(response);
+                            })
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
         },
         mounted: function () {
             console.log(this.form)
-            this.addresses = this.form.addresses.split('/') // 字符串转数组
+            // this.addresses = this.form.addresses.split('/') // 字符串转数组
             axios.get('/userHistory')
                 .then(response => {
                     this.userHistoryFilm = response.data;
