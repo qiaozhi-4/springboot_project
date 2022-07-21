@@ -95,8 +95,10 @@
                                 <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
                                         :offset="index % 5 != 0 ? 1 : 0">
                                     <el-card :body-style="{ padding: '0px' }">
-                                        <img :src="film.imgSrc"
-                                             class="image">
+                                        <el-link :href="'/video/' + film.id" :underline="false">
+                                            <img :src="film.imgSrc"
+                                                 class="image">
+                                        </el-link>
                                         <div style="padding: 20px;">
                                             <span>{{film.name}}</span>
                                         </div>
@@ -108,8 +110,10 @@
                                 <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
                                         :offset="index % 5 != 0 ? 1 : 0">
                                     <el-card :body-style="{ padding: '0px' }">
-                                        <img :src="film.imgSrc"
-                                             class="image">
+                                        <el-link :href="'/video/' + film.id" :underline="false">
+                                            <img :src="film.imgSrc"
+                                                 class="image">
+                                        </el-link>
                                         <div style="padding: 20px;">
                                             <span>{{film.name}}</span>
                                         </div>
@@ -180,7 +184,7 @@
             <el-form-item label="原密码" prop="password">
                 <el-input v-model="ruleForm.password" show-password></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
+            <el-form-item label="新密码" prop="pass">
                 <el-input v-model="ruleForm.pass" show-password></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="checkPass">
@@ -285,7 +289,7 @@
                 dialogVisible: false,
                 disabled: false,
                 form: [[${adminGetUser}]],
-                addresses: ['湖南', '永州', '祁阳', '文明铺'], // 选中的地址数组
+                addresses: [], // 选中的地址数组
                 options: [], // 选项，不需要配置
                 props: {
                     lazy: true,
@@ -304,9 +308,9 @@
                 // 修改密码
                 dialogFormVisible2: false,
                 ruleForm: {
-                    pass: '',
-                    checkPass: '',
-                    password: ''
+                    pass: '', // 新密码
+                    checkPass: '', // 确认密码
+                    password: '', // 原密码
                 },
                 rules: {
                     pass: [
@@ -347,12 +351,15 @@
                 this.imgList = []
                 this.dialogFormVisible = false
             },
+            // 用户修改头像
             modificationUserTop() {
+                let r = this.imgList[0].raw
+                console.log(this.imgList[0], r)
                 // 前端POST异步发送文件：
                 params = new FormData()
                 params.append('file', this.imgList[0].raw) // 文件 ===============
                 params.append('_csrf', csrf);
-                params.append('id', this.form.id);
+                params.append('userId', this.form.id);
                 let res = {
                     headers: {'Content-Type': 'multipart/form-data'}
                 }
@@ -375,7 +382,7 @@
             },
             // 修改信息
             modificationUser() {
-                this.form.addresses = this.addresses.join('/') // 数组转字符串
+                this.form.address = this.addresses.join('/') // 数组转字符串
                 // 前端POST异步发送文件：
                 params = new FormData()
                 params.append('_csrf', csrf);
@@ -384,7 +391,7 @@
                 params.append('sex', this.form.sex);
                 params.append('birthday', this.form.birthday);
                 params.append('email', this.form.email);
-                params.append('addresses', this.form.addresses);
+                params.append('address', this.form.address);
                 axios.post('/userUpdateInfo', params)
                     .then(response => {
                         if (response.data) {
@@ -400,14 +407,14 @@
                     })
                 console.log(this.form)
             },
+            // 修改密码
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         params = new FormData()
                         params.append('_csrf', csrf);
-                        params.append('pass', this.ruleForm.pass);
-                        params.append('checkPass', this.ruleForm.checkPass);
                         params.append('password', this.ruleForm.password);
+                        params.append('pass', this.ruleForm.pass);
                         axios.post('/userUpdatePassword', params)
                             .then(response => {
                                 if (response.data) {
@@ -415,6 +422,7 @@
                                         message: '修改成功，请重新登入',
                                         type: 'success'
                                     });
+                                    this.dialogFormVisible2 = true
                                 }
                             })
                             .catch(data => {
@@ -431,8 +439,10 @@
             },
         },
         mounted: function () {
-            console.log(this.form)
-            // this.addresses = this.form.addresses.split('/') // 字符串转数组
+            console.log('用户：', this.form)
+            if (this.form.address !== '') {
+                this.addresses = this.form.address.split('/') // 字符串转数组
+            }
             axios.get('/userHistory')
                 .then(response => {
                     this.userHistoryFilm = response.data;
