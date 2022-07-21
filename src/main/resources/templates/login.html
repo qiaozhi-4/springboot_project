@@ -17,7 +17,7 @@
 
 
 <div id="app">
-    <el-form action="/login" method="post" :model="loginForm" ref="loginForm" :label-width="formLabelWidth" >
+    <el-form action="/login" method="post" :model="loginForm" ref="loginForm" :label-width="formLabelWidth">
 
         <input name="manner" value="0" type="hidden"/>
 
@@ -41,15 +41,23 @@
             </div>
         </el-form-item>
 
-<!--        <el-form-item>-->
-<!--            <el-row>-->
-<!--                <el-col :span="6">第三方登录:</el-col>-->
-<!--                <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>-->
-<!--                </el-col>-->
-<!--            </el-row>-->
-<!--        </el-form-item>-->
+        <el-form-item  label-width="60px">
+            <el-link href="/register" type="primary" :underline="false">没有账号？点击注册</el-link>
+        </el-form-item>
+
+
+        <!--        <el-form-item>-->
+        <!--            <el-row>-->
+        <!--                <el-col :span="6">第三方登录:</el-col>-->
+        <!--                <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>-->
+        <!--                </el-col>-->
+        <!--            </el-row>-->
+        <!--        </el-form-item>-->
 
     </el-form>
+    <div style="left: 50px">
+
+    </div>
 
 
 </div>
