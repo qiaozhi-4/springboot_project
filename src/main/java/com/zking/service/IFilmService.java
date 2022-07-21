@@ -3,20 +3,21 @@ package com.zking.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zking.dto.FilmDTO;
 import com.zking.entity.Film;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface IFilmService extends IService<Film>{
 
+
+
     //<!--用户收藏电影-->
-    boolean addLikeFilm(@Param("userId") int userId, @Param("filmId") int filmId);
+    boolean addLikeFilm( int userId,  int filmId);
     //<!--用户观看电影-->
-    boolean addLookFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    boolean addLookFilm( int userId, int filmId);
     //<!--查询用户是否收藏这个电影-->
-    boolean isLikeFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    boolean isLikeFilm( int userId, int filmId);
     //<!--查询用户是否看过这个电影-->
-    boolean isLookFilm(@Param("userId") int userId,@Param("filmId") int filmId);
+    boolean isLookFilm( int userId, int filmId);
     //<!--查询用户的收藏电影-->
     List<Film> userLikeFilm(int id);
     //<!--查询用户的观看历史-->

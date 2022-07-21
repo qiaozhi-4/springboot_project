@@ -76,7 +76,6 @@ public class RegisterController {
         File dest = new File(location, path);
         file.transferTo(dest);
         System.out.println("path => " + path);
-
         User user = new User(0, username, pass, "/img" + path, name, sex, 0, null,null, null, null, parse, null, null);
         boolean save = userService.save(user);
         if (!save) {

@@ -5,34 +5,54 @@
 <!--必须填写namespace属性，是接口路径-->
 <mapper namespace="com.zking.repository.IFilmMapper">
 
+    <!--//用户取消收藏电影-->
+    <delete id="deleteLikeFilm" parameterType="int">
+        delete
+        from favorite
+        where user_id = #{userId}
+          AND film_id = #{filmId};
+    </delete>
+
     <!--用户收藏电影-->
     <insert id="addLikeFilm" parameterType="Integer">
-        insert into favorite values (#{userId},#{filmId})
+        insert into favorite
+        values (#{userId}, #{filmId})
     </insert>
 
     <!--用户观看电影-->
     <insert id="addLookFilm" parameterType="Integer">
-        insert into history values (#{userId},#{filmId})
+        insert into history
+        values (#{userId}, #{filmId})
     </insert>
 
     <!--查询用户是否收藏这个电影-->
     <select id="isLikeFilm" resultType="Integer">
-        SELECT film_id FROM favorite WHERE user_id = #{userId} and film_id=#{filmId}
+        SELECT film_id
+        FROM favorite
+        WHERE user_id = #{userId}
+          and film_id = #{filmId}
     </select>
 
     <!--查询用户是否看过这个电影-->
     <select id="isLookFilm" resultType="Integer">
-        SELECT film_id FROM history WHERE user_id = #{userId} and film_id=#{filmId}
+        SELECT film_id
+        FROM history
+        WHERE user_id = #{userId}
+          and film_id = #{filmId}
     </select>
 
     <!--查询用户的收藏电影-->
     <select id="userLikeFilm" resultType="Film">
-        SELECT * FROM film WHERE id in(SELECT film_id FROM favorite WHERE user_id = #{id})
+        SELECT *
+        FROM film
+        WHERE id in (SELECT film_id FROM favorite WHERE user_id = #{id})
     </select>
 
     <!--查询用户的观看历史-->
     <select id="userHistory" resultType="Film">
-        SELECT * FROM film WHERE id in(SELECT film_id FROM history WHERE user_id = #{id})
+        SELECT *
+        FROM film
+        WHERE id in (SELECT film_id FROM history WHERE user_id = #{id})
     </select>
 
     <!--查询所有电影类型-->
@@ -93,7 +113,7 @@
     <!--设置电影类型-->
     <insert id="addFilmType" parameterType="int">
         insert into film_type (film_id, type_id) values
-        <foreach collection="types"  item="typeId" separator=",">
+        <foreach collection="types" item="typeId" separator=",">
             (#{filmId}, #{typeId})
         </foreach>
     </insert>
@@ -109,7 +129,7 @@
     <!--设置电影演员-->
     <insert id="addFilmActor" parameterType="int">
         insert into film_actor (film_id, actor) values
-        <foreach collection="actors"  item="actorId" separator=",">
+        <foreach collection="actors" item="actorId" separator=",">
             (#{filmId}, #{actorId})
         </foreach>
     </insert>

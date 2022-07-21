@@ -11,7 +11,7 @@ import java.util.List;
 public interface IUserMapper extends BaseMapper<User> {
 
     //给用户添加角色
-    Integer addRole();
+    Integer addRole(int id);
 
     //根据giteeid查询用户的信息
     // 根据用户id查询，用户有哪些角色

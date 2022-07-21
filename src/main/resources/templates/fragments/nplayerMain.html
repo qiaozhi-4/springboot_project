@@ -1,12 +1,33 @@
+<!--    <div   th:fragment="nplayerMain" style="display: flex; flex-direction: column;">-->
+<!--        <header></header>-->
+<!--        <main style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 550px; max-width: 1000px">-->
+<!--            <div style="flex-grow: 1;">-->
+<!--                <n-player ref="player" :options="options" :set="setPlayer"/>-->
+<!--            </div>-->
+<!--        </main>-->
+<!--        <footer>-->
+<!--        </footer>-->
+<!--    </div>-->
 
-    <div   th:fragment="nplayerMain" style="display: flex; flex-direction: column;">
-        <header></header>
-        <main style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 550px; max-width: 1000px">
-            <div style="flex-grow: 1;">
-                <n-player ref="player" :options="options" :set="setPlayer"/>
-            </div>
-        </main>
-        <el-divider></el-divider>
-        <footer>
-        </footer>
+
+<el-container th:fragment="nplayerMain" style="display: flex; flex-direction: row;">
+    <div style="flex: 1; overflow: hidden; display: flex; padding: 2rem; max-height: 550px; max-width: 1000px">
+        <div style="flex-grow: 1;">
+            <n-player ref="player" :options="options" :set="setPlayer"/>
+        </div>
     </div>
+    <div v-if="user.vip<1 && film.vip>0">
+        <div style="height: 50px"></div>
+        <div style="color: red">此视频需要VIP，您还不是会员，只能试看5秒。</div>
+        <div style="height: 50px"></div>
+        <el-button @click="vip" class="hyzx" :underline="false"><span style="color: #ffc720">会员充值</span></el-button>
+    </div>
+    <div v-if="user.vip>0 && film.vip>0">
+        <div style="height: 50px"></div>
+        <div style="color: #ffc720">
+            你是尊贵的VIP，可以无限观影。
+        </div>
+        <div style="height: 50px"></div>
+        <el-button @click="vip" class="hyzx" :underline="false"><span style="color: #ffc720">会员续费</span></el-button>
+    </div>
+</el-container>
