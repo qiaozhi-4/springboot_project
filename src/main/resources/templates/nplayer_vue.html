@@ -226,7 +226,7 @@
                 params.append('sendTime', new Date().getTime())
                 params.append('bgColor', '#ffffff')
                 params.append('_csrf', csrf)
-
+                console.log(csrf)
                 axios.post(`/video/${movieId}/message`, params)
                     .then(resp => console.log('发送弹幕成功！', resp.data) || this.$message.success('发送后台成功！'))
                     .catch(err => console.log('发送弹幕失败！', err) || this.$message.error('发送后台失败，忽略！'))
