@@ -66,6 +66,8 @@
             top: 200px;
             /* 一直将导航栏置于最顶层  */
             z-index: 999;
+            background-color: #1a1e21!important;
+            color: #0dcaf0!important;
         }
 
     </style>
@@ -87,7 +89,7 @@
         <el-main width="1500px">
 
             <div class="admin" th:v-if="${#authentication.name} == 'admin'">
-                <el-link href="/adminIndex" :underline="false"><img style="width: 30px" src="/img/head.jpg"></el-link>
+                <el-link href="/adminIndex" :underline="false"><span>点击进入管理员页面</span></el-link>
             </div>
             <!-- 轮播部分 -->
             <el-row class="lunbo" type="flex" justify="space-around">

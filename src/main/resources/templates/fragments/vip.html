@@ -16,7 +16,7 @@
             <span class="" style="color: #1a1e21!important; ">请登录之后再购买VIP</span>
         </el-link>
         <el-link th:if="${#authentication.name != 'anonymousUser'}"  :underline="false">
-            <el-avatar size="small" th:src="'../' + ${#authentication.principal.headImg}"></el-avatar>
+            <el-avatar size="small" th:src="'..' + ${#authentication.principal.headImg}"></el-avatar>
             <span style="color: #1a1e21!important; " th:text="${#authentication.name}"></span>
         </el-link>
         <div style="height: 40px;"></div>
