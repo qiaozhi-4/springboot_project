@@ -80,32 +80,6 @@ public class UserController {
     public String updateUse(){
         return "countryStateCity";
     }
-    //修改用户信息
-    @PostMapping("/updateUsers")
-    public String updateUser(HttpServletRequest request, MultipartFile file, String name, String address, String email , String password) throws IOException, ServletException, ServletException {
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        User principal =(User) authentication.getPrincipal();
-        if (!Objects.equals(file.getOriginalFilename(), "")) {
-            String imgname = UUID.randomUUID() + file.getOriginalFilename();
-            String path = "/" + imgname;
-            File dest = new File(location, path);
-            file.transferTo(dest);
-            principal.setHeadImg(path);
-        }
-        //密码加密
-        String pass = encoder.encode(password);
-        principal.setPassword(pass);
-        principal.setName(name);
-        principal.setAddress(address);
-        principal.setEmail(email);
-        //修改
-        userSevice.saveOrUpdate(principal);
-        request.logout(); // 强制登出
-        return "redirect:index";
-    }
-
 
     //用户的封号
     @GetMapping("deleteUser")
