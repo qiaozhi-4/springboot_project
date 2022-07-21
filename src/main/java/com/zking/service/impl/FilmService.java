@@ -9,6 +9,8 @@ import com.zking.entity.Type;
 import com.zking.repository.IFilmMapper;
 import com.zking.service.IFilmService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "film")
 public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilmService {
 
 
@@ -71,9 +74,10 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
     }
 
     //主页需要获取分类,以及这个分类的所有电影
-    @Cacheable(cacheNames = "film::all", unless = " #result == null ")
+    @Cacheable(key = "'all'", unless = " #result == null ")
     @Override
     public List<Object> getTypeAndFilm() {
+        System.out.println("jhhhhh");
         List<Object> list = new LinkedList<>();
         //查询所有的分类
         List<Type> types = getBaseMapper().findAllType();
@@ -133,13 +137,14 @@ public class FilmService extends ServiceImpl<IFilmMapper, Film> implements IFilm
 
 
     //查询前5
-    @Cacheable(cacheNames = "film::Heat", unless = " #result == null ")
+    @Cacheable(key = "'Heat'", unless = " #result == null ")
     @Override
     public List<Film> selectHeat() {
         return getBaseMapper().selectHeat();
     }
 
     //电影添加
+    @CacheEvict(key = "'all'")
     @Override
     public boolean addFilms(Film film, Integer[] actors, Integer[] types) {
         boolean save = save(film);

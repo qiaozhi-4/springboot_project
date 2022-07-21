@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<el-row  th:fragment="fuzzy" type="flex" align="middle">
+  <el-col :span="1"></el-col>
+  <el-col :span="2">
+    <el-link href="../" :underline="false">
+      <i class="el-icon-back">返回主页</i>
+    </el-link>
+  </el-col>
+
+  <el-col :span="2"></el-col>
+  <el-col :span="5" :offset="1">
+    <el-input class="sousuo qita" placeholder="" v-model="inputHead">
+      <el-button class="shouye" slot="append" icon="el-icon-search">
+        <el-link :underline="false" :href="'fuzzyQuery?str=' + inputHead">搜索</el-link>
+      </el-button>
+    </el-input>
+  </el-col>
+
+  <el-col :span="10"></el-col>
+  <el-col :span="2">
+    <el-link v-if="user=='anonymousUser'" @click="loginClick" :underline="false">
+      <el-avatar size="small" src="../img/head.jpg"></el-avatar>
+      <span class="qita">点击登录</span>
+    </el-link>
+    <el-dropdown v-if="user!='anonymousUser'">
+      <el-link :underline="false">
+        <el-avatar size="small" :src="'..' + user.headImg"></el-avatar>
+        <span class="qita" v-text="user.username"></span>
+      </el-link>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-if="user.vip > 0">
+          vip到期时间：<span v-text="user.vipTime"></span>
+        </el-dropdown-item>
+        <el-dropdown-item v-if="user.vip < 1">
+          <div @click="vip">您还不是VIP，点击购买以获得更好的观影体验</div>
+        </el-dropdown-item>
+        <el-link :href="'/userIndex?userId=' + user.id">
+          <el-dropdown-item>
+            我的主页
+          </el-dropdown-item>
+        </el-link>
+        <el-dropdown-item>
+          <form action="/logout" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
+            <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出</el-button>
+          </form>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+  </el-col>
+</el-row>
+</body>
+</html>
