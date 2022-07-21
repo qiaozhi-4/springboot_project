@@ -5,11 +5,7 @@
     <title>Title</title>
     <link th:href="@{/css/theme-chalk-2.15.7.css}" href="../static/css/theme-chalk-2.15.7.css" rel="stylesheet"/>
     <style>
-        .el-header {
-            color: #333;
-            text-align: center;
-            line-height: 60px;
-        }
+
     </style>
 
 </head>
@@ -31,6 +27,8 @@
             <div th:replace="~{fragments/nplayerMain::nplayerMain}"></div>
         </el-main>
     </el-container>
+    <!-- vip购买弹出框 -->
+    <div th:replace="~{fragments/vip::vip}"></div>
 </div>
 
 <script th:src="@{/js/vue-2.6.14.min.js}" src="../static/js/vue-2.6.14.min.js"></script>
@@ -79,6 +77,9 @@
     new Vue({
         el: '#app',
         data: {
+            //vip购买弹出框
+            vipVisible: false,
+
             //登录表单是否显示
             loginVisible: false,
             loginForm: {
@@ -87,6 +88,7 @@
                 _csrf: csrf,
             },
             user: userInfo,
+            film: film,
 
             player: null,
             danmaku: null,
@@ -123,6 +125,13 @@
             },
         },
         methods: {
+
+            //vip购买弹框
+            vip() {
+                this.vipVisible = true
+                return false
+            },
+
             //收藏电影的方法
             addLike() {
                 console.log('获取到的数据', userId, movieId)

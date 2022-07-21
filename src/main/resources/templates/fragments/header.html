@@ -47,8 +47,12 @@
                 <span class="qita" v-text="user.username"></span>
             </el-link>
             <el-dropdown-menu slot="dropdown">
-
-
+                <el-dropdown-item v-if="user.vip > 0">
+                    vip到期时间：<span v-text="user.vipTime"></span>
+                </el-dropdown-item>
+                <el-dropdown-item v-if="user.vip < 1">
+                    <div @click="vip">您还不是VIP，点击购买以获得更好的观影体验</div>
+                </el-dropdown-item>
                 <el-link :href="'/userIndex?userId=' + user.id">
                     <el-dropdown-item>
                         我的主页
@@ -96,7 +100,7 @@
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item v-for="(type,index) in typeAndFilm">
-                            <el-link class="qita" :href="'#'+ type.type.id" :underline="false">{{type.type.name}}
+                            <el-link :href="'#'+ type.type.id" :underline="false">{{type.type.name}}
                             </el-link>
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -143,7 +147,14 @@
                         <el-avatar size="small" th:src="${#authentication.principal.headImg}"></el-avatar>
                         <span class="qita" th:text="${#authentication.name}"></span>
                     </el-link>
+
                     <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item th:v-if="${#authentication.principal.vip} > 0">
+                            vip到期时间：<span th:text="${#authentication.principal.vipTime}"></span>
+                        </el-dropdown-item>
+                        <el-dropdown-item th:v-if="${#authentication.principal.vip} < 1">
+                            <div @click="vip">您还不是VIP，点击购买以获得更好的观影体验</div>
+                        </el-dropdown-item>
 
                         <el-link th:href="'/userIndex?userId=' + ${#authentication.principal.id}">
                             <el-dropdown-item>
