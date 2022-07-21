@@ -13,7 +13,16 @@
     </el-link>
   </el-col>
 
-  <el-col :span="19"></el-col>
+  <el-col :span="2"></el-col>
+  <el-col :span="5" :offset="1">
+    <el-input class="sousuo qita" placeholder="" v-model="inputHead">
+      <el-button class="shouye" slot="append" icon="el-icon-search">
+        <el-link :underline="false" :href="'fuzzyQuery?str=' + inputHead">搜索</el-link>
+      </el-button>
+    </el-input>
+  </el-col>
+
+  <el-col :span="10"></el-col>
   <el-col :span="2">
     <el-link v-if="user=='anonymousUser'" @click="loginClick" :underline="false">
       <el-avatar size="small" src="../img/head.jpg"></el-avatar>
