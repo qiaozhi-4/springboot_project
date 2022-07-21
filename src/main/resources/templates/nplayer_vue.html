@@ -235,7 +235,7 @@
                 if (this.socket) {
                     this.socket.close()
                 }
-                this.socket = new WebSocket(`/ws/${movieId}/${userId}`)
+                this.socket = new WebSocket(`ws://localhost:8081/ws/${movieId}/${userId}`)
                 this.socket.onerror = err => console.log('WebSocket Error', err)
                 this.socket.onopen = () => console.log('WebSocket Connected!')
                 this.socket.onmessage = event => {
@@ -304,6 +304,8 @@
         },
         mounted() {
 
+            this.setupWebSocket()
+
             console.log('当前登录用户', this.user)
             console.log('当前登录用户', userInfo)
             axios.defaults.withCredentials = true
@@ -323,6 +325,7 @@
                 .catch(err => this.$message.error('获取弹幕失败！'))
         },
     })
+    // initGet...(success(){ document.forms[0].submit() }
 </script>
 </body>
 </html>
