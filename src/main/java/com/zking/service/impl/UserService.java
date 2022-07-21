@@ -37,7 +37,7 @@ public class UserService extends ServiceImpl<IUserMapper, User> implements IUser
     //登录【根据用户名查询用户】
     @Override
     public User findUserByUsername(String userName) {
-        return getOne(new QueryWrapper<User>().eq("username", userName));
+        return getOne(new QueryWrapper<User>().eq("username", userName), false);
     }
 
 

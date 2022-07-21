@@ -69,11 +69,7 @@
                                     </el-table-column>
                                     <el-table-column prop="name" label="昵称" width="120">
                                     </el-table-column>
-                                    <el-table-column prop="sex" label="性别" width="120">
-                                    </el-table-column>
                                     <el-table-column prop="vip" label="类型" width="80">
-                                    </el-table-column>
-                                    <el-table-column prop="email" label="邮箱" width="120">
                                     </el-table-column>
                                     <el-table-column prop="time" label="注册时间" width="120">
                                     </el-table-column>
@@ -86,10 +82,18 @@
                                                    size="mini"
                                                    placeholder="输入关键字搜索">
                                         </template>
-                                        <el-button type="text" @click="dialogFormVisible = true">修改
-                                        </el-button>
-                                        <el-button type="text" @click="dialogFormVisible2 = true">封禁
-                                        </el-button>
+                                        <template slot-scope="scope">
+                                            <el-switch
+                                                    active-text="封禁"
+                                                    inactive-text="解封"
+                                                    @change="bannedUser(scope.row)"
+                                                    v-model="scope.row.vip"
+                                                    active-color="#ff4949"
+                                                    inactive-color="#13ce66"
+                                                    :active-value="-1"
+                                                    :inactive-value="0">
+                                            </el-switch>
+                                        </template>
                                     </el-table-column>
                                 </el-table>
                             </template>
@@ -113,64 +117,6 @@
         </el-footer>
 
     </el-container>
-
-    <el-dialog title="修改订单" :visible.sync="dialogFormVisible" :before-close="cancel">
-        <el-form :model="form">
-            <el-form-item label="用户头像" :label-width="formLabelWidth">
-                <el-upload
-                        action="#"
-                        list-type="picture-card"
-                        :file-list="imgList"
-                        :auto-upload="false"
-                        limit="1"
-                        :on-change="fn">
-                    <i slot="default" class="el-icon-plus"></i>
-                    <div slot="file" slot-scope="{file}">
-                        <img
-                                class="el-upload-list__item-thumbnail"
-                                :src="file.url" alt=""
-                        >
-                        <span class="el-upload-list__item-actions">
-                        <span
-                                class="el-upload-list__item-preview"
-                                @click="handlePictureCardPreview(file)"
-                        >
-                            <i class="el-icon-zoom-in"></i>
-                        </span>
-                        <span
-                                v-if="!disabled"
-                                class="el-upload-list__item-delete"
-                                @click="handleRemove(file)"
-                        >
-                          <i class="el-icon-delete"></i>
-                        </span>
-                      </span>
-                    </div>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl">
-                </el-dialog>
-            </el-form-item>
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="cancel">取 消</el-button>
-            <el-button type="primary" @click="modificationUser">确 定</el-button>
-        </div>
-    </el-dialog>
-
-    <el-dialog title="封禁用户" :visible.sync="dialogFormVisible2">
-        <div style="margin-bottom: 20px">
-            <span>确定封锁{{form.name}}吗？</span>
-        </div>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible2 = false">取 消</el-button>
-            <el-button type="primary" @click="bannedUser">确 定</el-button>
-        </div>
-    </el-dialog>
-
 </div>
 
 <!--js脚本-->
@@ -188,7 +134,6 @@
     new Vue({
         el: '#app',
         data: {
-            vip: 'VIP用户',
             //头部模糊搜索框内容
             inputHead: '',
             //登录
@@ -202,22 +147,9 @@
             tableData: [],
             currentPage: 1,//默认显示第一页
             pageSize: 4,//默认每页显示5条
-            dialogFormVisible: false,
-            dialogFormVisible2: false,
-            form: {},
-            beforeModificationForm: {
-                userImg: '',
-                name: '',
-            },
-            imgList: [],
-            formLabelWidth: '150px',
-            /*文件上传*/
-            dialogImageUrl: '',
-            dialogVisible: false,
-            disabled: false,
-            cities: [],
-            actors: [],
             search: '',
+        },
+        computed: {
         },
         methods: {
             toggleSelection(rows) {
@@ -232,62 +164,30 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            formatter(row, column) {
-                return row.address;
-            },
             dj(row) {
-                this.form = row;
-                this.imgList.push(
-                    {url: row.headImg})
-                this.beforeModificationForm.headImg = row.headImg
-                this.beforeModificationForm.name = row.name
                 console.log(row)
             },
-            modificationUser() {
-                // 前端POST异步发送文件：
-                params = new FormData()
-                params.append('file', this.imgList[0].raw) // 文件 ===============
-                params.append('_csrf', csrf);
-                params.append('id', this.form.id);
-                params.append('name', this.form.name);
-                let res = {
-                    headers: {'Content-Type': 'multipart/form-data'}
-                }
-                axios.post('/updateUser', params, res)
-                    .then(response => {
-                        if (response.data) {
-                            this.form.headImg = this.imgList[0].url;
-                            this.$message({
-                                message: '用户信息已更新',
-                                type: 'success'
-                            });
-                            this.imgList = []
-                            this.dialogFormVisible = false;
-                        }
-                    })
-                    .catch(data => {
-                        this.$message('修改失败');
-                        console.log(response);
-                    })
-            },
-            bannedUser() {
+            bannedUser(row) {
+                console.log('封禁或解封的对象', row)
                 params = new URLSearchParams()
                 params.append('_csrf', csrf);
-                params.append('id', this.form.id);
+                params.append('id', row.id);
+                params.append('vip', row.vip);
                 axios.post('/bannedUser', params)
                     .then(response => {
                         if (response.data) {
                             this.$message({
-                                message: '用户已封禁',
+                                message: '操作成功',
                                 type: 'success'
                             });
+                        }else {
+                            this.$message('操作失败');
                         }
                     })
                     .catch(data => {
-                        this.$message('用户封禁失败');
+                        this.$message('操作失败');
                         console.log(response);
                     })
-                this.dialogFormVisible2 = false;
             },
             //重置表单
             resetForm(loginForm) {
@@ -353,24 +253,6 @@
                     title: '消息',
                     message: '您取消了登录'
                 });
-            },
-            /*文件上传*/
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
-            },
-            handleRemove(file) {
-                this.imgList = [];
-            },
-            fn(file) {
-                this.imgList.push(file)
-                console.log(this.imgList)
-            },
-            cancel() {
-                this.form.headImg = this.beforeModificationForm.headImg
-                this.form.name = this.beforeModificationForm.name
-                this.imgList = []
-                this.dialogFormVisible = false
             },
             // 分页
             handleSizeChange(val) {

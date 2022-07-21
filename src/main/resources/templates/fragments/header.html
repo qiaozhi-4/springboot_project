@@ -190,9 +190,11 @@
                                  src="../../static/images/ikun.png"></a>
                 </form>
             </el-col>
-            <el-col :span="8" :offset="1">
-                <el-input placeholder="熊出没" v-model="inputHead">
-                    <el-button slot="append" icon="el-icon-search" style="margin: -11px 0;">搜索</el-button>
+            <el-col :span="5" :offset="1">
+                <el-input class="sousuo qita" placeholder="熊出没" v-model="inputHead">
+                    <el-button class="shouye" slot="append" icon="el-icon-search">
+                        <el-link :underline="false" :href="'fuzzyQuery?str=' + inputHead">搜索</el-link>
+                    </el-button>
                 </el-input>
             </el-col>
             <el-col :span="6" :offset="1">

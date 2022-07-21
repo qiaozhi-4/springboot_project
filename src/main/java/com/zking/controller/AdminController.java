@@ -119,12 +119,15 @@ public class AdminController {
     @RolesAllowed("admin") // 必须admin角色才能访问
     @PostMapping("/bannedUser")
     @ResponseBody
-    public boolean bannedUser(User user) {
-        user.setVip(-1);
+    public boolean bannedUser(Integer id, Integer vip) {
+        User user = new User();
+        user.setId(id);
+        user.setVip(vip);
         return userService.updateById(user);
     }
 
     // 模糊查询用户
+    @RolesAllowed("admin") // 必须admin角色才能访问
     @ResponseBody
     @GetMapping ("fuzzyQueryUser")
     public List<User> fuzzyQueryUser(String selectName) {
@@ -132,6 +135,7 @@ public class AdminController {
     }
 
     // 模糊查询视频
+    @RolesAllowed("admin") // 必须admin角色才能访问
     @ResponseBody
     @GetMapping ("fuzzyQueryFilm")
     public List<FilmDTO> fuzzyQueryFilm(String selectName, String selectType) {
