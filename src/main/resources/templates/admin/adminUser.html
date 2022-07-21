@@ -57,7 +57,10 @@
                                         <template slot-scope="scope">
                                             <div class="demo-type">
                                                 <div>
-                                                    <el-avatar :src="scope.row.headImg"></el-avatar>
+                                                    <el-link :href="'/adminUserIndex/' + scope.row.id"
+                                                             :underline="false">
+                                                        <el-avatar :src="scope.row.headImg"></el-avatar>
+                                                    </el-link>
                                                 </div>
                                             </div>
                                         </template>

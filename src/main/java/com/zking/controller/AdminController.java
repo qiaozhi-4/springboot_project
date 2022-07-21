@@ -14,7 +14,9 @@ import com.zking.service.IUserService;
 import com.zking.util.Ffmpeg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +53,14 @@ public class AdminController {
     @GetMapping("adminUser")
     public String adminUser() {
         return "/admin/adminUser";
+    }
+
+    @RolesAllowed("admin")
+    @GetMapping("adminUserIndex/{id}")
+    public String adminUserIndex(Model model, @PathVariable String id) {
+        User user = userService.getById(id);
+        model.addAttribute("adminGetUser",user);
+        return "/admin/adminUserIndex";
     }
 
 

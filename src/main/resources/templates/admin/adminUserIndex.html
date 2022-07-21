@@ -59,9 +59,9 @@
                                             </el-form-item>
                                             <el-form-item label="性别">
                                                 <div style="text-align: left;">
-                                                    <template>
-                                                        <el-radio v-model="form.sex" label="男">男</el-radio>
-                                                        <el-radio v-model="form.sex" label="女">女</el-radio>
+                                                    <template disabled>
+                                                        <el-radio v-model="form.sex" label="男" disabled>男</el-radio>
+                                                        <el-radio v-model="form.sex" label="女" disabled>女</el-radio>
                                                     </template>
                                                 </div>
                                             </el-form-item>
@@ -69,22 +69,19 @@
                                                 <el-col :span="11">
                                                     <el-date-picker type="date" placeholder="选择日期"
                                                                     v-model="form.birthday"
+                                                                    disabled
                                                                     style="width: 100%;"></el-date-picker>
                                                 </el-col>
                                             </el-form-item>
                                             <el-form-item label="邮箱">
-                                                <el-input v-model="form.email" placeholder="你还未绑定邮箱"></el-input>
+                                                <el-input v-model="form.email" placeholder="你还未绑定邮箱"
+                                                          disabled></el-input>
                                             </el-form-item>
                                             <el-form-item label="地址">
-                                                <div style="text-align: left;">
-                                                    <el-cascader :props="props" :options="options" clearable
-                                                                 v-model="addresses"></el-cascader>
-                                                </div>
+                                                <el-input v-model="form.address" placeholder="你还填写地址" disabled></el-input>
                                             </el-form-item>
                                             <el-form-item>
                                                 <el-button type="primary" @click="modificationUser">修改</el-button>
-                                                <el-button type="primary" @click="dialogFormVisible2 = true">修改密码
-                                                </el-button>
                                             </el-form-item>
                                         </el-form>
                                     </el-col>
@@ -179,24 +176,6 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="修改密码" :visible.sync="dialogFormVisible2">
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="原密码" prop="password">
-                <el-input v-model="ruleForm.password" show-password></el-input>
-            </el-form-item>
-            <el-form-item label="新密码" prop="pass">
-                <el-input v-model="ruleForm.pass" show-password></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="checkPass">
-                <el-input v-model="ruleForm.checkPass" show-password></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </div>
-    </el-dialog>
-
 </div>
 
 <!--js脚本-->
@@ -209,121 +188,23 @@
 <script th:src="@{/js/video.min.js}" src="../../static/js/video.min.js"></script>
 <script th:inline="javascript">
 
-    // 配置Axios，设置baseURL会自动拼接
-    const axiosInstance = axios.create({
-        baseURL: 'http://localhost:8081/api/', // http://localhost:8081/api/address/parent/0
-        timeout: 3000,
-        // withCredentials: true, // 携带cookie（session）
-        headers: {'X-Custom-Header': 'your-project'}
-    })
-
-    axios.defaults.withCredentials = true
-
-    // 从缓存或者网络中获取全国地址的数据
-    const getAddressFromCacheOrNetwork = pid => new Promise((resolve, reject) => {
-        globalThis.cache = globalThis.cache || {}
-        if (globalThis.cache[`${pid}`]) {
-            resolve(globalThis.cache[`${pid}`])
-            return
-        }
-        axiosInstance.get(`address/parent/${pid}`)
-            .then(resp => {
-                const data = resp.data
-                globalThis.cache[`${pid}`] = data
-                resolve(data)
-            })
-            .catch(err => reject(err))
-    })
-
     var csrf = [[${_csrf.token}]]; // 字符串会自动添加""，数字直接显示
     let params;
 
     new Vue({
         el: '#app',
-        data() {
-            var checkPassword = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('原密码不能为空'));
-                } else {
-                    let count = value.split('').length
-                    if (count < 5 || count > 17) {
-                        callback(new Error('密码长度6~16'));
-                    } else {
-                        callback();
-                    }
-                }
-            };
-            var validatePass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else {
-                    let count = value.split('').length
-                    if (count < 5 || count > 17) {
-                        callback(new Error('密码长度6~16'));
-                    } else {
-                        if (this.ruleForm.checkPass !== '') {
-                            this.$refs.ruleForm.validateField('checkPass');
-                        }
-                        callback();
-                    }
-                }
-            };
-            var validatePass2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                } else if (value !== this.ruleForm.pass) {
-                    callback(new Error('两次输入密码不一致!'));
-                } else {
-                    callback();
-                }
-            };
-            return {
-                activeName: 'second',
-                userHistoryFilm: [],
-                userLikeFilm: [],
-                /*文件上传*/
-                dialogFormVisible: false,
-                imgList: [],
-                formLabelWidth: '150px',
-                dialogImageUrl: '',
-                dialogVisible: false,
-                disabled: false,
-                form: [[${adminGetUser}]],
-                addresses: [], // 选中的地址数组
-                options: [], // 选项，不需要配置
-                props: {
-                    lazy: true,
-                    lazyLoad: function (node, resolve) {
-                        console.log(node)
-                        getAddressFromCacheOrNetwork(node.level === 0 ? 0 : node.data.id)
-                            .then(data => resolve(data.map(v => ({
-                                label: v.name, // 用名字或者全名做标签都可以
-                                value: v.name, // 选中后返回值就用名字
-                                id: v.id,      // 记录id，根据id查询子区域
-                                leaf: node.level > 2, // 最后一级为3即叶子节点
-                            }))))
-                            .catch(err => resolve([]))
-                    },
-                },
-                // 修改密码
-                dialogFormVisible2: false,
-                ruleForm: {
-                    pass: '', // 新密码
-                    checkPass: '', // 确认密码
-                    password: '', // 原密码
-                },
-                rules: {
-                    pass: [
-                        {validator: validatePass, trigger: 'blur'}
-                    ],
-                    checkPass: [
-                        {validator: validatePass2, trigger: 'blur'}
-                    ],
-                    password: [
-                        {validator: checkPassword, trigger: 'blur'}
-                    ]
-                }
-            };
+        data: {
+            activeName: 'second',
+            userHistoryFilm: [],
+            userLikeFilm: [],
+            /*文件上传*/
+            dialogFormVisible: false,
+            imgList: [],
+            formLabelWidth: '150px',
+            dialogImageUrl: '',
+            dialogVisible: false,
+            disabled: false,
+            form: [[${adminGetUser}]],
         },
         computed: {},
         methods: {
@@ -382,16 +263,11 @@
             },
             // 修改信息
             modificationUser() {
-                this.form.address = this.addresses.join('/') // 数组转字符串
                 // 前端POST异步发送文件：
                 params = new FormData()
                 params.append('_csrf', csrf);
                 params.append('id', this.form.id);
                 params.append('name', this.form.name);
-                params.append('sex', this.form.sex);
-                params.append('birthday', this.form.birthday);
-                params.append('email', this.form.email);
-                params.append('address', this.form.address);
                 axios.post('/userUpdateInfo', params)
                     .then(response => {
                         if (response.data) {
@@ -407,49 +283,24 @@
                     })
                 console.log(this.form)
             },
-            // 修改密码
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        params = new FormData()
-                        params.append('_csrf', csrf);
-                        params.append('password', this.ruleForm.password);
-                        params.append('pass', this.ruleForm.pass);
-                        axios.post('/userUpdatePassword', params)
-                            .then(response => {
-                                if (response.data) {
-                                    this.$message({
-                                        message: '修改成功，请重新登入',
-                                        type: 'success'
-                                    });
-                                    this.dialogFormVisible2 = true
-                                }
-                            })
-                            .catch(data => {
-                                this.$message('修改失败');
-                                console.log(response);
-                            })
-                    } else {
-                        return false;
-                    }
-                });
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
         },
         mounted: function () {
             console.log('用户：', this.form)
-            if (this.form.address !== '') {
-                this.addresses = this.form.address.split('/') // 字符串转数组
-            }
-            axios.get('/userHistory')
+            axios.get('/userHistory',{
+                params: {
+                    id: this.form.id,
+                },
+            })
                 .then(response => {
                     this.userHistoryFilm = response.data;
                     console.log(response);
                 })
                 .catch(data => console.log(response))
-            axios.get('/userLikeFilm')
+            axios.get('/userLikeFilm',{
+                params: {
+                    id: this.form.id,
+                },
+            })
                 .then(response => {
                     this.userLikeFilm = response.data;
                     console.log(response);

@@ -216,21 +216,38 @@
                     <el-avatar size="small" src="img/head.jpg"></el-avatar>
                     <span class="qita">点击登录</span>
                 </el-link>
-                <el-dropdown>
-                    <el-link th:if="${#authentication?.name != 'anonymousUser'}" :underline="false">
+                <el-dropdown th:if="${#authentication?.name != 'anonymousUser'}">
+                    <el-link :underline="false">
                         <el-avatar size="small" th:src="${#authentication.principal.headImg}"></el-avatar>
                         <span class="qita" th:text="${#authentication.name}"></span>
                     </el-link>
+
                     <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item th:v-if="${#authentication.principal.vip} > 0">
+                            vip到期时间：<span th:text="${#authentication.principal.vipTime}"></span>
+                        </el-dropdown-item>
+                        <el-dropdown-item th:v-if="${#authentication.principal.vip} < 1">
+                            <div @click="vip">您还不是VIP，点击购买以获得更好的观影体验</div>
+                        </el-dropdown-item>
+
+                        <el-link th:href="'/userIndex?userId=' + ${#authentication.principal.id}">
+                            <el-dropdown-item>
+                                我的主页
+                            </el-dropdown-item>
+                        </el-link>
+
+                        <el-dropdown-item>
+                        </el-dropdown-item>
+
                         <el-dropdown-item>
                             <form action="/logout" method="post">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/></br>
+                                <input type="hidden" th:id="${_csrf.parameterName}" th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}"/></br>
                                 <el-button native-type="submit" type="danger" icon="el-icon-delete" circle>点击登出
                                 </el-button>
                             </form>
                         </el-dropdown-item>
-                        <el-dropdown-item>狮子头</el-dropdown-item>
-                        <el-dropdown-item>螺蛳粉</el-dropdown-item>
+
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
