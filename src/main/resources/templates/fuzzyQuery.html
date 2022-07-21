@@ -94,7 +94,8 @@
         </el-main>
     </el-container>
 
-
+    <!-- vip购买弹出框 -->
+    <div th:replace="~{fragments/vip::vip}"></div>
 
 
 </div>
@@ -109,8 +110,15 @@
             films:[[${films}]],
             user: [[${#authentication?.principal}]],
             inputHead:'',
-        },
-        mounted: function () {
+            //vip购买弹出框
+            vipVisible: false,
+        },methods: {
+            //vip购买弹框
+            vip() {
+                this.vipVisible = true
+                return false
+            },
+
 
         },
     })

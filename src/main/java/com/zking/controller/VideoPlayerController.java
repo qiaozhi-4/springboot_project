@@ -121,6 +121,7 @@ public class VideoPlayerController
 
     String r = restTemplate.postForObject("http://localhost:8081/login", request, String.class);
 
+        System.out.println(r);
         // 模拟登录
         int id = ATOMIC_INTEGER.getAndIncrement();
         model.addAttribute("userId", id);

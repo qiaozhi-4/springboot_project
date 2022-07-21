@@ -36,23 +36,14 @@
         </el-form-item>
 
         <el-form-item label="" label-width="60px">
-            <div id="captcha">
-                <el-input type="submit" autocomplete="off" @click="validate1()">点击登录</el-input>
-            </div>
+            <div id="captcha"></div>
         </el-form-item>
 
-        <el-form-item  label-width="60px">
+
+        <el-form-item label-width="60px">
             <el-link href="/register" type="primary" :underline="false">没有账号？点击注册</el-link>
         </el-form-item>
 
-
-        <!--        <el-form-item>-->
-        <!--            <el-row>-->
-        <!--                <el-col :span="6">第三方登录:</el-col>-->
-        <!--                <el-col :span="2"><a href="/login/gitee"><img width="25px" src="img/logo-black.svg"></a>-->
-        <!--                </el-col>-->
-        <!--            </el-row>-->
-        <!--        </el-form-item>-->
 
     </el-form>
     <div style="left: 50px">
@@ -89,13 +80,6 @@
             formLabelWidth: '120px',
         },
         methods: {
-            // validate1:function (){
-            //     if(validate){
-            //         console.log(validate);
-            //         console.log("xxx-xxx");
-            //         return false;
-            //     }
-            // }
         },
         mounted: function () {
             if (error != null) {
@@ -118,6 +102,7 @@
                         .done(r => {
                             console.log("验证成功")
                             boo = true
+                            document.forms[0].submit()
                         }) // 成功，继续下一步
                         .fail(e => {
                             console.log("验证失败")
