@@ -49,27 +49,27 @@ public class ResponseBodyControllerS {
 
     //用户信息修改
     @PostMapping("/userUpdateInfo")
-    public Boolean userUpdateInfo(User user){
-            return userService.updateById(user);
+    public Boolean userUpdateInfo(User user) {
+        System.out.println(user);
+        return userService.updateById(user);
     }
 
     //用户信息修改密码
     @PostMapping("/userUpdatePassword")
-    public Boolean userUpdateInfo(String password1, String password2,HttpServletRequest request,@ModelAttribute("user") User user) throws ServletException {
-        if (password1.isEmpty()){
+    public Boolean userUpdateInfo(String password, String pass, HttpServletRequest request, @ModelAttribute("user") User user) throws ServletException {
+        if (password.isEmpty()) {
             return false;
         }
-        if (password1.equals(password2)){
-            user.setPassword(encoder.encode(user.getPassword()));
+        if (user.getPassword().equals(password)) {
+            user.setPassword(encoder.encode(pass));
 
             //修改
             userService.updateById(user);
             request.logout(); // 强制登出
             return true;
         }
-            return false;
+        return false;
     }
-
 
 
     //获取电影和类型
@@ -81,14 +81,14 @@ public class ResponseBodyControllerS {
     //用户收藏电影
     @PreAuthorize("isAuthenticated()") // 必须登录后才能访问
     @GetMapping("/addLikeFilm")
-    public Boolean addLikeFilm(Integer userId,Integer filmId) {
-        return filmService.addLikeFilm(userId,filmId);
+    public Boolean addLikeFilm(Integer userId, Integer filmId) {
+        return filmService.addLikeFilm(userId, filmId);
     }
 
     //用户观看电影
     @GetMapping("/addLookFilm")
-    public Boolean addLookFilm(Integer userId,Integer filmId) {
-        return filmService.addLookFilm(userId,filmId);
+    public Boolean addLookFilm(Integer userId, Integer filmId) {
+        return filmService.addLookFilm(userId, filmId);
     }
 
     //查询用户喜欢的电影
