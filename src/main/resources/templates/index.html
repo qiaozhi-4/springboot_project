@@ -9,50 +9,63 @@
     <div th:replace="~{fragments/css::css}"></div>
     <style>
         .isVip {
-            color: #ffc720!important;
+            color: #ffc720 !important;
         }
+
         .indexMsg img {
-            color: #fff!important;
-            font-size: 16px!important;
+            color: #fff !important;
+            font-size: 16px !important;
         }
+
         .original_price {
-            text-decoration: line-through!important;
-            margin-left: 5px!important;
+            text-decoration: line-through !important;
+            margin-left: 5px !important;
         }
 
         .discount {
-            margin-right: 25px!important;
-            border: 1px solid #fff!important;
-            padding: 5px 7px!important;
-            border-radius: 20px!important;
+            margin-right: 25px !important;
+            border: 1px solid #fff !important;
+            padding: 5px 7px !important;
+            border-radius: 20px !important;
         }
+
         .price {
-            font-size: 30px!important;
+            font-size: 30px !important;
             color: #fff !important;
-            line-height: 40px!important;
+            line-height: 40px !important;
         }
-        .con{
-            margin: 0 auto!important;
-            overflow: hidden!important;
-            position: relative!important;
-            background-color: #dd9b80!important;
-            text-align: center!important;
+
+        .con {
+            margin: 0 auto !important;
+            overflow: hidden !important;
+            position: relative !important;
+            background-color: #dd9b80 !important;
+            text-align: center !important;
         }
-        .subscript{
-            color: #ffc720!important;
-            height: 30px!important;
-            width: 100px!important;
-            position: absolute!important;
-            right: -30px!important;
-            text-align: center!important;
-            line-height: 30px!important;
-            font-family: "黑体"!important;
+
+        .subscript {
+            color: #ffc720 !important;
+            height: 30px !important;
+            width: 100px !important;
+            position: absolute !important;
+            right: -30px !important;
+            text-align: center !important;
+            line-height: 30px !important;
+            font-family: "黑体" !important;
             background-color: #608f39 !important;
-            -moz-transform:rotate(45deg)!important;
-            -webkit-transform:rotate(45deg)!important;
-            -o-transform:rotate(45deg)!important;
-            -ms-transform:rotate(45deg)!important;
-            transform:rotate(45deg)!important;
+            -moz-transform: rotate(45deg) !important;
+            -webkit-transform: rotate(45deg) !important;
+            -o-transform: rotate(45deg) !important;
+            -ms-transform: rotate(45deg) !important;
+            transform: rotate(45deg) !important;
+        }
+
+        .admin {
+            position: fixed;
+            right: 50px;
+            top: 200px;
+            /* 一直将导航栏置于最顶层  */
+            z-index: 999;
         }
 
     </style>
@@ -72,16 +85,21 @@
 
         <!-- 主体部分 -->
         <el-main width="1500px">
+
+            <div class="admin" th:v-if="${#authentication.name} == 'admin'">
+                <el-link href="/adminIndex" :underline="false"><img style="width: 30px" src="/img/head.jpg"></el-link>
+            </div>
             <!-- 轮播部分 -->
             <el-row class="lunbo" type="flex" justify="space-around">
                 <el-col :span="22">
                     <div>
                         <el-carousel height="400px" direction="vertical">
                             <el-carousel-item class="mohu" v-for="film in frontList" :key="film.id">
-                                <el-link  :href="'/video/' + film.id"  :underline="false">
+                                <el-link :href="'/video/' + film.id" :underline="false">
 
 
-                                    <video width="1000px" height="600px" id="demo" controls="controls" autoplay="autoplay" muted>
+                                    <video width="1000px" height="600px" id="demo" controls="controls"
+                                           autoplay="autoplay" muted>
                                         <source :src="film.coverSrc" type="video/mp4">
                                     </video>
 
@@ -95,7 +113,7 @@
 
             <!-- 电影分类 -->
             <div v-for="(element,index) in typeAndFilm">
-                <div  :id="element.type.id" style="height: 80px"></div>
+                <div :id="element.type.id" style="height: 80px"></div>
                 <el-row>
                     <el-col class="className" :push="11" :span="3">
                         <h2>{{element.type.name}}</h2>
@@ -108,13 +126,14 @@
                                 <el-card class="box-card movie">
                                     <div class="bottomBox">
                                         <div class="indexMsg con">
-                                            <div  v-if="film.vip>0" class="subscript">
+                                            <div v-if="film.vip>0" class="subscript">
                                                 vip
                                             </div>
 
                                             <img height="120px" width="100%" :src="film.imgSrc">
                                         </div>
-                                    </div><br>
+                                    </div>
+                                    <br>
                                     <b><span>{{film.name}}</span></b><br><br>
                                     <span>{{film.info}}</span><br>
                                 </el-card>
@@ -133,9 +152,9 @@
             <el-row type="flex" justify="start">
                 <el-col :span="8">
                     <p>关于我们</p>
-<!--                    <p>用户用户名信息：<span th:text="${#authentication.name}"></span></p>-->
-<!--                    <p>用户权限信息：<span th:text="${#authentication.authorities}"></span></p>-->
-<!--                    <p>用户信息：<span th:text="${#authentication.principal}"></span></p>-->
+                    <!--                    <p>用户用户名信息：<span th:text="${#authentication.name}"></span></p>-->
+                    <!--                    <p>用户权限信息：<span th:text="${#authentication.authorities}"></span></p>-->
+                    <!--                    <p>用户信息：<span th:text="${#authentication.principal}"></span></p>-->
                 </el-col>
                 <el-col :span="8">
                     <p>联系我们</p>
