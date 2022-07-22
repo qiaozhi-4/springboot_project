@@ -92,33 +92,41 @@
                             </el-tab-pane>
 
                             <el-tab-pane label="历史记录" name="second">
-                                <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
-                                        :offset="index % 5 != 0 ? 1 : 0">
-                                    <el-card :body-style="{ padding: '0px' }">
-                                        <el-link :href="'/video/' + film.id" :underline="false">
-                                            <img :src="film.imgSrc"
-                                                 class="image">
-                                        </el-link>
-                                        <div style="padding: 20px;">
-                                            <span>{{film.name}}</span>
-                                        </div>
-                                    </el-card>
-                                </el-col>
+                                <div v-if="userHistoryFilmLength > 0">
+                                    <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
+                                            :offset="index % 5 != 0 ? 1 : 0">
+                                        <el-card :body-style="{ padding: '0px' }">
+                                            <el-link :href="'/video/' + film.id" :underline="false">
+                                                <img :src="film.imgSrc"
+                                                     class="image">
+                                            </el-link>
+                                            <div style="padding: 20px;">
+                                                <span>{{film.name}}</span>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+                                </div>
+
+                                <el-empty v-else :image-size="200"></el-empty>
                             </el-tab-pane>
 
                             <el-tab-pane label="我的收藏" name="third">
-                                <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
-                                        :offset="index % 5 != 0 ? 1 : 0">
-                                    <el-card :body-style="{ padding: '0px' }">
-                                        <el-link :href="'/video/' + film.id" :underline="false">
-                                            <img :src="film.imgSrc"
-                                                 class="image">
-                                        </el-link>
-                                        <div style="padding: 20px;">
-                                            <span>{{film.name}}</span>
-                                        </div>
-                                    </el-card>
-                                </el-col>
+                                <div v-if="userLikeFilmLength > 0">
+                                    <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
+                                            :offset="index % 5 != 0 ? 1 : 0">
+                                        <el-card :body-style="{ padding: '0px' }">
+                                            <el-link :href="'/video/' + film.id" :underline="false">
+                                                <img :src="film.imgSrc"
+                                                     class="image">
+                                            </el-link>
+                                            <div style="padding: 20px;">
+                                                <span>{{film.name}}</span>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+                                </div>
+
+                                <el-empty v-else :image-size="200"></el-empty>
                             </el-tab-pane>
                         </el-tabs>
 
@@ -325,7 +333,14 @@
                 }
             };
         },
-        computed: {},
+        computed: {
+            userHistoryFilmLength(){
+                return this.userHistoryFilm.length
+            },
+            userLikeFilmLength(){
+                return this.userLikeFilm.length
+            }
+        },
         methods: {
             handleClick(tab, event) {
                 console.log(tab, event);

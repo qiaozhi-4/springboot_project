@@ -55,7 +55,7 @@
                                                 </el-input>
                                             </el-form-item>
                                             <el-form-item label="昵称">
-                                                <el-input v-model="form.name"></el-input>
+                                                <el-input v-model="form.name" disabled></el-input>
                                             </el-form-item>
                                             <el-form-item label="性别">
                                                 <div style="text-align: left;">
@@ -74,14 +74,11 @@
                                                 </el-col>
                                             </el-form-item>
                                             <el-form-item label="邮箱">
-                                                <el-input v-model="form.email" placeholder="你还未绑定邮箱"
+                                                <el-input v-model="form.email" placeholder="他还未绑定邮箱"
                                                           disabled></el-input>
                                             </el-form-item>
                                             <el-form-item label="地址">
-                                                <el-input v-model="form.address" placeholder="你还填写地址" disabled></el-input>
-                                            </el-form-item>
-                                            <el-form-item>
-                                                <el-button type="primary" @click="modificationUser">修改</el-button>
+                                                <el-input v-model="form.address" placeholder="他还填写地址" disabled></el-input>
                                             </el-form-item>
                                         </el-form>
                                     </el-col>
@@ -89,33 +86,42 @@
                             </el-tab-pane>
 
                             <el-tab-pane label="历史记录" name="second">
-                                <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
-                                        :offset="index % 5 != 0 ? 1 : 0">
-                                    <el-card :body-style="{ padding: '0px' }">
-                                        <el-link :href="'/video/' + film.id" :underline="false">
-                                            <img :src="film.imgSrc"
-                                                 class="image">
-                                        </el-link>
-                                        <div style="padding: 20px;">
-                                            <span>{{film.name}}</span>
-                                        </div>
-                                    </el-card>
-                                </el-col>
+                                <div v-if="userHistoryFilmLength > 0">
+                                    <el-col :span="4" v-for="(film, index) in userHistoryFilm" :key="film.id"
+                                            :offset="index % 5 != 0 ? 1 : 0">
+                                        <el-card :body-style="{ padding: '0px' }">
+                                            <el-link :href="'/video/' + film.id" :underline="false">
+                                                <img :src="film.imgSrc"
+                                                     class="image">
+                                            </el-link>
+                                            <div style="padding: 20px;">
+                                                <span>{{film.name}}</span>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+                                </div>
+
+                                <el-empty v-else :image-size="200"></el-empty>
                             </el-tab-pane>
 
                             <el-tab-pane label="我的收藏" name="third">
-                                <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
-                                        :offset="index % 5 != 0 ? 1 : 0">
-                                    <el-card :body-style="{ padding: '0px' }">
-                                        <el-link :href="'/video/' + film.id" :underline="false">
-                                            <img :src="film.imgSrc"
-                                                 class="image">
-                                        </el-link>
-                                        <div style="padding: 20px;">
-                                            <span>{{film.name}}</span>
-                                        </div>
-                                    </el-card>
-                                </el-col>
+
+                                <div v-if="userLikeFilmLength > 0">
+                                    <el-col :span="4" v-for="(film, index) in userLikeFilm" :key="film.id"
+                                            :offset="index % 5 != 0 ? 1 : 0">
+                                        <el-card :body-style="{ padding: '0px' }">
+                                            <el-link :href="'/video/' + film.id" :underline="false">
+                                                <img :src="film.imgSrc"
+                                                     class="image">
+                                            </el-link>
+                                            <div style="padding: 20px;">
+                                                <span>{{film.name}}</span>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+                                </div>
+
+                                <el-empty v-else :image-size="200"></el-empty>
                             </el-tab-pane>
                         </el-tabs>
 
@@ -132,48 +138,8 @@
 
     </el-container>
 
-    <el-dialog title="修改头像" :visible.sync="dialogFormVisible" :before-close="cancel">
-        <el-form :model="form">
-            <el-form-item label="用户头像" :label-width="formLabelWidth">
-                <el-upload
-                        action="#"
-                        list-type="picture-card"
-                        :file-list="imgList"
-                        :auto-upload="false"
-                        limit="1"
-                        :on-change="fn">
-                    <i slot="default" class="el-icon-plus"></i>
-                    <div slot="file" slot-scope="{file}">
-                        <img
-                                class="el-upload-list__item-thumbnail"
-                                :src="file.url" alt=""
-                        >
-                        <span class="el-upload-list__item-actions">
-                        <span
-                                class="el-upload-list__item-preview"
-                                @click="handlePictureCardPreview(file)"
-                        >
-                            <i class="el-icon-zoom-in"></i>
-                        </span>
-                        <span
-                                v-if="!disabled"
-                                class="el-upload-list__item-delete"
-                                @click="handleRemove(file)"
-                        >
-                          <i class="el-icon-delete"></i>
-                        </span>
-                      </span>
-                    </div>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl">
-                </el-dialog>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="cancel">取 消</el-button>
-            <el-button type="primary" @click="modificationUserTop">确 定</el-button>
-        </div>
+    <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl">
     </el-dialog>
 
 </div>
@@ -198,90 +164,27 @@
             userHistoryFilm: [],
             userLikeFilm: [],
             /*文件上传*/
-            dialogFormVisible: false,
-            imgList: [],
-            formLabelWidth: '150px',
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
             form: [[${adminGetUser}]],
         },
-        computed: {},
+        computed: {
+            userHistoryFilmLength(){
+                return this.userHistoryFilm.length
+            },
+            userLikeFilmLength(){
+                return this.userLikeFilm.length
+            }
+        },
         methods: {
             handleClick(tab, event) {
                 console.log(tab, event);
             },
             /*修改头像*/
             userTop() {
-                this.imgList.push(
-                    {url: this.form.headImg})
-                this.dialogFormVisible = true
-            },
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
+                this.dialogImageUrl = this.form.headImg;
                 this.dialogVisible = true;
-            },
-            handleRemove(file) {
-                this.imgList = [];
-            },
-            fn(file) {
-                this.imgList.push(file)
-                console.log(this.imgList)
-            },
-            cancel() {
-                this.imgList = []
-                this.dialogFormVisible = false
-            },
-            // 用户修改头像
-            modificationUserTop() {
-                let r = this.imgList[0].raw
-                console.log(this.imgList[0], r)
-                // 前端POST异步发送文件：
-                params = new FormData()
-                params.append('file', this.imgList[0].raw) // 文件 ===============
-                params.append('_csrf', csrf);
-                params.append('userId', this.form.id);
-                let res = {
-                    headers: {'Content-Type': 'multipart/form-data'}
-                }
-                axios.post('/userUpdateHead', params, res)
-                    .then(response => {
-                        if (response.data) {
-                            this.form.headImg = this.imgList[0].url;
-                            this.$message({
-                                message: '头像修改成功',
-                                type: 'success'
-                            });
-                            this.imgList = []
-                            this.dialogFormVisible = false;
-                        }
-                    })
-                    .catch(data => {
-                        this.$message('头像修改失败');
-                        console.log(response);
-                    })
-            },
-            // 修改信息
-            modificationUser() {
-                // 前端POST异步发送文件：
-                params = new FormData()
-                params.append('_csrf', csrf);
-                params.append('id', this.form.id);
-                params.append('name', this.form.name);
-                axios.post('/userUpdateInfo', params)
-                    .then(response => {
-                        if (response.data) {
-                            this.$message({
-                                message: '修改成功',
-                                type: 'success'
-                            });
-                        }
-                    })
-                    .catch(data => {
-                        this.$message('修改失败');
-                        console.log(response);
-                    })
-                console.log(this.form)
             },
         },
         mounted: function () {
