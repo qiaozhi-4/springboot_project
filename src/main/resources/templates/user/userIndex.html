@@ -42,6 +42,11 @@
         <el-main width="1500px" style="background-color: white">
 
             <el-row type="flex" justify="space-around">
+                <div style="float: left;">
+                    <el-link :href="'/'" :underline="false">
+                        <span>返回</span>
+                    </el-link>
+                </div>
                 <el-col :span="20" class="main-navigation-bar">
                     <template>
 
@@ -334,10 +339,10 @@
             };
         },
         computed: {
-            userHistoryFilmLength(){
+            userHistoryFilmLength() {
                 return this.userHistoryFilm.length
             },
-            userLikeFilmLength(){
+            userLikeFilmLength() {
                 return this.userLikeFilm.length
             }
         },
