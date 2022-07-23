@@ -2,32 +2,24 @@ package com.zking.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.commons.codec.digest.HmacAlgorithms;
-import org.apache.commons.codec.digest.HmacUtils;
-import org.json.JSONObject;
-import com.zking.entity.Result;
 import com.zking.entity.Film;
 import com.zking.entity.User;
 import com.zking.service.IFilmService;
 import com.zking.service.IUserService;
-import com.zking.service.impl.FilmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.PermitAll;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +56,7 @@ public class RegisterController {
             model.addAttribute("info", "头像不为空");
             return "register";
         }
-        if (username == null && password == null && name == null) {
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty()) {
             model.addAttribute("info", "请填写必要信息");
             return "register";
         }
