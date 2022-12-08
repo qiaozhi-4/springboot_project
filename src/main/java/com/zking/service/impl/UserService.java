@@ -19,6 +19,7 @@ public class UserService extends ServiceImpl<IUserMapper, User> implements IUser
     @Override
     public Boolean addRole(int id) {
 //        return getBaseMapper().addRole()!=null;
+
         return getBaseMapper().addRole(id) != null;
     }
 
